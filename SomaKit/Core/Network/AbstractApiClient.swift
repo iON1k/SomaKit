@@ -26,14 +26,8 @@ public class AbstractJSONApiClient: ApiRequestMaganer {
         self.init(baseUrl: baseUrl, alamoManager: Manager.sharedInstance)
     }
     
-    public func _createRequest<TResponse: Mappable>(methodType: ApiMethodType, apiMethod: String,
-                              params: ApiRequest<TResponse>.ParamsType) -> ApiRequest<TResponse> {
-        jsonMapper.registerTypeIfNeeded(TResponse)
-        return ApiRequest(manager: self, methodType: methodType, apiMethod: apiMethod, params: params)
-    }
-    
     public func apiRequestRunningEngine<TResponse>(request: ApiRequest<TResponse>) throws -> Observable<Any> {
-        let anyObjectsParams = try request.params.mapValues { (value) throws -> AnyObject in
+        let anyObjectsParams = try request.params?.mapValues { (value) throws -> AnyObject in
             guard let newValue = value as? AnyObject else {
                 throw SomaError("Api request parameter \(value) wrong type.")
             }
@@ -42,7 +36,8 @@ public class AbstractJSONApiClient: ApiRequestMaganer {
         }
         
         let urlString = try buildURLString(request.apiMethod)
-        return alamoManager.rx_string(alamoApiMethodType(request.methodType), urlString, parameters: anyObjectsParams)
+        return alamoManager.rx_string(alamoApiMethodType(request.methodType), urlString,
+            parameters: anyObjectsParams, encoding: _defaultParameterEncoding, headers: request.headers)
             .doOnNext({ (responseString) in
                 Log.debug("Api request get response: \(responseString)")
             })
@@ -65,6 +60,16 @@ public class AbstractJSONApiClient: ApiRequestMaganer {
     
     public func apiRequestCompleted<TResponse>(request: ApiRequest<TResponse>, response: TResponse) {
         //Nothing
+    }
+    
+    public func _createRequest<TResponse: Mappable>(methodType: ApiMethodType, apiMethod: String,
+                               params: ApiRequest<TResponse>.ParamsType = nil, headers: ApiRequest<TResponse>.HeadersType = nil) -> ApiRequest<TResponse> {
+        jsonMapper.registerTypeIfNeeded(TResponse)
+        return ApiRequest(manager: self, methodType: methodType, apiMethod: apiMethod, params: params, headers: headers)
+    }
+    
+    public var _defaultParameterEncoding: ParameterEncoding {
+        return .URL
     }
     
     private func buildURLString(endPoint: String) throws -> String {

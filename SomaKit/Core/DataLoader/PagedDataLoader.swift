@@ -12,19 +12,23 @@ public class PagedDataLoader<TData>: DataProviderType {
     public typealias PageType = UInt
     public typealias PageDataType = TData
     public typealias DataType = [PageType : PageDataType]
-    public typealias PageDataProviderType = AnyDataLoader<TData>
+    public typealias SourcePageDataLoader = AnyDataLoader<TData>
     
     private let dataSyncLock = SyncLock()
     private let pageProvidersSyncLock = SyncLock()
     
-    private let dataVar = Variable<DataType>([:])
+    private let dataVar: Variable<DataType>
     
     private let disposeBag = DisposeBag()
     
-    private var pageProviders: [PageType : PageDataProviderType] = [:]
+    private var pageProviders: [PageType : SourcePageDataLoader] = [:]
     
     public var data: DataType {
         return dataVar.value
+    }
+    
+    public init(let defaultData: DataType) {
+        dataVar = Variable<DataType>(defaultData)
     }
     
     public func rxData() -> Observable<DataType> {
@@ -32,7 +36,7 @@ public class PagedDataLoader<TData>: DataProviderType {
     }
     
     public func loadPage(pageNumber: PageType) -> Observable<PageDataType> {
-        return Observable.deferred({ () -> Observable<PageDataProviderType> in
+        return Observable.deferred({ () -> Observable<SourcePageDataLoader> in
             return Observable.just(self.getPageProvider(pageNumber))
         })
         .flatMap({ (pageProvider) -> Observable<PageDataType> in
@@ -40,8 +44,8 @@ public class PagedDataLoader<TData>: DataProviderType {
         })
     }
     
-    private func getPageProvider(pageNumber: PageType) -> PageDataProviderType {
-        return pageProvidersSyncLock.sync { () -> PageDataProviderType! in
+    private func getPageProvider(pageNumber: PageType) -> SourcePageDataLoader {
+        return pageProvidersSyncLock.sync { () -> SourcePageDataLoader! in
             var pageProvider = pageProviders[pageNumber]
             
             if pageProvider == nil {
@@ -67,7 +71,13 @@ public class PagedDataLoader<TData>: DataProviderType {
         }
     }
     
-    public func _createPageDataProvider(pageNumber: PageType) -> PageDataProviderType {
+    public func _createPageDataProvider(pageNumber: PageType) -> SourcePageDataLoader {
         abstractMethod(#function)
+    }
+}
+
+extension PagedDataLoader {
+    public convenience init() {
+        self.init(defaultData: [:])
     }
 }

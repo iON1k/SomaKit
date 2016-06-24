@@ -7,9 +7,9 @@
 //
 
 public protocol ConverterType {
-    associatedtype FromValueType
-    associatedtype ToValueType
+    associatedtype FirstType
+    associatedtype SecondType
     
-    func convertValue(value: FromValueType) throws -> ToValueType
-    func convertValue(value: ToValueType) throws -> FromValueType
+    func convertValue(value: FirstType) throws -> SecondType
+    func convertValue(value: SecondType) throws -> FirstType
 }

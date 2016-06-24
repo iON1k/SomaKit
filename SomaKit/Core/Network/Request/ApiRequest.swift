@@ -22,12 +22,14 @@ public protocol ApiRequestMaganer {
 
 public class ApiRequest<TResponse>: RequestType {
     public typealias ResponseType = TResponse
-    public typealias ParamsType = [String : Any]
+    public typealias ParamsType = [String : Any]?
+    public typealias HeadersType = [String : String]?
     
     private let manager: ApiRequestMaganer
     public let apiMethod: String
     public let methodType: ApiMethodType
     public let params: ParamsType
+    public let headers: HeadersType
     
     public func rxResponse() -> Observable<ResponseType> {
         return Observable.deferred({ () in
@@ -55,10 +57,12 @@ public class ApiRequest<TResponse>: RequestType {
         return nil
     }
     
-    public init(manager: ApiRequestMaganer, methodType: ApiMethodType, apiMethod: String, params: ParamsType) {
+    public init(manager: ApiRequestMaganer, methodType: ApiMethodType, apiMethod: String,
+                params: ParamsType = nil, headers: HeadersType = nil) {
         self.manager = manager
         self.methodType = methodType
         self.apiMethod = apiMethod
         self.params = params
+        self.headers = headers
     }
 }

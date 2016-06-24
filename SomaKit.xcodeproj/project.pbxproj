@@ -15,6 +15,7 @@
 		2418B0E41D0D7F2C00B72488 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2418B0E31D0D7F2C00B72488 /* Log.swift */; };
 		2418B0E61D0D8DBD00B72488 /* Log+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2418B0E51D0D8DBD00B72488 /* Log+Extension.swift */; };
 		2418B0E81D0D8E0400B72488 /* NativeLogProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2418B0E71D0D8E0400B72488 /* NativeLogProcessor.swift */; };
+		242898A41D1D1D1E001807E5 /* AnyConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 242898A31D1D1D1E001807E5 /* AnyConverter.swift */; };
 		242AC25C1D19FD4200CEB18C /* RequestError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 242AC25B1D19FD4200CEB18C /* RequestError.swift */; };
 		243CD8DA1D10C32D002EE79F /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 243CD8D91D10C32D002EE79F /* Request.swift */; };
 		243CD8DC1D10C46D002EE79F /* AnyRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 243CD8DB1D10C46D002EE79F /* AnyRequest.swift */; };
@@ -25,7 +26,6 @@
 		249CBDD21D1C94190097C75E /* AnyDataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 249CBDCC1D1C94190097C75E /* AnyDataLoader.swift */; };
 		249CBDD31D1C94190097C75E /* DataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 249CBDCD1D1C94190097C75E /* DataLoader.swift */; };
 		249CBDD41D1C94190097C75E /* FetchableDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 249CBDCE1D1C94190097C75E /* FetchableDataProvider.swift */; };
-		249CBDD51D1C94190097C75E /* PagedDataAgregator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 249CBDCF1D1C94190097C75E /* PagedDataAgregator.swift */; };
 		249CBDD61D1C94190097C75E /* PagedDataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 249CBDD01D1C94190097C75E /* PagedDataLoader.swift */; };
 		249CBDE01D1C95890097C75E /* DefaultValueType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 249CBDD91D1C95890097C75E /* DefaultValueType.swift */; };
 		249CBDE11D1C95890097C75E /* Observable+Nil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 249CBDDA1D1C95890097C75E /* Observable+Nil.swift */; };
@@ -55,6 +55,7 @@
 		2418B0E31D0D7F2C00B72488 /* Log.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		2418B0E51D0D8DBD00B72488 /* Log+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Log+Extension.swift"; sourceTree = "<group>"; };
 		2418B0E71D0D8E0400B72488 /* NativeLogProcessor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NativeLogProcessor.swift; sourceTree = "<group>"; };
+		242898A31D1D1D1E001807E5 /* AnyConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyConverter.swift; sourceTree = "<group>"; };
 		242AC25B1D19FD4200CEB18C /* RequestError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestError.swift; sourceTree = "<group>"; };
 		243CD8D91D10C32D002EE79F /* Request.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Request.swift; sourceTree = "<group>"; };
 		243CD8DB1D10C46D002EE79F /* AnyRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyRequest.swift; sourceTree = "<group>"; };
@@ -65,7 +66,6 @@
 		249CBDCC1D1C94190097C75E /* AnyDataLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyDataLoader.swift; sourceTree = "<group>"; };
 		249CBDCD1D1C94190097C75E /* DataLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataLoader.swift; sourceTree = "<group>"; };
 		249CBDCE1D1C94190097C75E /* FetchableDataProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchableDataProvider.swift; sourceTree = "<group>"; };
-		249CBDCF1D1C94190097C75E /* PagedDataAgregator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagedDataAgregator.swift; sourceTree = "<group>"; };
 		249CBDD01D1C94190097C75E /* PagedDataLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagedDataLoader.swift; sourceTree = "<group>"; };
 		249CBDD91D1C95890097C75E /* DefaultValueType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultValueType.swift; sourceTree = "<group>"; };
 		249CBDDA1D1C95890097C75E /* Observable+Nil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Observable+Nil.swift"; sourceTree = "<group>"; };
@@ -102,6 +102,7 @@
 			children = (
 				240A45811D1C69EE00CFD0DA /* SameTypeConverter.swift */,
 				240A45821D1C69EE00CFD0DA /* ConverterType.swift */,
+				242898A31D1D1D1E001807E5 /* AnyConverter.swift */,
 			);
 			path = Converter;
 			sourceTree = "<group>";
@@ -195,7 +196,6 @@
 				249CBDCC1D1C94190097C75E /* AnyDataLoader.swift */,
 				249CBDCD1D1C94190097C75E /* DataLoader.swift */,
 				249CBDCE1D1C94190097C75E /* FetchableDataProvider.swift */,
-				249CBDCF1D1C94190097C75E /* PagedDataAgregator.swift */,
 				249CBDD01D1C94190097C75E /* PagedDataLoader.swift */,
 			);
 			path = DataLoader;
@@ -372,6 +372,7 @@
 				2418B0E41D0D7F2C00B72488 /* Log.swift in Sources */,
 				249CBDE01D1C95890097C75E /* DefaultValueType.swift in Sources */,
 				240A45881D1C7D4300CFD0DA /* AbstractApiClient.swift in Sources */,
+				242898A41D1D1D1E001807E5 /* AnyConverter.swift in Sources */,
 				240A45841D1C69EE00CFD0DA /* ConverterType.swift in Sources */,
 				249CBDD61D1C94190097C75E /* PagedDataLoader.swift in Sources */,
 				240A45861D1C6D9900CFD0DA /* StoreDataProvider+Async.swift in Sources */,
@@ -384,7 +385,6 @@
 				249CBDF51D1C98E70097C75E /* Collection+Extension.swift in Sources */,
 				2418B0E81D0D8E0400B72488 /* NativeLogProcessor.swift in Sources */,
 				249CBDF31D1C95FF0097C75E /* RequestDataLoader.swift in Sources */,
-				249CBDD51D1C94190097C75E /* PagedDataAgregator.swift in Sources */,
 				249CBDF11D1C95950097C75E /* TransformDataProvider.swift in Sources */,
 				249CBDD31D1C94190097C75E /* DataLoader.swift in Sources */,
 				249CBDE11D1C95890097C75E /* Observable+Nil.swift in Sources */,

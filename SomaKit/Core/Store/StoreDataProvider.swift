@@ -8,26 +8,26 @@
 
 import RxSwift
 
-public class StoreDataProvider<TDataConverter: ConverterType, TStore: StoreType
-    where TDataConverter.ToValueType == TStore.DataType>: DataProviderType {
+public class StoreDataProvider<TData, TStore: StoreType>: DataProviderType {
     
-    public typealias DataType = TDataConverter.FromValueType
+    public typealias DataType = TData
     public typealias StoreDataType = TStore.DataType
     public typealias StoreKeyType = TStore.KeyType
     
     private let dataValue: Variable<DataType>
     private let store: TStore
     private let key: StoreKeyType
-    private let converter: TDataConverter
+    private let converter: AnyConverter<DataType, StoreDataType>
     
     public func rxData() -> Observable<DataType> {
         return dataValue.asObservable()
     }
     
-    public init(store: TStore, key: StoreKeyType, converter: TDataConverter, defaultValue: DataType) {
+    public init<TConverter: ConverterType where TConverter.FirstType == DataType,
+        TConverter.SecondType == StoreDataType>(store: TStore, key: StoreKeyType, converter: TConverter, defaultValue: DataType) {
         self.store = store
         self.key = key
-        self.converter = converter
+        self.converter = converter.asAny()
         dataValue = Variable(defaultValue)
     }
     
@@ -42,5 +42,11 @@ public class StoreDataProvider<TDataConverter: ConverterType, TStore: StoreType
         let data = try converter.convertValue(storeData)
         dataValue.value = data
         return data
+    }
+}
+
+public extension StoreDataProvider where TData == TStore.DataType {
+    public convenience init(store: TStore, key: StoreKeyType, defaultValue: DataType) {
+        self.init(store: store, key: key, converter: SameTypeConverter(), defaultValue: defaultValue)
     }
 }

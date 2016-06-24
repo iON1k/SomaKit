@@ -17,7 +17,6 @@ public class RequestDataLoader<TRequest: RequestType, TData>: DataLoaderType {
     public typealias DataType = TData
     public typealias TransformHandler = TRequest.ResponseType -> DataType
     
-    
     private let dataValue = Variable<RequestDataLoaderValue<DataType>>(.NoData)
     
     private let request: TRequest
