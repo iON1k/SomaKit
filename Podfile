@@ -3,5 +3,9 @@ use_frameworks!
 
 source 'https://github.com/CocoaPods/Specs.git'
 
-pod 'RxSwift', '~> 2.5'
-pod 'RxCocoa', '~> 2.5'
+target 'SomaKit' do
+    pod 'RxSwift', '~> 2.5'
+    pod 'RxCocoa', '~> 2.5'
+    pod 'RxAlamofire', '~> 2.5'
+    pod 'ObjectMapper', '~> 1.3'
+end

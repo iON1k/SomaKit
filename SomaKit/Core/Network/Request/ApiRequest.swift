@@ -8,15 +8,16 @@
 
 import RxSwift
 
-public enum MethodType {
+public enum ApiMethodType: String {
     case Get
     case Post
 }
 
 public protocol ApiRequestMaganer {
-    func apiRequestRunningEngine<TResponse>(request: ApiRequest<TResponse>) -> Observable<Any>
+    func apiRequestRunningEngine<TResponse>(request: ApiRequest<TResponse>) throws -> Observable<Any>
     func apiResponseMappingEngine<TResponse>(request: ApiRequest<TResponse>, sourceResponse: Any) -> Observable<TResponse>
     func apiRequestHandleError<TResponse>(request: ApiRequest<TResponse>, error: ErrorType)
+    func apiRequestCompleted<TResponse>(request: ApiRequest<TResponse>, response: TResponse)
 }
 
 public class ApiRequest<TResponse>: RequestType {
@@ -25,12 +26,12 @@ public class ApiRequest<TResponse>: RequestType {
     
     private let manager: ApiRequestMaganer
     public let apiMethod: String
-    public let methodType: MethodType
+    public let methodType: ApiMethodType
     public let params: ParamsType
     
     public func rxResponse() -> Observable<ResponseType> {
         return Observable.deferred({ () in
-            return Observable.just(self.manager.apiRequestRunningEngine(self))
+            return try Observable.just(self.manager.apiRequestRunningEngine(self))
         })
         .flatMap({ (engine) -> Observable<Any> in
             return engine
@@ -42,6 +43,8 @@ public class ApiRequest<TResponse>: RequestType {
             if let responseError = self._checkResponseOnError(response) {
                 throw responseError
             }
+            
+            self.manager.apiRequestCompleted(self, response: response)
         })
         .doOnError({ (error) in
             self.manager.apiRequestHandleError(self, error: error)
@@ -52,7 +55,7 @@ public class ApiRequest<TResponse>: RequestType {
         return nil
     }
     
-    public init(manager: ApiRequestMaganer, methodType: MethodType, apiMethod: String, params: ParamsType) {
+    public init(manager: ApiRequestMaganer, methodType: ApiMethodType, apiMethod: String, params: ParamsType) {
         self.manager = manager
         self.methodType = methodType
         self.apiMethod = apiMethod

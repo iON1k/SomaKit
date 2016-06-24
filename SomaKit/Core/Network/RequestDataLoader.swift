@@ -8,18 +8,31 @@
 
 import RxSwift
 
+private enum RequestDataLoaderValue<TData> {
+    case NoData
+    case SomeData(data: TData)
+}
+
 public class RequestDataLoader<TRequest: RequestType, TData>: DataLoaderType {
     public typealias DataType = TData
     public typealias TransformHandler = TRequest.ResponseType -> DataType
     
-    private let dataValue = Variable<DataType?>(nil)
+    
+    private let dataValue = Variable<RequestDataLoaderValue<DataType>>(.NoData)
     
     private let request: TRequest
     private let transformHandler: TransformHandler
     
     public func rxData() -> Observable<DataType> {
         return dataValue.asObservable()
-            .ignoreNil()
+            .flatMap({ (dataValue) -> Observable<DataType> in
+                switch dataValue {
+                case .NoData:
+                    return Observable.empty()
+                case .SomeData(let data):
+                    return Observable.just(data)
+                }
+            })
     }
     
     public func loadData() -> Observable<DataType> {
@@ -28,7 +41,7 @@ public class RequestDataLoader<TRequest: RequestType, TData>: DataLoaderType {
                 return self.transformHandler(response)
             }
             .doOnNext { (newData) in
-                self.dataValue.value = newData
+                self.dataValue.value = RequestDataLoaderValue.SomeData(data: newData)
             }
     }
     
@@ -44,8 +57,6 @@ public extension RequestType {
     }
     
     public func asDataLoader() -> RequestDataLoader<Self, ResponseType> {
-        return asDataLoader() { response in
-            return response
-        }
+        return asDataLoader(SomaFunc.emptyTransform)
     }
 }

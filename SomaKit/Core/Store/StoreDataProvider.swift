@@ -8,65 +8,39 @@
 
 import RxSwift
 
-public class StoreDataProvider<TStore: StoreType>: DataProviderType {
-    public typealias DataType = TStore.DataType
+public class StoreDataProvider<TDataConverter: ConverterType, TStore: StoreType
+    where TDataConverter.ToValueType == TStore.DataType>: DataProviderType {
+    
+    public typealias DataType = TDataConverter.FromValueType
+    public typealias StoreDataType = TStore.DataType
     public typealias StoreKeyType = TStore.KeyType
     
     private let dataValue: Variable<DataType>
     private let store: TStore
     private let key: StoreKeyType
+    private let converter: TDataConverter
     
     public func rxData() -> Observable<DataType> {
         return dataValue.asObservable()
     }
     
-    public init(store: TStore, key: StoreKeyType, defaultValue: DataType) {
-        dataValue = Variable(defaultValue)
+    public init(store: TStore, key: StoreKeyType, converter: TDataConverter, defaultValue: DataType) {
         self.store = store
         self.key = key
+        self.converter = converter
+        dataValue = Variable(defaultValue)
     }
     
-    public func updateData(data: DataType) throws {
-        try store.saveData(key, data: data)
+    public func setData(data: DataType) throws {
+        let storeData = try converter.convertValue(data)
+        try store.saveData(key, data: storeData)
         dataValue.value = data
     }
     
     public func loadData() throws -> DataType {
-        let data = try store.loadData(key)
+        let storeData = try store.loadData(key)
+        let data = try converter.convertValue(storeData)
         dataValue.value = data
         return data
     }
 }
-
-extension StoreDataProvider {
-    public func updateDataAsync(data: DataType) -> Observable<Void> {
-        return Observable.create({ (observer) -> Disposable in
-            do {
-                try self.updateData(data)
-                observer.onNext()
-                observer.onCompleted()
-            } catch let error {
-                observer.onError(error)
-            }
-            
-            return NopDisposable.instance
-        })
-        .subscribeOn(ConcurrentDispatchQueueScheduler(globalConcurrentQueueQOS: .Default))
-    }
-    
-    public func loadDataAsync() -> Observable<DataType> {
-        return Observable.create({ (observer) -> Disposable in
-            do {
-                let data = try self.loadData()
-                observer.onNext(data)
-                observer.onCompleted()
-            } catch let error {
-                observer.onError(error)
-            }
-            
-            return NopDisposable.instance
-        })
-        .subscribeOn(ConcurrentDispatchQueueScheduler(globalConcurrentQueueQOS: .Default))
-    }
-}
-
