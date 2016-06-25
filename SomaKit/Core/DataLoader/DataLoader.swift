@@ -11,3 +11,9 @@ import RxSwift
 public protocol DataLoaderType: DataProviderType {
     func loadData() -> Observable<DataType>
 }
+
+extension DataProviderType {
+    func loadData() -> Observable<DataType> {
+        return Observable.empty()
+    }
+}
