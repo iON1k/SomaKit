@@ -8,7 +8,7 @@
 
 import RxSwift
 
-public class RequestDataLoader<TRequest: RequestType, TData>: DataLoaderType {
+public class RequestDataLoader<TRequest: RequestType, TData>: DataProviderType {
     public typealias DataType = TData
     public typealias TransformHandler = TRequest.ResponseType -> DataType
     
