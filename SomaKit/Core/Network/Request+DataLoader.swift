@@ -10,7 +10,7 @@ import RxSwift
 
 public extension RequestType {
     public func asDataLoader(defaultValue: ResponseType) -> DataLoader<ResponseType> {
-        return DataLoader(source: self.asObservable(), defaultValue: defaultValue)
+        return DataLoader(dataSource: self, defaultValue: defaultValue)
     }
 }
 

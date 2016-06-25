@@ -19,14 +19,14 @@ public class TransformDataProvider<TData, TSourceData>: DataProviderType {
         return transformHandler(sourceRxData())
     }
     
-    public init<TDataProvider: DataProviderConvertibleType where TDataProvider.DataType == TSourceData>(dataProvider: TDataProvider, transformHandler: TransformHandler) {
-        sourceRxData = dataProvider.asDataProvider().rxData
+    public init<TDataSource: DataProviderConvertibleType where TDataSource.DataType == TSourceData>(dataSource: TDataSource, transformHandler: TransformHandler) {
+        sourceRxData = dataSource.asDataProvider().rxData
         self.transformHandler = transformHandler
     }
 }
 
 extension DataProviderConvertibleType {
     public func transform<TData>(transformHandler: Observable<DataType> -> Observable<TData>) -> TransformDataProvider<TData, DataType> {
-        return TransformDataProvider(dataProvider: self, transformHandler: transformHandler)
+        return TransformDataProvider(dataSource: self, transformHandler: transformHandler)
     }
 }
