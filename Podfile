@@ -8,4 +8,5 @@ target 'SomaKit' do
     pod 'RxCocoa', '~> 2.5'
     pod 'RxAlamofire', '~> 2.5'
     pod 'ObjectMapper', '~> 1.3'
+    pod 'MagicalRecord', '~> 2.3'
 end

@@ -8,30 +8,15 @@
 
 import Foundation
 
-public class AnyConverter<TValue1, TValue2>: ConverterType {
-    public typealias FirstType = TValue1
-    public typealias SecondType = TValue2
-    
-    private let sourceConvertValue1: FirstType throws -> SecondType
-    private let sourceConvertValue2: SecondType throws -> FirstType
-    
-    public func convertValue(value: FirstType) throws -> SecondType {
-        return try sourceConvertValue1(value)
-    }
-    
-    public func convertValue(value: SecondType) throws -> FirstType {
-        return try sourceConvertValue2(value)
-    }
-    
-    public init<TConverter: ConverterType where TConverter.FirstType == FirstType,
-        TConverter.SecondType == SecondType>(sourceConverter: TConverter) {
-        sourceConvertValue1 = sourceConverter.convertValue
-        sourceConvertValue2 = sourceConverter.convertValue
+public class AnyConverter<TValue1, TValue2>: HandleConverter<TValue1, TValue2> {
+    public init<TConverter: ConverterType where TConverter.Type1 == Type1,
+        TConverter.Type2 == Type2>(sourceConverter: TConverter) {
+        super.init(converterHandler1: sourceConverter.convertValue, converterHandler2: sourceConverter.convertValue)
     }
 }
 
 extension ConverterType {
-    public func asAny() -> AnyConverter<FirstType, SecondType> {
+    public func asAny() -> AnyConverter<Type1, Type2> {
         return AnyConverter(sourceConverter: self)
     }
 }

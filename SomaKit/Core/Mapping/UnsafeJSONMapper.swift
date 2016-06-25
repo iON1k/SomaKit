@@ -36,18 +36,16 @@ public class UnsafeJSONMapper {
     }
     
     public func map<TObject>(jsonString: String, mapperKey: String) throws -> TObject {
-        let mappingHandler = mappingHandlers[mapperKey]
-        
-        guard mappingHandler != nil else {
+        guard let mappingHandler = mappingHandlers[mapperKey] else {
             throw SomaError("UnsafeJSONStringMapper no register type with key \(mapperKey)")
         }
         
-        let resultObject = mappingHandler!(jsonString)
+        let resultObject = mappingHandler(jsonString)
         
         if let resultObject = resultObject as? TObject {
             return resultObject
         } else {
-            throw SomaError("UnsafeJSONStringMapper json mapping error: \(jsonString)")
+            throw SomaError("UnsafeJSONStringMapper json mapping error:\n\(jsonString)")
         }
     }
     

@@ -20,9 +20,9 @@ public func synchronized(lockObj: AnyObject, @noescape block: () -> Void) -> Voi
     endSyncLock(lockObj)
 }
 
-public func synchronized<T>(lockObj: AnyObject, @noescape block: () -> T!) -> T! {
+public func synchronized<T>(lockObj: AnyObject, @noescape block: () -> T) -> T {
     beginSyncLock(lockObj)
-    let result: T! = block()
+    let result: T = block()
     endSyncLock(lockObj)
     
     return result
@@ -41,7 +41,7 @@ public class SyncLock {
         synchronized(self, block: block)
     }
     
-    public func sync<T>(@noescape block: () -> T!) -> T! {
+    public func sync<T>(@noescape block: () -> T) -> T {
         return synchronized(self, block: block)
     }
 }

@@ -23,8 +23,8 @@ public class StoreDataProvider<TData, TStore: StoreType>: DataProviderType {
         return dataValue.asObservable()
     }
     
-    public init<TConverter: ConverterType where TConverter.FirstType == DataType,
-        TConverter.SecondType == StoreDataType>(store: TStore, key: StoreKeyType, converter: TConverter, defaultValue: DataType) {
+    public init<TConverter: ConverterType where TConverter.Type1 == DataType,
+        TConverter.Type2 == StoreDataType>(store: TStore, key: StoreKeyType, converter: TConverter, defaultValue: DataType) {
         self.store = store
         self.key = key
         self.converter = converter.asAny()
@@ -37,8 +37,11 @@ public class StoreDataProvider<TData, TStore: StoreType>: DataProviderType {
         dataValue.value = data
     }
     
-    public func loadData() throws -> DataType {
-        let storeData = try store.loadData(key)
+    public func loadData() throws -> DataType? {
+        guard let storeData = try store.loadData(key) else {
+            return nil
+        }
+        
         let data = try converter.convertValue(storeData)
         dataValue.value = data
         return data

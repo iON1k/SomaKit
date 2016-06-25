@@ -7,10 +7,10 @@
 //
 
 public class SameTypeConverter<TValue>: ConverterType {
-    public typealias FirstType = TValue
-    public typealias SecondType = TValue
+    public typealias Type1 = TValue
+    public typealias Type2 = TValue
     
-    public func convertValue(value: FirstType) throws -> SecondType {
+    public func convertValue(value: Type1) throws -> Type2 {
         return value
     }
 }

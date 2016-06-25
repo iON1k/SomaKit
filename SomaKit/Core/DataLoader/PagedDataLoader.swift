@@ -45,8 +45,8 @@ public class PagedDataLoader<TData>: DataProviderType {
     }
     
     private func getPageProvider(pageNumber: PageType) -> SourcePageDataLoader {
-        return pageProvidersSyncLock.sync { () -> SourcePageDataLoader! in
-            var pageProvider = pageProviders[pageNumber]
+        return pageProvidersSyncLock.sync { () -> SourcePageDataLoader in
+            var pageProvider: SourcePageDataLoader! = pageProviders[pageNumber]
             
             if pageProvider == nil {
                 pageProvider = _createPageDataProvider(pageNumber)
@@ -59,7 +59,11 @@ public class PagedDataLoader<TData>: DataProviderType {
                     .addDisposableTo(disposeBag)
             }
             
-            return pageProvider
+            guard let resultPageProvider = pageProvider else {
+                fatalError("Page provder not created")
+            }
+            
+            return resultPageProvider
         }
     }
     

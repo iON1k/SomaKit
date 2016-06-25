@@ -10,6 +10,6 @@ public protocol StoreType {
     associatedtype KeyType
     associatedtype DataType
     
-    func loadData(key: KeyType) throws -> DataType
+    func loadData(key: KeyType) throws -> DataType?
     func saveData(key: KeyType, data: DataType) throws
 }

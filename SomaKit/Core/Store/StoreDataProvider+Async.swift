@@ -24,7 +24,7 @@ public extension StoreDataProvider {
             .subscribeOn(ConcurrentDispatchQueueScheduler(globalConcurrentQueueQOS: .Default))
     }
     
-    public func loadDataAsync() -> Observable<DataType> {
+    public func loadDataAsync() -> Observable<DataType?> {
         return Observable.create({ (observer) -> Disposable in
             do {
                 let data = try self.loadData()
