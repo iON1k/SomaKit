@@ -1,5 +1,5 @@
 //
-//  DataProvider.swift
+//  DataProviderType.swift
 //  SomaKit
 //
 //  Created by Anton on 13.06.16.
@@ -24,7 +24,7 @@ extension DataProviderType {
 }
 
 extension DataProviderType {
-    public func asDataProvider() -> AnyDataProvider<DataType> {
-        return self.asAny()
+    public func asAnyDataProvider() -> AnyDataProvider<DataType> {
+        return AnyDataProvider(rxData)
     }
 }

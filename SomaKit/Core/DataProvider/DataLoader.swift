@@ -14,7 +14,7 @@ public class DataLoader<TData>: DataProviderType {
     
     private let dataValue: Variable<DataType>
     
-    private let sourceDataHandler: SourceDataHandler
+    private let sourceProvider: AnyDataProvider<TData>
     private let defaultValue: DataType
     
     public func rxData() -> Observable<DataType> {
@@ -26,27 +26,27 @@ public class DataLoader<TData>: DataProviderType {
     }
     
     public func fetchData() -> Observable<DataType> {
-        return sourceDataHandler()
+        return sourceProvider.rxData()
             .doOnNext { (data) in
                 self.dataValue.value = data
             }
     }
     
-    public init<TDataSource: DataProviderConvertibleType where TDataSource.DataType == DataType>(dataSource: TDataSource, defaultValue: DataType) {
-        self.sourceDataHandler = dataSource.asDataProvider().rxData
+    public init<TDataProvider: DataProviderConvertibleType where TDataProvider.DataType == DataType>(dataProvider: TDataProvider, defaultValue: DataType) {
+        self.sourceProvider = dataProvider.asAnyDataProvider()
         self.defaultValue = defaultValue
         
         dataValue = Variable(defaultValue)
     }
 }
 
-public extension DataProviderType {
+public extension DataProviderConvertibleType {
     public func asDataLoader(defaultValue: DataType) -> DataLoader<DataType> {
-        return DataLoader(dataSource: self, defaultValue: defaultValue)
+        return DataLoader(dataProvider: self, defaultValue: defaultValue)
     }
 }
 
-public extension DataProviderType where DataType: DefaultValueType {
+public extension DataProviderConvertibleType where DataType: DefaultValueType {
     public func asDataLoader() -> DataLoader<DataType> {
         return asDataLoader(DataType.defaultValue)
     }

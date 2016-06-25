@@ -8,14 +8,23 @@
 
 import RxSwift
 
-public class AnyDataProvider<TData>: TransformDataProvider<TData, TData> {
-    public init<TDataSource: DataProviderConvertibleType where TDataSource.DataType == DataType>(dataSource: TDataSource) {
-        super.init(dataSource: dataSource, transformHandler: SomaFunc.emptyTransform)
+public class AnyDataProvider<TData>: DataProviderType {
+    public typealias DataType = TData
+    public typealias DataHandlerType = Void -> Observable<DataType>
+    
+    private let sourceDataHandler: DataHandlerType
+    
+    public func rxData() -> Observable<DataType> {
+        return sourceDataHandler()
+    }
+    
+    public init(_ sourceDataHandler: DataHandlerType) {
+        self.sourceDataHandler = sourceDataHandler
     }
 }
 
-public extension DataProviderConvertibleType {
-    public func asAny() -> AnyDataProvider<DataType> {
-        return AnyDataProvider(dataSource: self)
+public extension AnyDataProvider {
+    public func asAnyDataProvider() -> AnyDataProvider<DataType> {
+        return self
     }
 }

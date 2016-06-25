@@ -23,8 +23,8 @@ public class StoreDataProvider<TData, TKey>: DataProviderType {
         return dataValue.asObservable()
     }
     
-    public init<TStore: StoreType where TStore.DataType == DataType, TStore.KeyType == KeyType>(store: TStore, key: KeyType, defaultValue: DataType) {
-        self.store = store.asAny()
+    public init<TStore: StoreConvertibleType where TStore.DataType == DataType, TStore.KeyType == KeyType>(store: TStore, key: KeyType, defaultValue: DataType) {
+        self.store = store.asAnyStore()
         
         self.key = key
         self.defaultValue = defaultValue

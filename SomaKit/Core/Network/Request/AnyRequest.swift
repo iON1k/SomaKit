@@ -10,20 +10,21 @@ import RxSwift
 
 public class AnyRequest<TResponse>: RequestType {
     public typealias ResponseType = TResponse
+    public typealias ResponseHandlerType = Void -> Observable<ResponseType>
 
-    private let sourceRxResponse: Void -> Observable<ResponseType>
+    private let sourceResponseHandler: ResponseHandlerType
     
     public func rxResponse() -> Observable<ResponseType> {
-        return sourceRxResponse()
+        return sourceResponseHandler()
     }
     
-    public init<TRequest: RequestType where TRequest.ResponseType == ResponseType>(sourceRequest: TRequest) {
-        sourceRxResponse = sourceRequest.rxResponse
+    public init(_ sourceResponseHandler: ResponseHandlerType) {
+        self.sourceResponseHandler = sourceResponseHandler
     }
 }
 
-public extension RequestType {
-    public func asAny() -> AnyRequest<ResponseType> {
-        return AnyRequest(sourceRequest: self)
+public extension AnyRequest {
+    public func asAnyRequest() -> AnyRequest<ResponseType> {
+        return self
     }
 }

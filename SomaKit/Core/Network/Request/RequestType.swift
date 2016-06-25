@@ -1,5 +1,5 @@
 //
-//  Request.swift
+//  RequestType.swift
 //  SomaKit
 //
 //  Created by Anton on 15.06.16.
@@ -8,7 +8,7 @@
 
 import RxSwift
 
-public protocol RequestType: ObservableConvertibleType, DataProviderConvertibleType {
+public protocol RequestType: ObservableConvertibleType, DataProviderConvertibleType, RequestConvertibleType {
     associatedtype ResponseType
     
     func rxResponse() -> Observable<ResponseType>
@@ -27,7 +27,13 @@ extension RequestType {
 extension RequestType {
     public typealias DataType = ResponseType
     
-    public func asDataProvider() -> AnyDataProvider<ResponseType> {
-        return self.asAny()
+    public func asAnyDataProvider() -> AnyDataProvider<ResponseType> {
+        return AnyDataProvider(rxResponse)
+    }
+}
+
+extension RequestType {
+    public func asAnyRequest() -> AnyRequest<ResponseType> {
+        return AnyRequest(rxResponse)
     }
 }

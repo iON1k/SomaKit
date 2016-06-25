@@ -12,21 +12,21 @@ public class TransformDataProvider<TData, TSourceData>: DataProviderType {
     public typealias DataType = TData
     public typealias TransformHandler = Observable<TSourceData> -> Observable<DataType>
     
-    private let sourceRxData: Void -> Observable<TSourceData>
+    private let sourceDataHandler: Void -> Observable<TSourceData>
     private let transformHandler: TransformHandler
     
     public func rxData() -> Observable<DataType> {
-        return transformHandler(sourceRxData())
+        return transformHandler(sourceDataHandler())
     }
     
-    public init<TDataSource: DataProviderConvertibleType where TDataSource.DataType == TSourceData>(dataSource: TDataSource, transformHandler: TransformHandler) {
-        sourceRxData = dataSource.asDataProvider().rxData
+    public init<TDataProvider: DataProviderType where TDataProvider.DataType == TSourceData>(dataProvider: TDataProvider, transformHandler: TransformHandler) {
+        sourceDataHandler = dataProvider.rxData
         self.transformHandler = transformHandler
     }
 }
 
-extension DataProviderConvertibleType {
+extension DataProviderType {
     public func transform<TData>(transformHandler: Observable<DataType> -> Observable<TData>) -> TransformDataProvider<TData, DataType> {
-        return TransformDataProvider(dataSource: self, transformHandler: transformHandler)
+        return TransformDataProvider(dataProvider: self, transformHandler: transformHandler)
     }
 }
