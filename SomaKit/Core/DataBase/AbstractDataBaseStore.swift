@@ -15,7 +15,7 @@ public class AbstractDataBaseStore<TKey: CVarArgType, TData, TDataBase: NSManage
     public typealias SetterHandlerType = (DataType, DataBaseType) throws -> Void
     public typealias GetterHandlerType = (DataBaseType) throws -> DataType
     
-    private let keyProperty: String
+    public let keyProperty: String
     
     private let setterHandler: SetterHandlerType
     private let getterHandler: GetterHandlerType

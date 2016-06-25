@@ -32,6 +32,10 @@ public class UserDefaultsStore<TData: AnyObject>: StoreType {
         userDefaults.setObject(data, forKey: key)
     }
     
+    public func removeData(key: KeyType) {
+        userDefaults.removeObjectForKey(key)
+    }
+    
     public init(userDefaults: NSUserDefaults) {
         self.userDefaults = userDefaults
     }

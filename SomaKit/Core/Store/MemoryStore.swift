@@ -10,13 +10,30 @@ public class MemoryStore<TValue>: StoreType {
     public typealias KeyType = String
     public typealias DataType = TValue
     
+    private var syncLock = SyncLock()
     private var dictionaryStore: [String : TValue] = [:]
     
     public func loadData(key: KeyType) throws -> DataType? {
-        return dictionaryStore[key]
+        return syncLock.sync({ () -> DataType? in
+            return dictionaryStore[key]
+        })
     }
     
     public func saveData(key: KeyType, data: DataType) throws {
-        dictionaryStore[key] = data
+        return syncLock.sync({ () -> Void in
+            return dictionaryStore[key] = data
+        })
+    }
+    
+    public func removeData(key: KeyType) {
+        return syncLock.sync({ () -> Void in
+            return dictionaryStore.removeValueForKey(key)
+        })
+    }
+    
+    public func removeAllData() {
+        return syncLock.sync({ () -> Void in
+            return dictionaryStore.removeAll()
+        })
     }
 }

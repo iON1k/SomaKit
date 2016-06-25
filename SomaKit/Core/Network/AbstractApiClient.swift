@@ -13,11 +13,11 @@ import ObjectMapper
 
 public class AbstractJSONApiClient: ApiRequestMaganer {
     private let alamoManager: Manager
-    private let baseUrl: NSURL
+    private let baseUrl: URLConvertible
     
     private let jsonMapper = UnsafeJSONMapper()
     
-    public init(baseUrl: NSURL, alamoManager: Manager) {
+    public init(baseUrl: URLConvertible, alamoManager: Manager) {
         self.alamoManager = alamoManager
         self.baseUrl = baseUrl
     }
@@ -73,7 +73,7 @@ public class AbstractJSONApiClient: ApiRequestMaganer {
     }
     
     private func buildURLString(endPoint: String) throws -> String {
-        let url = NSURL(string: endPoint, relativeToURL: baseUrl)
+        let url = NSURL(string: endPoint, relativeToURL: baseUrl.url)
         
         if let url = url {
             return url.absoluteString

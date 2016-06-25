@@ -48,6 +48,7 @@
 		24A243BF1D1EDF6800128012 /* Observable+DataProviderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24A243BE1D1EDF6800128012 /* Observable+DataProviderType.swift */; };
 		24E07E011D1EAEFF006B2914 /* StoreType+Async.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E07E001D1EAEFF006B2914 /* StoreType+Async.swift */; };
 		24E07E031D1EC16F006B2914 /* DataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E07E021D1EC16F006B2914 /* DataLoader.swift */; };
+		24E4F5B71D1EEDB400F65297 /* URLConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E4F5B61D1EEDB400F65297 /* URLConvertible.swift */; };
 		24EA198D1D1E88E1009A5301 /* PagedDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EA198C1D1E88E1009A5301 /* PagedDataProvider.swift */; };
 		BAD7EEB694F1856A96767CC2 /* Pods_SomaKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E6C592268BFE55E26AEC882 /* Pods_SomaKit.framework */; };
 /* End PBXBuildFile section */
@@ -97,6 +98,7 @@
 		24A243BE1D1EDF6800128012 /* Observable+DataProviderType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Observable+DataProviderType.swift"; sourceTree = "<group>"; };
 		24E07E001D1EAEFF006B2914 /* StoreType+Async.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "StoreType+Async.swift"; sourceTree = "<group>"; };
 		24E07E021D1EC16F006B2914 /* DataLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataLoader.swift; sourceTree = "<group>"; };
+		24E4F5B61D1EEDB400F65297 /* URLConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLConvertible.swift; sourceTree = "<group>"; };
 		24EA198C1D1E88E1009A5301 /* PagedDataProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagedDataProvider.swift; sourceTree = "<group>"; };
 		4E6C592268BFE55E26AEC882 /* Pods_SomaKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SomaKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		63EB9298E17EAC012969AD36 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -237,6 +239,7 @@
 		249CBDD81D1C95890097C75E /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				24E4F5B61D1EEDB400F65297 /* URLConvertible.swift */,
 				249CBDD91D1C95890097C75E /* DefaultValueType.swift */,
 				249CBDDA1D1C95890097C75E /* Observable+Nil.swift */,
 				249CBDDB1D1C95890097C75E /* OptionalType.swift */,
@@ -401,6 +404,7 @@
 				24A243B51D1ED0E400128012 /* TransformStore.swift in Sources */,
 				2418B0E61D0D8DBD00B72488 /* Log+Extension.swift in Sources */,
 				243EC4B01D1B55C1006BBC49 /* StoreType.swift in Sources */,
+				24E4F5B71D1EEDB400F65297 /* URLConvertible.swift in Sources */,
 				249CBDE61D1C95890097C75E /* Utils.swift in Sources */,
 				24A243BB1D1EDCBE00128012 /* StoreConvertibleType.swift in Sources */,
 				249CBDED1D1C95950097C75E /* AnyDataProvider.swift in Sources */,
