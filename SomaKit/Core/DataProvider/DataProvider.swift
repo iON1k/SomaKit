@@ -8,7 +8,23 @@
 
 import RxSwift
 
-public protocol DataProviderType {
+public protocol DataProviderType: ObservableConvertibleType, DataProviderConvertibleType {
     associatedtype DataType
     func rxData() -> Observable<DataType>
+}
+
+extension DataProviderType {
+    public typealias E = DataType
+    
+    public func asObservable() -> Observable<DataType> {
+        return Observable.deferred({ () -> Observable<DataType> in
+            return self.rxData()
+        })
+    }
+}
+
+extension DataProviderType {
+    public func asDataProvider() -> AnyDataProvider<DataType> {
+        return self.asAny()
+    }
 }

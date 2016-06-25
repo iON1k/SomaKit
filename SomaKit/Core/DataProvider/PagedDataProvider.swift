@@ -1,5 +1,5 @@
 //
-//  PagedDataLoader.swift
+//  PagedDataProvider.swift
 //  SomaKit
 //
 //  Created by Anton on 13.06.16.
@@ -8,7 +8,7 @@
 
 import RxSwift
 
-public class PagedDataLoader<TData>: DataProviderType {
+public class PagedDataProvider<TData>: DataProviderType {
     public typealias PageType = UInt
     public typealias PageDataType = TData
     public typealias DataType = [PageType : PageDataType]
@@ -53,7 +53,7 @@ public class PagedDataLoader<TData>: DataProviderType {
     }
 }
 
-extension PagedDataLoader {
+extension PagedDataProvider {
     public convenience init() {
         self.init(defaultData: [:])
     }

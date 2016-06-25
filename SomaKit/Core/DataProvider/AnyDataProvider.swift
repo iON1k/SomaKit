@@ -9,13 +9,13 @@
 import RxSwift
 
 public class AnyDataProvider<TData>: TransformDataProvider<TData, TData> {
-    public init<TDataProvider: DataProviderType where TDataProvider.DataType == DataType>(dataProvider: TDataProvider) {
+    public init<TDataProvider: DataProviderConvertibleType where TDataProvider.DataType == DataType>(dataProvider: TDataProvider) {
         super.init(dataProvider: dataProvider, transformHandler: SomaFunc.emptyTransform)
     }
 }
 
-public extension DataProviderType {
-    public func asAnyProvider() -> AnyDataProvider<DataType> {
+public extension DataProviderConvertibleType {
+    public func asAny() -> AnyDataProvider<DataType> {
         return AnyDataProvider(dataProvider: self)
     }
 }

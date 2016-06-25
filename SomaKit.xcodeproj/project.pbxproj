@@ -42,9 +42,12 @@
 		249CBDEF1D1C95950097C75E /* DataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 249CBDEA1D1C95950097C75E /* DataProvider.swift */; };
 		249CBDF01D1C95950097C75E /* ObservableDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 249CBDEB1D1C95950097C75E /* ObservableDataProvider.swift */; };
 		249CBDF11D1C95950097C75E /* TransformDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 249CBDEC1D1C95950097C75E /* TransformDataProvider.swift */; };
-		249CBDF31D1C95FF0097C75E /* RequestDataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 249CBDF21D1C95FF0097C75E /* RequestDataLoader.swift */; };
+		249CBDF31D1C95FF0097C75E /* Request+DataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 249CBDF21D1C95FF0097C75E /* Request+DataLoader.swift */; };
 		249CBDF51D1C98E70097C75E /* Collection+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 249CBDF41D1C98E70097C75E /* Collection+Extension.swift */; };
-		24EA198D1D1E88E1009A5301 /* PagedDataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EA198C1D1E88E1009A5301 /* PagedDataLoader.swift */; };
+		24A243B31D1ECB1E00128012 /* DataProviderConvertibleType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24A243B21D1ECB1E00128012 /* DataProviderConvertibleType.swift */; };
+		24E07E011D1EAEFF006B2914 /* StoreType+Async.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E07E001D1EAEFF006B2914 /* StoreType+Async.swift */; };
+		24E07E031D1EC16F006B2914 /* DataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E07E021D1EC16F006B2914 /* DataLoader.swift */; };
+		24EA198D1D1E88E1009A5301 /* PagedDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EA198C1D1E88E1009A5301 /* PagedDataProvider.swift */; };
 		BAD7EEB694F1856A96767CC2 /* Pods_SomaKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E6C592268BFE55E26AEC882 /* Pods_SomaKit.framework */; };
 /* End PBXBuildFile section */
 
@@ -87,9 +90,12 @@
 		249CBDEA1D1C95950097C75E /* DataProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataProvider.swift; sourceTree = "<group>"; };
 		249CBDEB1D1C95950097C75E /* ObservableDataProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservableDataProvider.swift; sourceTree = "<group>"; };
 		249CBDEC1D1C95950097C75E /* TransformDataProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransformDataProvider.swift; sourceTree = "<group>"; };
-		249CBDF21D1C95FF0097C75E /* RequestDataLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestDataLoader.swift; sourceTree = "<group>"; };
+		249CBDF21D1C95FF0097C75E /* Request+DataLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Request+DataLoader.swift"; path = "SomaKit/Core/Network/Request+DataLoader.swift"; sourceTree = SOURCE_ROOT; };
 		249CBDF41D1C98E70097C75E /* Collection+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Collection+Extension.swift"; sourceTree = "<group>"; };
-		24EA198C1D1E88E1009A5301 /* PagedDataLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagedDataLoader.swift; sourceTree = "<group>"; };
+		24A243B21D1ECB1E00128012 /* DataProviderConvertibleType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataProviderConvertibleType.swift; sourceTree = "<group>"; };
+		24E07E001D1EAEFF006B2914 /* StoreType+Async.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "StoreType+Async.swift"; sourceTree = "<group>"; };
+		24E07E021D1EC16F006B2914 /* DataLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataLoader.swift; sourceTree = "<group>"; };
+		24EA198C1D1E88E1009A5301 /* PagedDataProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagedDataProvider.swift; sourceTree = "<group>"; };
 		4E6C592268BFE55E26AEC882 /* Pods_SomaKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SomaKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		63EB9298E17EAC012969AD36 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD9C42503E8BBE7336950BBF /* Pods-SomaKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SomaKit.release.xcconfig"; path = "Pods/Target Support Files/Pods-SomaKit/Pods-SomaKit.release.xcconfig"; sourceTree = "<group>"; };
@@ -194,7 +200,6 @@
 			children = (
 				243CD8D81D10C2FF002EE79F /* Request */,
 				240A45871D1C7D4300CFD0DA /* AbstractApiClient.swift */,
-				249CBDF21D1C95FF0097C75E /* RequestDataLoader.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -206,6 +211,7 @@
 				243CD8DB1D10C46D002EE79F /* AnyRequest.swift */,
 				243F99721D1298F8000E979A /* ApiRequest.swift */,
 				242AC25B1D19FD4200CEB18C /* RequestError.swift */,
+				249CBDF21D1C95FF0097C75E /* Request+DataLoader.swift */,
 			);
 			path = Request;
 			sourceTree = "<group>";
@@ -214,6 +220,7 @@
 			isa = PBXGroup;
 			children = (
 				243EC4AF1D1B55C1006BBC49 /* StoreType.swift */,
+				24E07E001D1EAEFF006B2914 /* StoreType+Async.swift */,
 				243EC4B11D1B5680006BBC49 /* StoreDataProvider.swift */,
 				240A45851D1C6D9900CFD0DA /* StoreDataProvider+Async.swift */,
 				24250C4C1D1DF40D00D208DF /* MemoryStore.swift */,
@@ -246,7 +253,9 @@
 				249CBDEA1D1C95950097C75E /* DataProvider.swift */,
 				249CBDEB1D1C95950097C75E /* ObservableDataProvider.swift */,
 				249CBDEC1D1C95950097C75E /* TransformDataProvider.swift */,
-				24EA198C1D1E88E1009A5301 /* PagedDataLoader.swift */,
+				24EA198C1D1E88E1009A5301 /* PagedDataProvider.swift */,
+				24E07E021D1EC16F006B2914 /* DataLoader.swift */,
+				24A243B21D1ECB1E00128012 /* DataProviderConvertibleType.swift */,
 			);
 			path = DataProvider;
 			sourceTree = "<group>";
@@ -386,7 +395,7 @@
 				24250C4B1D1DF2A700D208DF /* RevertConverter.swift in Sources */,
 				249CBDF01D1C95950097C75E /* ObservableDataProvider.swift in Sources */,
 				249CBDE51D1C95890097C75E /* Synchronized.swift in Sources */,
-				24EA198D1D1E88E1009A5301 /* PagedDataLoader.swift in Sources */,
+				24EA198D1D1E88E1009A5301 /* PagedDataProvider.swift in Sources */,
 				249CBDE21D1C95890097C75E /* OptionalType.swift in Sources */,
 				24250C511D1DF81B00D208DF /* HandleStore.swift in Sources */,
 				2418B0E61D0D8DBD00B72488 /* Log+Extension.swift in Sources */,
@@ -400,6 +409,7 @@
 				249CBDE01D1C95890097C75E /* DefaultValueType.swift in Sources */,
 				240A45881D1C7D4300CFD0DA /* AbstractApiClient.swift in Sources */,
 				24250C4D1D1DF40D00D208DF /* MemoryStore.swift in Sources */,
+				24E07E011D1EAEFF006B2914 /* StoreType+Async.swift in Sources */,
 				242898A41D1D1D1E001807E5 /* AnyConverter.swift in Sources */,
 				240A45841D1C69EE00CFD0DA /* ConverterType.swift in Sources */,
 				24250C441D1DE99700D208DF /* HandleConverter.swift in Sources */,
@@ -412,10 +422,12 @@
 				24250C541D1DFA1B00D208DF /* UserDefaultsStore.swift in Sources */,
 				249CBDF51D1C98E70097C75E /* Collection+Extension.swift in Sources */,
 				2418B0E81D0D8E0400B72488 /* NativeLogProcessor.swift in Sources */,
-				249CBDF31D1C95FF0097C75E /* RequestDataLoader.swift in Sources */,
+				249CBDF31D1C95FF0097C75E /* Request+DataLoader.swift in Sources */,
 				24250C491D1DEC2E00D208DF /* JSONMappingConverter.swift in Sources */,
 				249CBDF11D1C95950097C75E /* TransformDataProvider.swift in Sources */,
+				24A243B31D1ECB1E00128012 /* DataProviderConvertibleType.swift in Sources */,
 				249CBDE11D1C95890097C75E /* Observable+Nil.swift in Sources */,
+				24E07E031D1EC16F006B2914 /* DataLoader.swift in Sources */,
 				242AC25C1D19FD4200CEB18C /* RequestError.swift in Sources */,
 				240A45831D1C69EE00CFD0DA /* SameTypeConverter.swift in Sources */,
 				24250C471D1DEC0300D208DF /* UnsafeJSONMapper.swift in Sources */,

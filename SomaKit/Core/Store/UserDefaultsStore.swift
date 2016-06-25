@@ -22,7 +22,7 @@ public class UserDefaultsStore<TData: AnyObject>: StoreType {
         }
         
         guard let resultData = someObject as? DataType else {
-            throw SomaError("User defaults has no valid data with type \(someObject.dynamicType) for key \(key)")
+            throw SomaError("User defaults has no valid data \(someObject.dynamicType) for key \(key)")
         }
         
         return resultData
