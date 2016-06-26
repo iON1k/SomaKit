@@ -8,7 +8,7 @@
 
 import MagicalRecord
 
-public class AbstractDataBaseStore<TKey: CVarArgType, TData, TDataBase: NSManagedObject>: StoreType {
+public class AbstractDataBaseStore<TKey: AnyObjectConvertiableType, TData, TDataBase: NSManagedObject>: StoreType {
     public typealias KeyType = TKey
     public typealias DataType = TData
     public typealias DataBaseType = TDataBase
@@ -36,20 +36,21 @@ public class AbstractDataBaseStore<TKey: CVarArgType, TData, TDataBase: NSManage
         var error: ErrorType?
         
         MagicalRecord.saveWithBlockAndWait { (dbLocalContext) in
-            var dbRecord = DataBaseType.MR_findFirstWithPredicate(self.keyPredicate(key), inContext: dbLocalContext)
-            
-            if dbRecord == nil {
-                dbRecord = DataBaseType.MR_createEntityInContext(dbLocalContext)
-            }
-            
-            guard let resultDBRecord = dbRecord else {
-                let dataBaseName = typeName(TDataBase)
-                error = SomaError("DataBase \(dataBaseName) entity creating failed")
-                return
-            }
-            
             do {
+                var dbRecord = DataBaseType.MR_findFirstWithPredicate(self.keyPredicate(key), inContext: dbLocalContext)
+                
+                if dbRecord == nil {
+                    dbRecord = DataBaseType.MR_createEntityInContext(dbLocalContext)
+                }
+                
+                guard let resultDBRecord = dbRecord else {
+                    let dataBaseName = typeName(TDataBase)
+                    error = SomaError("DataBase \(dataBaseName) entity creating failed")
+                    return
+                }
+                
                 try self.setterHandler(data, resultDBRecord)
+                (resultDBRecord as NSManagedObject).setValue(key.asAnyObject(), forKey: self.keyProperty)
             } catch let catchedError {
                 error = catchedError
             }
@@ -67,6 +68,6 @@ public class AbstractDataBaseStore<TKey: CVarArgType, TData, TDataBase: NSManage
     }
     
     private func keyPredicate(key: KeyType) -> NSPredicate {
-        return NSPredicate(format: "%K = %@", self.keyProperty, key)
+        return NSPredicate(format: "%K = %@", argumentArray: [self.keyProperty, key.asAnyObject()])
     }
 }

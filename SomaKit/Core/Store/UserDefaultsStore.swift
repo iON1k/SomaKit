@@ -36,13 +36,7 @@ public class UserDefaultsStore<TData: AnyObject>: StoreType {
         userDefaults.removeObjectForKey(key)
     }
     
-    public init(userDefaults: NSUserDefaults) {
+    public init(userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()) {
         self.userDefaults = userDefaults
-    }
-}
-
-public extension UserDefaultsStore {
-    public convenience init() {
-        self.init(userDefaults: NSUserDefaults.standardUserDefaults())
     }
 }

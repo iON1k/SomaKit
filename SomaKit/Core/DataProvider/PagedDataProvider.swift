@@ -20,7 +20,7 @@ public class PagedDataProvider<TData>: DataProviderType {
         return dataVar.value
     }
     
-    public init(let defaultData: DataType) {
+    public init(let defaultData: DataType = [:]) {
         dataVar = Variable<DataType>(defaultData)
     }
     
@@ -50,11 +50,5 @@ public class PagedDataProvider<TData>: DataProviderType {
     
     public func _createPageDataProvider(pageNumber: PageType) -> Observable<TData> {
         abstractMethod(#function)
-    }
-}
-
-extension PagedDataProvider {
-    public convenience init() {
-        self.init(defaultData: [:])
     }
 }
