@@ -131,11 +131,11 @@ public class CacheableDataProvider<TKey, TData>: DataProviderType {
     
     private func asyncSaveToCache(data: SourceDataType) {
         let cacheKeyValue = cacheKey
-        let cacheStoreVaslue = cacheStore
+        let cacheStoreValue = cacheStore
         
         dispatch_async(cachingSerialQueue) {
             do {
-                try cacheStoreVaslue.saveData(cacheKeyValue, data: data)
+                try cacheStoreValue.saveData(cacheKeyValue, data: data)
             } catch let error {
                 Log.log(error)
             }
