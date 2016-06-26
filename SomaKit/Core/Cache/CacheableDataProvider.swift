@@ -8,11 +8,33 @@
 
 import RxSwift
 
-public enum CacheableDataProviderMode {
-    case CacheFirst
-    case DataFirst(needCachePredicate: ErrorType -> Bool)
+public enum CacheableDataProviderBehavior<TData> {
+    public typealias CacheOnErrorPredicate = ErrorType -> Bool
+    public typealias DataToCachePredicate = TData -> Bool
+    
+    case CacheAndData(dataToCachePredicate: DataToCachePredicate)
+    case DataOrCache(cacheOnErrorPredicate: CacheOnErrorPredicate, dataToCachePredicate: DataToCachePredicate)
     case OnlyCache
-    case NoCache
+    case NoCache(dataToCachePredicate: DataToCachePredicate)
+}
+
+public class CacheableDataProviderBehaviors {
+    public static func cacheAndData<TData>(dataToCachePredicate: TData -> Bool = SomaFunc.truePredicate) -> CacheableDataProviderBehavior<TData> {
+        return .CacheAndData(dataToCachePredicate: dataToCachePredicate)
+    }
+    
+    public static func noCache<TData>(dataToCachePredicate: TData -> Bool = SomaFunc.truePredicate) -> CacheableDataProviderBehavior<TData> {
+        return .NoCache(dataToCachePredicate: dataToCachePredicate)
+    }
+    
+    public static func dataOrCache<TData>(cacheOnErrorPredicate: ErrorType -> Bool = SomaFunc.truePredicate,
+                                   dataToCachePredicate: TData -> Bool = SomaFunc.truePredicate) -> CacheableDataProviderBehavior<TData> {
+        return .DataOrCache(cacheOnErrorPredicate: cacheOnErrorPredicate, dataToCachePredicate: dataToCachePredicate)
+    }
+    
+    public static func onlyCache<TData>() -> CacheableDataProviderBehavior<TData> {
+        return .OnlyCache
+    }
 }
 
 public class CacheState<TData> {
@@ -29,31 +51,31 @@ public class CacheableDataProvider<TKey, TData>: DataProviderType {
     public typealias SourceDataType = TData
     public typealias DataType = CacheState<TData>
     
-    private let cacheMode: CacheableDataProviderMode
+    private let behavior: CacheableDataProviderBehavior<SourceDataType>
     private let sourceProvider: AnyDataProvider<SourceDataType>
     private let cacheStore: AnyStore<TKey, SourceDataType>
     private let cacheKey: TKey
     
     public func rxData() -> Observable<DataType> {
         return Observable.deferred({ () -> Observable<DataType> in
-            switch self.cacheMode {
-            case .NoCache:
-                return self.sourceDataProviderObservable()
+            switch self.behavior {
+            case .NoCache(let dataToCachePredicate):
+                return self.sourceDataProviderObservable(dataToCachePredicate)
             case .OnlyCache:
                 return self.cacheStoreLoadDataObservable(false)
-            case .CacheFirst():
+            case .CacheAndData(let dataToCachePredicate):
                 return [
                     self.cacheStoreLoadDataObservable(true)
                         .catchError({ (error) -> Observable<CacheState<TData>> in
                             return Observable.empty()
                         }),
-                    self.sourceDataProviderObservable()
+                    self.sourceDataProviderObservable(dataToCachePredicate)
                 ].concat()
-            case .DataFirst(let needCachePredicate):
+            case .DataOrCache(let cacheOnErrorPredicate, let dataToCachePredicate):
                 return
-                    self.sourceDataProviderObservable()
+                    self.sourceDataProviderObservable(dataToCachePredicate)
                         .catchError({ (error) -> Observable<CacheState<TData>> in
-                            if needCachePredicate(error) {
+                            if cacheOnErrorPredicate(error) {
                                 return self.cacheStoreLoadDataObservable(true)
                                     .catchError({ (_) -> Observable<CacheState<TData>> in
                                         return Observable.error(error)
@@ -68,18 +90,20 @@ public class CacheableDataProvider<TKey, TData>: DataProviderType {
     
     public init<TDataProvider: DataProviderConvertibleType, TCacheStore: StoreConvertibleType
         where TDataProvider.DataType == SourceDataType, TCacheStore.KeyType == TKey,
-        TCacheStore.DataType == SourceDataType>(sourceProvider: TDataProvider, cacheStore: TCacheStore, cacheKey: TKey,
-                                          cacheMode: CacheableDataProviderMode = .CacheFirst) {
+        TCacheStore.DataType == SourceDataType>(sourceProvider: TDataProvider, cacheStore: TCacheStore, cacheKey: TKey, behavior: CacheableDataProviderBehavior<SourceDataType>
+            = CacheableDataProviderBehaviors.dataOrCache()) {
         self.sourceProvider = sourceProvider.asAnyDataProvider()
         self.cacheStore = cacheStore.asAnyStore()
         self.cacheKey = cacheKey
-        self.cacheMode = cacheMode
+        self.behavior = behavior
     }
     
-    private func sourceDataProviderObservable() -> Observable<DataType> {
+    private func sourceDataProviderObservable(dataToCachePredicate: SourceDataType -> Bool) -> Observable<DataType> {
         return sourceProvider.rxData()
             .doOnNext({ (data) in
-                self.asyncSaveToCache(data)
+                if dataToCachePredicate(data) {
+                    self.asyncSaveToCache(data)
+                }
             })
             .map({ (data) -> DataType in
                 return CacheState(data: data, fromCache: false)
