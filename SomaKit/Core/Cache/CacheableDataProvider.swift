@@ -47,6 +47,8 @@ public class CacheState<TData> {
     }
 }
 
+private let cachinSerialQueueName = "com.somakit.caching"
+
 public class CacheableDataProvider<TKey, TData>: DataProviderType {
     public typealias SourceDataType = TData
     public typealias DataType = CacheState<TData>
@@ -55,6 +57,8 @@ public class CacheableDataProvider<TKey, TData>: DataProviderType {
     private let sourceProvider: AnyDataProvider<SourceDataType>
     private let cacheStore: AnyStore<TKey, SourceDataType>
     private let cacheKey: TKey
+    private let disposeBag = DisposeBag()
+    private let cachingSerialQueue: dispatch_queue_t
     
     public func rxData() -> Observable<DataType> {
         return Observable.deferred({ () -> Observable<DataType> in
@@ -96,6 +100,8 @@ public class CacheableDataProvider<TKey, TData>: DataProviderType {
         self.cacheStore = cacheStore.asAnyStore()
         self.cacheKey = cacheKey
         self.behavior = behavior
+        
+        cachingSerialQueue = dispatch_queue_create(cachinSerialQueueName, DISPATCH_QUEUE_SERIAL)
     }
     
     private func sourceDataProviderObservable(dataToCachePredicate: SourceDataType -> Bool) -> Observable<DataType> {
@@ -115,7 +121,7 @@ public class CacheableDataProvider<TKey, TData>: DataProviderType {
             .ignoreNil()
             .doOnError({ (error) in
                 if needLogErrors {
-                    Log.error("CacheableDataProvider cache loading error: \(error)")
+                    Log.log(error)
                 }
             })
             .map({ (data) -> DataType in
@@ -124,8 +130,16 @@ public class CacheableDataProvider<TKey, TData>: DataProviderType {
     }
     
     private func asyncSaveToCache(data: SourceDataType) {
-        _ = cacheStore.saveDataAsync(cacheKey, data: data)
-            .subscribe()
+        let cacheKeyValue = cacheKey
+        let cacheStoreVaslue = cacheStore
+        
+        dispatch_async(cachingSerialQueue) {
+            do {
+                try cacheStoreVaslue.saveData(cacheKeyValue, data: data)
+            } catch let error {
+                Log.log(error)
+            }
+        }
     }
 }
 

@@ -21,6 +21,10 @@ extension Log {
         log(.Error, message: message, args: args)
     }
     
+    public static func log(error: ErrorType) {
+        log(.Error, message: "Error: \(error)")
+    }
+    
     public static func warning(message: String, args: Any...) {
         log(.Warning, message: message, args: args)
     }
