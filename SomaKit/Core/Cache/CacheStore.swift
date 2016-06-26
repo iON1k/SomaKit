@@ -20,22 +20,11 @@ public class CacheStore<TKey, TData>: StoreType {
     private let cacheLifeTime: CacheLifeTime
     
     public func loadData(key: KeyType) throws -> DataType? {
-        guard let cacheValue = try sourceStore.loadData(key) else {
+        guard let cacheData = try sourceStore.loadData(key) else {
             return nil
         }
         
-        let data = cacheValue.data
-        
-        switch cacheLifeTime {
-        case .Forever:
-            return data
-        case .Value(let lifeTime):
-            if cacheValue.creationTimestamp + lifeTime < currentTimestamp() {
-                return data
-            } else {
-                return nil
-            }
-        }
+        return isActualCache(cacheData) ? cacheData.data : nil
     }
     
     public func saveData(key: KeyType, data: DataType) throws {
@@ -50,5 +39,18 @@ public class CacheStore<TKey, TData>: StoreType {
     
     private func currentTimestamp() -> Double {
         return NSDate.timeIntervalSinceReferenceDate()
+    }
+    
+    private func isActualCache(cacheData: CacheDataType) -> Bool {
+        switch cacheLifeTime {
+        case .Forever:
+            return true
+        case .Value(let lifeTime):
+            if cacheData.creationTimestamp + lifeTime < currentTimestamp() {
+                return true
+            } else {
+                return false
+            }
+        }
     }
 }

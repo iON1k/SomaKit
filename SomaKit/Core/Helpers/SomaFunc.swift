@@ -17,6 +17,14 @@ public final class SomaFunc {
         return value
     }
     
+    public static func truePredicate<TValue>(value: TValue) -> Bool {
+        return true
+    }
+    
+    public static func falsePredicate<TValue>(value: TValue) -> Bool {
+        return false
+    }
+    
     private init() {
         //Nothing
     }

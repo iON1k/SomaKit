@@ -8,7 +8,7 @@
 
 import MagicalRecord
 
-public class AbstractDataBaseStore<TKey: AnyObjectConvertiableType, TData, TDataBase: NSManagedObject>: StoreType {
+public class AbstractDataBaseStore<TKey, TData, TDataBase: NSManagedObject>: StoreType {
     public typealias KeyType = TKey
     public typealias DataType = TData
     public typealias DataBaseType = TDataBase
@@ -21,7 +21,7 @@ public class AbstractDataBaseStore<TKey: AnyObjectConvertiableType, TData, TData
     private let getterHandler: GetterHandlerType
     
     public func loadData(key: KeyType) throws -> DataType? {
-        let optinalDBRecord = DataBaseType.MR_findFirstWithPredicate(self.keyPredicate(key))
+        let optinalDBRecord = DataBaseType.MR_findFirstWithPredicate(try self.keyPredicate(key))
         
         guard let dbRecord = optinalDBRecord else {
             return nil
@@ -37,7 +37,7 @@ public class AbstractDataBaseStore<TKey: AnyObjectConvertiableType, TData, TData
         
         MagicalRecord.saveWithBlockAndWait { (dbLocalContext) in
             do {
-                var dbRecord = DataBaseType.MR_findFirstWithPredicate(self.keyPredicate(key), inContext: dbLocalContext)
+                var dbRecord = DataBaseType.MR_findFirstWithPredicate(try self.keyPredicate(key), inContext: dbLocalContext)
                 
                 if dbRecord == nil {
                     dbRecord = DataBaseType.MR_createEntityInContext(dbLocalContext)
@@ -50,7 +50,7 @@ public class AbstractDataBaseStore<TKey: AnyObjectConvertiableType, TData, TData
                 }
                 
                 try self.setterHandler(data, resultDBRecord)
-                (resultDBRecord as NSManagedObject).setValue(key.asAnyObject(), forKey: self.keyProperty)
+                (resultDBRecord as NSManagedObject).setValue(try self.keyObject(key), forKey: self.keyProperty)
             } catch let catchedError {
                 error = catchedError
             }
@@ -67,7 +67,15 @@ public class AbstractDataBaseStore<TKey: AnyObjectConvertiableType, TData, TData
         self.getterHandler = getterHandler
     }
     
-    private func keyPredicate(key: KeyType) -> NSPredicate {
-        return NSPredicate(format: "%K = %@", argumentArray: [self.keyProperty, key.asAnyObject()])
+    private func keyPredicate(key: KeyType) throws -> NSPredicate {
+        return NSPredicate(format: "%K = %@", argumentArray: [self.keyProperty, try keyObject(key)])
+    }
+    
+    private func keyObject(key: KeyType) throws -> AnyObject {
+        guard let keyObj = key as? AnyObject else {
+            throw SomaError("Database store wrong key type \(typeName(KeyType)). Expected type AnyObject.")
+        }
+        
+        return keyObj
     }
 }

@@ -23,7 +23,7 @@ public class MemoryCache<TData>: MemoryStore<CacheValue<TData>> {
     }
 }
 
-extension MemoryCache {
+public extension MemoryCache {
     public func asCacheStore(cacheLifeTime: CacheLifeTime = .Forever) -> CacheStore<KeyType, TData> {
         return CacheStore(sourceStore: self, cacheLifeTime: cacheLifeTime)
     }

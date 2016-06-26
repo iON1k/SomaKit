@@ -19,8 +19,8 @@ public class DataBaseCache<TData, TDataBase: CacheManagedObject>: AbstractDataBa
     }
 }
 
-//extension DataBaseCache {
-//    public func asCacheStore(cacheLifeTime: CacheLifeTime = .Forever) -> CacheStore<KeyType, TData> {
-//        return CacheStore(sourceStore: self, cacheLifeTime: cacheLifeTime)
-//    }
-//}
+public extension DataBaseCache {
+    public func asCacheStore(cacheLifeTime: CacheLifeTime = .Forever) -> CacheStore<String, TData> {
+        return CacheStore(sourceStore: self, cacheLifeTime: cacheLifeTime)
+    }
+}
