@@ -15,7 +15,7 @@ public class UserDefaultsStore<TKey: StringKeyConvertiable, TData: AnyObject>: S
     private let userDefaults: NSUserDefaults
     
     public func loadData(key: KeyType) throws -> DataType? {
-        let stringKey = key.asStringKey()
+        let stringKey = key.stringKey
         let optionalSomeObject = userDefaults.objectForKey(stringKey)
         
         guard let someObject = optionalSomeObject else {
@@ -30,11 +30,11 @@ public class UserDefaultsStore<TKey: StringKeyConvertiable, TData: AnyObject>: S
     }
     
     public func saveData(key: KeyType, data: DataType) throws {
-        userDefaults.setObject(data, forKey: key.asStringKey())
+        userDefaults.setObject(data, forKey: key.stringKey)
     }
     
     public func removeData(key: KeyType) {
-        userDefaults.removeObjectForKey(key.asStringKey())
+        userDefaults.removeObjectForKey(key.stringKey)
     }
     
     public init(userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()) {

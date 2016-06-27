@@ -15,19 +15,19 @@ public class MemoryStore<TKey: StringKeyConvertiable, TData>: StoreType {
     
     public func loadData(key: KeyType) throws -> DataType? {
         return syncLock.sync({ () -> DataType? in
-            return dictionaryStore[key.asStringKey()]
+            return dictionaryStore[key.stringKey]
         })
     }
     
     public func saveData(key: KeyType, data: DataType) throws {
         return syncLock.sync({ () -> Void in
-            return dictionaryStore[key.asStringKey()] = data
+            return dictionaryStore[key.stringKey] = data
         })
     }
     
     public func removeData(key: KeyType) {
         return syncLock.sync({ () -> Void in
-            return dictionaryStore.removeValueForKey(key.asStringKey())
+            return dictionaryStore.removeValueForKey(key.stringKey)
         })
     }
     

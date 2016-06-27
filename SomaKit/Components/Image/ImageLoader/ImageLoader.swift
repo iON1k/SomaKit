@@ -18,7 +18,7 @@ public class ImageLoader<TKey: StringKeyConvertiable> {
     
     public func loadImage(key: TKey, placeholder: UIImage?, plugins: [ImagePluginType]) -> Observable<UIImage> {
         return Observable.deferred({ () -> Observable<UIImage> in
-            let imageCacheKey = key.asStringKey()
+            let imageCacheKey = key.stringKey
             let processedImageCacheKey = self.pluginsCachingKey(imageCacheKey, plugins: plugins)
             
             if let processedImage = self.tryLoadImageFromCache(self.processedImageCache, cacheKey: processedImageCacheKey) {

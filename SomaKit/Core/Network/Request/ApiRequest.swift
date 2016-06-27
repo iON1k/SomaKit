@@ -22,7 +22,7 @@ public protocol ApiRequestMaganer {
 
 public class ApiRequest<TResponse>: RequestType, StringCachingKeyProvider {
     public typealias ResponseType = TResponse
-    public typealias ParamsType = [String : Any]?
+    public typealias ParamsType = [String : StringKeyConvertiable]?
     public typealias HeadersType = [String : String]?
     
     private let manager: ApiRequestMaganer
@@ -32,8 +32,7 @@ public class ApiRequest<TResponse>: RequestType, StringCachingKeyProvider {
     public let headers: HeadersType
     
     public var stringCachingKey: String {
-        //TODO: implement
-        abstractMethod()
+        return buildStringCachingKey()
     }
     
     public func rxResponse() -> Observable<ResponseType> {
@@ -69,5 +68,22 @@ public class ApiRequest<TResponse>: RequestType, StringCachingKeyProvider {
         self.apiMethod = apiMethod
         self.params = params
         self.headers = headers
+    }
+    
+    private func buildStringCachingKey() -> String {
+        var resultString = ""
+        
+        resultString += methodType.rawValue
+        resultString += apiMethod
+        
+        if let params = params {
+            resultString += params.stringKey
+        }
+        
+        if let headers = headers {
+            resultString += headers.stringKey
+        }
+        
+        return resultString
     }
 }
