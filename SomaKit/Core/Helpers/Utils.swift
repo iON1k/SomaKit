@@ -8,7 +8,7 @@
 
 import Foundation
 
-@noreturn public func abstractMethod(methodName: String) {
+@noreturn public func abstractMethod(methodName: String = "Method") {
     fatalError("\(methodName) has not been implemented")
 }
 

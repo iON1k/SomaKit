@@ -15,6 +15,7 @@
 		24E2CFB51D21239500967097 /* FakeStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E2CFB41D21239500967097 /* FakeStore.swift */; };
 		24E2CFB71D21291500967097 /* NetworkImageSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E2CFB61D21291500967097 /* NetworkImageSource.swift */; };
 		24E2CFB91D2132C700967097 /* StringCachingKeyProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E2CFB81D2132C700967097 /* StringCachingKeyProvider.swift */; };
+		24E2CFBB1D2134F700967097 /* RequestType+Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E2CFBA1D2134F700967097 /* RequestType+Cache.swift */; };
 		24E3CDAD1D1FE753001BCDB2 /* SomaKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 24E3CDAC1D1FE753001BCDB2 /* SomaKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		24E3CDF21D1FE7B3001BCDB2 /* CacheableDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E3CDB61D1FE7B3001BCDB2 /* CacheableDataProvider.swift */; };
 		24E3CDF31D1FE7B3001BCDB2 /* CacheManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E3CDB71D1FE7B3001BCDB2 /* CacheManagedObject.swift */; };
@@ -80,6 +81,7 @@
 		24E2CFB41D21239500967097 /* FakeStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakeStore.swift; sourceTree = "<group>"; };
 		24E2CFB61D21291500967097 /* NetworkImageSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkImageSource.swift; sourceTree = "<group>"; };
 		24E2CFB81D2132C700967097 /* StringCachingKeyProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringCachingKeyProvider.swift; sourceTree = "<group>"; };
+		24E2CFBA1D2134F700967097 /* RequestType+Cache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RequestType+Cache.swift"; sourceTree = "<group>"; };
 		24E3CDA91D1FE753001BCDB2 /* SomaKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SomaKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		24E3CDAC1D1FE753001BCDB2 /* SomaKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SomaKit.h; sourceTree = "<group>"; };
 		24E3CDAE1D1FE753001BCDB2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -208,6 +210,7 @@
 				24E3CDB91D1FE7B3001BCDB2 /* CacheValue.swift */,
 				24E3CDBA1D1FE7B3001BCDB2 /* DataBaseCache.swift */,
 				24E3CDBB1D1FE7B3001BCDB2 /* MemoryCache.swift */,
+				24E2CFBA1D2134F700967097 /* RequestType+Cache.swift */,
 			);
 			path = Cache;
 			sourceTree = "<group>";
@@ -556,6 +559,7 @@
 				24E3CE061D1FE7B3001BCDB2 /* Observable+Nil.swift in Sources */,
 				24E3CE1A1D1FE7B3001BCDB2 /* AnyStore.swift in Sources */,
 				24E3CE1F1D1FE7B3001BCDB2 /* StoreType+Async.swift in Sources */,
+				24E2CFBB1D2134F700967097 /* RequestType+Cache.swift in Sources */,
 				24E5C2D41D209E7F0098AB3A /* ImageSource.swift in Sources */,
 				24E3CDFA1D1FE7B3001BCDB2 /* ConverterType.swift in Sources */,
 				24E3CE0F1D1FE7B3001BCDB2 /* NativeLogProcessor.swift in Sources */,

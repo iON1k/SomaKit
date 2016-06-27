@@ -20,7 +20,7 @@ public protocol ApiRequestMaganer {
     func apiRequestCompleted<TResponse>(request: ApiRequest<TResponse>, response: TResponse)
 }
 
-public class ApiRequest<TResponse>: RequestType {
+public class ApiRequest<TResponse>: RequestType, StringCachingKeyProvider {
     public typealias ResponseType = TResponse
     public typealias ParamsType = [String : Any]?
     public typealias HeadersType = [String : String]?
@@ -30,6 +30,11 @@ public class ApiRequest<TResponse>: RequestType {
     public let methodType: ApiMethodType
     public let params: ParamsType
     public let headers: HeadersType
+    
+    public var stringCachingKey: String {
+        //TODO: implement
+        abstractMethod()
+    }
     
     public func rxResponse() -> Observable<ResponseType> {
         return Observable.deferred({ () in
