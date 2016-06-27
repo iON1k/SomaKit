@@ -16,39 +16,45 @@ public class ImageLoader<TKey: StringKeyConvertiable> {
     private let imageCache: AnyStore<String, UIImage>
     private let processedImageCache: AnyStore<String, UIImage>
     
-    public func loadImage(key: TKey, plugins: [ImagePluginType]) -> Observable<UIImage> {
+    public func loadImage(key: TKey, placeholder: UIImage?, plugins: [ImagePluginType]) -> Observable<UIImage> {
         return Observable.deferred({ () -> Observable<UIImage> in
             let imageCacheKey = key.asStringKey()
-            let processedImageCacheKey = self.pluginsCachingKey(key, plugins: plugins)
+            let processedImageCacheKey = self.pluginsCachingKey(imageCacheKey, plugins: plugins)
             
             if let processedImage = self.tryLoadImageFromCache(self.processedImageCache, cacheKey: processedImageCacheKey) {
                 return Observable.just(processedImage)
             }
             
             if let sourceImage = self.tryLoadImageFromCache(self.imageCache, cacheKey: imageCacheKey) {
-                let processedImage = try self.processSourceImage(sourceImage, plugins: plugins)
-                self.processedImageCache.saveDataAsync(processedImageCacheKey, data: processedImage)
-                return Observable.just(processedImage)
+                return Observable.just(try self.processSourceImage(sourceImage, plugins: plugins))
+                    .doOnNext({ (processedImage) in
+                        self.processedImageCache.saveDataAsync(processedImageCacheKey, data: processedImage)
+                    })
             }
             
-            return self.sourceLoadingImageObservable(key, plugins: plugins)
+            let sourceLoading = self.sourceLoadingImageObservable(key, imageCacheKey: imageCacheKey, processedImageCacheKey: processedImageCacheKey, plugins: plugins)
+            
+            if let placeholder = placeholder {
+                return sourceLoading
+                    .startWith(placeholder)
+            }
+            
+            return sourceLoading
             
         })
         .subscribeOn(scheduler)
     }
     
-    private func sourceLoadingImageObservable(key: TKey, plugins: [ImagePluginType]) -> Observable<UIImage> {
+    private func sourceLoadingImageObservable(key: TKey, imageCacheKey: String, processedImageCacheKey: String, plugins: [ImagePluginType]) -> Observable<UIImage> {
         return imageSource.loadImage(key)
             .observeOn(scheduler)
             .doOnNext({ (image) in
-                let imageCacheKey = key.asStringKey()
                 self.imageCache.saveDataAsync(imageCacheKey, data: image)
             })
             .map({ (image) -> UIImage in
                 return try self.processSourceImage(image, plugins: plugins)
             })
             .doOnNext({ (processedImage) in
-                let processedImageCacheKey = self.pluginsCachingKey(key, plugins: plugins)
                 self.processedImageCache.saveDataAsync(processedImageCacheKey, data: processedImage)
             })
     }
@@ -73,8 +79,8 @@ public class ImageLoader<TKey: StringKeyConvertiable> {
         return processedImage
     }
     
-    private func pluginsCachingKey(imageCacheKey: TKey, plugins: [ImagePluginType]) -> String {
-        var cachingKey = imageCacheKey.asStringKey()
+    private func pluginsCachingKey(imageCacheKey: String, plugins: [ImagePluginType]) -> String {
+        var cachingKey = imageCacheKey
         
         for plugin in plugins {
             cachingKey += plugin.cachingKey
@@ -94,7 +100,11 @@ public class ImageLoader<TKey: StringKeyConvertiable> {
 }
 
 extension ImageLoader {
+    public func loadImage(key: TKey, placeholder: UIImage, plugins: ImagePluginType ...) -> Observable<UIImage> {
+        return self.loadImage(key, placeholder:placeholder, plugins: plugins)
+    }
+    
     public func loadImage(key: TKey, plugins: ImagePluginType ...) -> Observable<UIImage> {
-        return self.loadImage(key, plugins: plugins)
+        return self.loadImage(key, placeholder:nil, plugins: plugins)
     }
 }
