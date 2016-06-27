@@ -43,6 +43,24 @@ public class StoreDataProvider<TData, TKey>: DataProviderType {
         return data
     }
     
+    public func setDataSafe(data: DataType) {
+        do {
+            try setData(data)
+        } catch let error {
+            Log.log(error)
+        }
+    }
+    
+    public func loadDataSafe() -> DataType {
+        do {
+            return try loadData()
+        } catch let error {
+            Log.log(error)
+        }
+        
+        return defaultValue
+    }
+    
     private func normalizeData(data: DataType?) -> DataType {
         if let data = data {
             return data

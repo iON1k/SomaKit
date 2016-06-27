@@ -19,3 +19,23 @@ extension StoreType {
         return AnyStore(loadData, saveData)
     }
 }
+
+extension StoreType {
+    public func loadDataSafe(key: KeyType) -> DataType? {
+        do {
+            return try loadData(key)
+        } catch let error {
+            Log.log(error)
+        }
+        
+        return nil
+    }
+    
+    public func saveDataSafe(key: KeyType, data: DataType) {
+        do {
+            try saveData(key, data: data)
+        } catch let error {
+            Log.log(error)
+        }
+    }
+}

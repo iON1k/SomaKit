@@ -47,8 +47,6 @@ public class CacheState<TData> {
     }
 }
 
-private let cachinSerialQueueName = "com.somakit.caching"
-
 public class CacheableDataProvider<TKey, TData>: DataProviderType {
     public typealias SourceDataType = TData
     public typealias DataType = CacheState<TData>
@@ -58,7 +56,6 @@ public class CacheableDataProvider<TKey, TData>: DataProviderType {
     private let cacheStore: AnyStore<TKey, SourceDataType>
     private let cacheKey: TKey
     private let disposeBag = DisposeBag()
-    private let cachingSerialQueue: dispatch_queue_t
     
     public func rxData() -> Observable<DataType> {
         return Observable.deferred({ () -> Observable<DataType> in
@@ -100,8 +97,6 @@ public class CacheableDataProvider<TKey, TData>: DataProviderType {
         self.cacheStore = cacheStore.asAnyStore()
         self.cacheKey = cacheKey
         self.behavior = behavior
-        
-        cachingSerialQueue = dispatch_queue_create(cachinSerialQueueName, DISPATCH_QUEUE_SERIAL)
     }
     
     private func sourceDataProviderObservable(dataToCachePredicate: SourceDataType -> Bool) -> Observable<DataType> {
@@ -130,16 +125,9 @@ public class CacheableDataProvider<TKey, TData>: DataProviderType {
     }
     
     private func asyncSaveToCache(data: SourceDataType) {
-        let cacheKeyValue = cacheKey
-        let cacheStoreValue = cacheStore
-        
-        dispatch_async(cachingSerialQueue) {
-            do {
-                try cacheStoreValue.saveData(cacheKeyValue, data: data)
-            } catch let error {
-                Log.log(error)
-            }
-        }
+        cacheStore.saveDataAsync(cacheKey, data: data)
+            .subscribe()
+            .addDisposableTo(disposeBag)
     }
 }
 
