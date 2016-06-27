@@ -13,13 +13,13 @@ public extension StoreDataProvider {
         return Observable.deferred({ () -> Observable<Void> in
             return Observable.just(try self.setData(data))
         })
-            .subscribeOn(ConcurrentDispatchQueueScheduler(globalConcurrentQueueQOS: .Default))
+            .subcribeOnBackgroundScheduler()
     }
     
     public func loadDataAsync() -> Observable<DataType?> {
         return Observable.deferred({ () -> Observable<DataType?> in
             return Observable.just(try self.loadData())
         })
-            .subscribeOn(ConcurrentDispatchQueueScheduler(globalConcurrentQueueQOS: .Default))
+            .subcribeOnBackgroundScheduler()
     }
 }

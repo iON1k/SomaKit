@@ -13,13 +13,13 @@ public extension StoreType {
         return Observable.deferred({ () -> Observable<Void> in
             return Observable.just(try self.saveData(key, data: data))
         })
-            .subscribeOn(ConcurrentDispatchQueueScheduler(globalConcurrentQueueQOS: .Default))
+            .subcribeOnBackgroundScheduler()
     }
     
     public func loadDataAsync(key: KeyType) -> Observable<DataType?> {
         return Observable.deferred({ () -> Observable<DataType?> in
             return Observable.just(try self.loadData(key))
         })
-            .subscribeOn(ConcurrentDispatchQueueScheduler(globalConcurrentQueueQOS: .Default))
+            .subcribeOnBackgroundScheduler()
     }
 }

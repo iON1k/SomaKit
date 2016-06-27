@@ -37,7 +37,7 @@
 		24E3CE031D1FE7B3001BCDB2 /* TransformDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E3CDCB1D1FE7B3001BCDB2 /* TransformDataProvider.swift */; };
 		24E3CE041D1FE7B3001BCDB2 /* Collection+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E3CDCD1D1FE7B3001BCDB2 /* Collection+Extension.swift */; };
 		24E3CE051D1FE7B3001BCDB2 /* DefaultValueType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E3CDCE1D1FE7B3001BCDB2 /* DefaultValueType.swift */; };
-		24E3CE061D1FE7B3001BCDB2 /* Observable+Nil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E3CDCF1D1FE7B3001BCDB2 /* Observable+Nil.swift */; };
+		24E3CE061D1FE7B3001BCDB2 /* Observable+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E3CDCF1D1FE7B3001BCDB2 /* Observable+Extensions.swift */; };
 		24E3CE071D1FE7B3001BCDB2 /* OptionalType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E3CDD01D1FE7B3001BCDB2 /* OptionalType.swift */; };
 		24E3CE081D1FE7B3001BCDB2 /* SomaError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E3CDD11D1FE7B3001BCDB2 /* SomaError.swift */; };
 		24E3CE091D1FE7B3001BCDB2 /* SomaFunc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E3CDD21D1FE7B3001BCDB2 /* SomaFunc.swift */; };
@@ -106,7 +106,7 @@
 		24E3CDCB1D1FE7B3001BCDB2 /* TransformDataProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransformDataProvider.swift; sourceTree = "<group>"; };
 		24E3CDCD1D1FE7B3001BCDB2 /* Collection+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Collection+Extension.swift"; sourceTree = "<group>"; };
 		24E3CDCE1D1FE7B3001BCDB2 /* DefaultValueType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultValueType.swift; sourceTree = "<group>"; };
-		24E3CDCF1D1FE7B3001BCDB2 /* Observable+Nil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Observable+Nil.swift"; sourceTree = "<group>"; };
+		24E3CDCF1D1FE7B3001BCDB2 /* Observable+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Observable+Extensions.swift"; sourceTree = "<group>"; };
 		24E3CDD01D1FE7B3001BCDB2 /* OptionalType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OptionalType.swift; sourceTree = "<group>"; };
 		24E3CDD11D1FE7B3001BCDB2 /* SomaError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SomaError.swift; sourceTree = "<group>"; };
 		24E3CDD21D1FE7B3001BCDB2 /* SomaFunc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SomaFunc.swift; sourceTree = "<group>"; };
@@ -263,7 +263,7 @@
 				24AF8AEE1D20BF1400E40CCB /* StringKeyConvertiable.swift */,
 				24E3CDCD1D1FE7B3001BCDB2 /* Collection+Extension.swift */,
 				24E3CDCE1D1FE7B3001BCDB2 /* DefaultValueType.swift */,
-				24E3CDCF1D1FE7B3001BCDB2 /* Observable+Nil.swift */,
+				24E3CDCF1D1FE7B3001BCDB2 /* Observable+Extensions.swift */,
 				24E3CDD01D1FE7B3001BCDB2 /* OptionalType.swift */,
 				24E3CDD11D1FE7B3001BCDB2 /* SomaError.swift */,
 				24E3CDD21D1FE7B3001BCDB2 /* SomaFunc.swift */,
@@ -560,7 +560,7 @@
 				24E3CDFD1D1FE7B3001BCDB2 /* AnyDataProvider.swift in Sources */,
 				24E3CE221D1FE7B3001BCDB2 /* UserDefaultsStore.swift in Sources */,
 				24E3CE201D1FE7B3001BCDB2 /* StoreType.swift in Sources */,
-				24E3CE061D1FE7B3001BCDB2 /* Observable+Nil.swift in Sources */,
+				24E3CE061D1FE7B3001BCDB2 /* Observable+Extensions.swift in Sources */,
 				24E3CE1A1D1FE7B3001BCDB2 /* AnyStore.swift in Sources */,
 				24E3CE1F1D1FE7B3001BCDB2 /* StoreType+Async.swift in Sources */,
 				24E2CFBB1D2134F700967097 /* RequestType+Cache.swift in Sources */,

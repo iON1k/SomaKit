@@ -11,8 +11,6 @@ import RxSwift
 public class ImageLoader<TKey: StringKeyConvertiable> {
     private let imageSource: AnyImageSource<TKey>
     
-    private let scheduler = ConcurrentDispatchQueueScheduler(globalConcurrentQueueQOS: .Default)
-    
     private let imageCache: AnyStore<String, UIImage>
     private let processedImageCache: AnyStore<String, UIImage>
     
@@ -42,12 +40,12 @@ public class ImageLoader<TKey: StringKeyConvertiable> {
             return sourceLoading
             
         })
-        .subscribeOn(scheduler)
+        .subcribeOnBackgroundScheduler()
     }
     
     private func sourceLoadingImageObservable(key: TKey, imageCacheKey: String, processedImageCacheKey: String, plugins: [ImagePluginType]) -> Observable<UIImage> {
         return imageSource.loadImage(key)
-            .observeOn(scheduler)
+            .observeOnBackgroundScheduler()
             .doOnNext({ (image) in
                 self.imageCache.saveDataAsync(imageCacheKey, data: image)
             })

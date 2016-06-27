@@ -1,5 +1,5 @@
 //
-//  Observable+Nil.swift
+//  Observable+Extensions.swift
 //  SomaKit
 //
 //  Created by Anton on 22.06.16.
@@ -16,5 +16,15 @@ public extension Observable where Element: OptionalType {
             .map({ (element) -> E.Wrapped in
                 return element.value
             })
+    }
+}
+
+public extension Observable {
+    public func subcribeOnBackgroundScheduler() -> Observable<E> {
+        return self.subscribeOn(ConcurrentDispatchQueueScheduler(globalConcurrentQueueQOS: .Default))
+    }
+    
+    public func observeOnBackgroundScheduler() -> Observable<E> {
+        return self.observeOn(ConcurrentDispatchQueueScheduler(globalConcurrentQueueQOS: .Default))
     }
 }

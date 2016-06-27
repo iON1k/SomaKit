@@ -33,6 +33,6 @@ public class FileImageSource: ImageSourceType {
 extension FileImageSource {
     public func loadImageAsync(key: KeyType) -> Observable<UIImage> {
         return loadImage(key)
-            .subscribeOn(ConcurrentDispatchQueueScheduler(globalConcurrentQueueQOS: .Default))
+            .subcribeOnBackgroundScheduler()
     }
 }
