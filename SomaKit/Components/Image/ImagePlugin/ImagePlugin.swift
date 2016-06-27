@@ -10,3 +10,33 @@ public protocol ImagePluginType {
     func transform(image: UIImage) throws -> UIImage
     var cachingKey: String { get }
 }
+
+extension UIImage {
+    public func performPlugins(plugins: [ImagePluginType]) throws -> UIImage {
+        var processedImage = self
+        
+        for plugin in plugins {
+            processedImage = try plugin.transform(processedImage)
+        }
+        
+        return processedImage
+    }
+    
+    public func performPlugins(plugins: ImagePluginType ...) throws -> UIImage {
+        return try performPlugins(plugins)
+    }
+    
+    public func performPluginsSafe(plugins: [ImagePluginType]) -> UIImage? {
+        do {
+            return try performPlugins(plugins)
+        } catch let error {
+            Log.log(error)
+        }
+        
+        return nil
+    }
+    
+    public func performPluginsSafe(plugins: ImagePluginType ...) -> UIImage? {
+        return performPluginsSafe(plugins)
+    }
+}

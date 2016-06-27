@@ -26,10 +26,10 @@ public class ImageLoader<TKey: StringKeyConvertiable> {
             }
             
             if let sourceImage = self.tryLoadImageFromCache(self.imageCache, cacheKey: imageCacheKey) {
-                return Observable.just(try self.processSourceImage(sourceImage, plugins: plugins))
-                    .doOnNext({ (processedImage) in
-                        self.processedImageCache.saveDataAsync(processedImageCacheKey, data: processedImage)
-                    })
+                let processedImage = try sourceImage.performPlugins(plugins)
+                self.saveProcessedImageIfNeeded(processedImageCacheKey, processedImage: processedImage, sourceImage: sourceImage)
+                
+                return Observable.just(processedImage)
             }
             
             let sourceLoading = self.sourceLoadingImageObservable(key, imageCacheKey: imageCacheKey, processedImageCacheKey: processedImageCacheKey, plugins: plugins)
@@ -51,11 +51,9 @@ public class ImageLoader<TKey: StringKeyConvertiable> {
             .doOnNext({ (image) in
                 self.imageCache.saveDataAsync(imageCacheKey, data: image)
             })
-            .map({ (image) -> UIImage in
-                return try self.processSourceImage(image, plugins: plugins)
-            })
-            .doOnNext({ (processedImage) in
-                self.processedImageCache.saveDataAsync(processedImageCacheKey, data: processedImage)
+            .doOnNext({ (sourceImage) in
+                let processedImage = try sourceImage.performPlugins(plugins)
+                self.saveProcessedImageIfNeeded(processedImageCacheKey, processedImage: processedImage, sourceImage: sourceImage)
             })
     }
     
@@ -69,14 +67,10 @@ public class ImageLoader<TKey: StringKeyConvertiable> {
         return nil
     }
     
-    private func processSourceImage(sourceImage: UIImage, plugins: [ImagePluginType]) throws -> UIImage {
-        var processedImage = sourceImage
-        
-        for plugin in plugins {
-            processedImage = try plugin.transform(processedImage)
+    private func saveProcessedImageIfNeeded(processedImageCacheKey: String, processedImage: UIImage, sourceImage: UIImage) {
+        if sourceImage !== processedImage {
+            processedImageCache.saveDataAsync(processedImageCacheKey, data: processedImage)
         }
-        
-        return processedImage
     }
     
     private func pluginsCachingKey(imageCacheKey: String, plugins: [ImagePluginType]) -> String {

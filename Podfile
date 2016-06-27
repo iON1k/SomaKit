@@ -9,4 +9,5 @@ target 'SomaKit' do
     pod 'RxAlamofire', '~> 2.5'
     pod 'ObjectMapper', '~> 1.3'
     pod 'MagicalRecord', '~> 2.3'
+    pod 'AlamofireImage', '~> 2.0'
 end
