@@ -8,7 +8,7 @@
 
 import RxSwift
 
-public class ImageLoader<TKey: ImageLoaderKeyType> {
+public class ImageLoader<TKey: StringKeyConvertiable> {
     private let imageSource: AnyImageSource<TKey>
     
     private let scheduler = ConcurrentDispatchQueueScheduler(globalConcurrentQueueQOS: .Default)
@@ -18,7 +18,7 @@ public class ImageLoader<TKey: ImageLoaderKeyType> {
     
     public func loadImage(key: TKey, plugins: ImagePlugin ...) -> Observable<UIImage> {
         return Observable.deferred({ () -> Observable<UIImage> in
-            let imageCacheKey = key.imageLoaderCacheKey
+            let imageCacheKey = key.asStringKey()
             let processedImageCacheKey = self.pluginsCachingKey(key, plugins: plugins)
             
             if let processedImage = self.tryLoadImageFromCache(self.processedImageCache, cacheKey: processedImageCacheKey) {
@@ -41,7 +41,7 @@ public class ImageLoader<TKey: ImageLoaderKeyType> {
         return imageSource.loadImage(key)
             .observeOn(scheduler)
             .doOnNext({ (image) in
-                let imageCacheKey = key.imageLoaderCacheKey
+                let imageCacheKey = key.asStringKey()
                 self.imageCache.saveDataAsync(imageCacheKey, data: image)
             })
             .map({ (image) -> UIImage in
@@ -74,7 +74,7 @@ public class ImageLoader<TKey: ImageLoaderKeyType> {
     }
     
     private func pluginsCachingKey(imageCacheKey: TKey, plugins: [ImagePlugin]) -> String {
-        var cachingKey = imageCacheKey.imageLoaderCacheKey
+        var cachingKey = imageCacheKey.asStringKey()
         
         for plugin in plugins {
             cachingKey += plugin.cachingKey

@@ -6,7 +6,7 @@
 //  Copyright © 2016 iON1k. All rights reserved.
 //
 
-public class MemoryCache<TData>: MemoryStore<CacheValue<TData>> {
+public class MemoryCache<TKey: StringKeyConvertiable, TData>: MemoryStore<TKey, CacheValue<TData>> {
     public override init() {
         super.init()
         

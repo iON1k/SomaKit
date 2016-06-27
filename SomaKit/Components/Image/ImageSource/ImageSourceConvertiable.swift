@@ -7,7 +7,7 @@
 //
 
 public protocol ImageSourceConvertiable {
-    associatedtype KeyType: ImageLoaderKeyType
+    associatedtype KeyType: StringKeyConvertiable
     
     func asAnyImageSource() -> AnyImageSource<KeyType>
 }

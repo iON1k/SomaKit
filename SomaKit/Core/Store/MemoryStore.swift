@@ -6,28 +6,28 @@
 //  Copyright © 2016 iON1k. All rights reserved.
 //
 
-public class MemoryStore<TValue>: StoreType {
-    public typealias KeyType = String
-    public typealias DataType = TValue
+public class MemoryStore<TKey: StringKeyConvertiable, TData>: StoreType {
+    public typealias KeyType = TKey
+    public typealias DataType = TData
     
     private var syncLock = SyncLock()
-    private var dictionaryStore: [String : TValue] = [:]
+    private var dictionaryStore: [String : TData] = [:]
     
     public func loadData(key: KeyType) throws -> DataType? {
         return syncLock.sync({ () -> DataType? in
-            return dictionaryStore[key]
+            return dictionaryStore[key.asStringKey()]
         })
     }
     
     public func saveData(key: KeyType, data: DataType) throws {
         return syncLock.sync({ () -> Void in
-            return dictionaryStore[key] = data
+            return dictionaryStore[key.asStringKey()] = data
         })
     }
     
     public func removeData(key: KeyType) {
         return syncLock.sync({ () -> Void in
-            return dictionaryStore.removeValueForKey(key)
+            return dictionaryStore.removeValueForKey(key.asStringKey())
         })
     }
     

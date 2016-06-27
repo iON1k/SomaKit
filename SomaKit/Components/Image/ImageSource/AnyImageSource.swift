@@ -8,7 +8,7 @@
 
 import RxSwift
 
-public class AnyImageSource<TKey: ImageLoaderKeyType>: ImageSource {
+public class AnyImageSource<TKey: StringKeyConvertiable>: ImageSource {
     public typealias KeyType = TKey
     
     private let sourceLoadImageHandler: KeyType -> Observable<UIImage>
