@@ -31,7 +31,7 @@ public class ApiRequest<TResponse>: RequestType, StringCachingKeyProvider {
     public let params: ParamsType
     public let headers: HeadersType
     
-    private let stringCachingKeyCache = LazyReadOnly<String>()
+    private let stringCachingKeyCache = LazyCachingValue<String>()
     
     public var stringCachingKey: String {
         return stringCachingKeyCache.value

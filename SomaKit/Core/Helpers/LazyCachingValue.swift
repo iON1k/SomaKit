@@ -1,5 +1,5 @@
 //
-//  LazyReadOnly.swift
+//  LazyCachingValue.swift
 //  SomaKit
 //
 //  Created by Anton on 27.06.16.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class LazyReadOnly<TValue> {
+public class LazyCachingValue<TValue> {
     public typealias InitializeHandler = Void -> TValue
     
     public var value: TValue {
