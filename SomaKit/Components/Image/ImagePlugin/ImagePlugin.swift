@@ -6,7 +6,7 @@
 //  Copyright © 2016 iON1k. All rights reserved.
 //
 
-public protocol ImagePlugin {
+public protocol ImagePluginType {
     func transform(image: UIImage) throws -> UIImage
     var cachingKey: String { get }
 }

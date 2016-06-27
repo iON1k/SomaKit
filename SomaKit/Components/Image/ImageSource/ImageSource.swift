@@ -8,13 +8,13 @@
 
 import RxSwift
 
-public protocol ImageSource: ImageSourceConvertiable {
+public protocol ImageSourceType: ImageSourceConvertiable {
     associatedtype KeyType: StringKeyConvertiable
     
     func loadImage(key: KeyType) -> Observable<UIImage>
 }
 
-extension ImageSource {
+extension ImageSourceType {
     public func asAnyImageSource() -> AnyImageSource<KeyType> {
         return AnyImageSource(source: self)
     }

@@ -16,7 +16,7 @@ public class ImageLoader<TKey: StringKeyConvertiable> {
     private let imageCache: AnyStore<String, UIImage>
     private let processedImageCache: AnyStore<String, UIImage>
     
-    public func loadImage(key: TKey, plugins: ImagePlugin ...) -> Observable<UIImage> {
+    public func loadImage(key: TKey, plugins: [ImagePluginType]) -> Observable<UIImage> {
         return Observable.deferred({ () -> Observable<UIImage> in
             let imageCacheKey = key.asStringKey()
             let processedImageCacheKey = self.pluginsCachingKey(key, plugins: plugins)
@@ -37,7 +37,7 @@ public class ImageLoader<TKey: StringKeyConvertiable> {
         .subscribeOn(scheduler)
     }
     
-    private func sourceLoadingImageObservable(key: TKey, plugins: [ImagePlugin]) -> Observable<UIImage> {
+    private func sourceLoadingImageObservable(key: TKey, plugins: [ImagePluginType]) -> Observable<UIImage> {
         return imageSource.loadImage(key)
             .observeOn(scheduler)
             .doOnNext({ (image) in
@@ -63,7 +63,7 @@ public class ImageLoader<TKey: StringKeyConvertiable> {
         return nil
     }
     
-    private func processSourceImage(sourceImage: UIImage, plugins: [ImagePlugin]) throws -> UIImage {
+    private func processSourceImage(sourceImage: UIImage, plugins: [ImagePluginType]) throws -> UIImage {
         var processedImage = sourceImage
         
         for plugin in plugins {
@@ -73,7 +73,7 @@ public class ImageLoader<TKey: StringKeyConvertiable> {
         return processedImage
     }
     
-    private func pluginsCachingKey(imageCacheKey: TKey, plugins: [ImagePlugin]) -> String {
+    private func pluginsCachingKey(imageCacheKey: TKey, plugins: [ImagePluginType]) -> String {
         var cachingKey = imageCacheKey.asStringKey()
         
         for plugin in plugins {
@@ -90,5 +90,11 @@ public class ImageLoader<TKey: StringKeyConvertiable> {
         self.imageSource = imageSource.asAnyImageSource()
         self.imageCache = imageCache.asAnyStore()
         self.processedImageCache = processedImageCache.asAnyStore()
+    }
+}
+
+extension ImageLoader {
+    public func loadImage(key: TKey, plugins: ImagePluginType ...) -> Observable<UIImage> {
+        return self.loadImage(key, plugins: plugins)
     }
 }
