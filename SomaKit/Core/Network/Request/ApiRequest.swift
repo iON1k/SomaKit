@@ -31,8 +31,10 @@ public class ApiRequest<TResponse>: RequestType, StringCachingKeyProvider {
     public let params: ParamsType
     public let headers: HeadersType
     
+    private let stringCachingKeyCache = LazyReadOnly<String>()
+    
     public var stringCachingKey: String {
-        return buildStringCachingKey()
+        return stringCachingKeyCache.value
     }
     
     public func rxResponse() -> Observable<ResponseType> {
@@ -68,6 +70,8 @@ public class ApiRequest<TResponse>: RequestType, StringCachingKeyProvider {
         self.apiMethod = apiMethod
         self.params = params
         self.headers = headers
+        
+        stringCachingKeyCache.setupInitializeHandler(buildStringCachingKey)
     }
     
     private func buildStringCachingKey() -> String {
