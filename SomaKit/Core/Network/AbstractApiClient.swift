@@ -22,7 +22,7 @@ public class AbstractJSONApiClient: ApiRequestMaganer {
         self.baseUrl = baseUrl
     }
     
-    public convenience init(baseUrl: NSURL) {
+    public convenience init(baseUrl: URLConvertible) {
         self.init(baseUrl: baseUrl, alamoManager: Manager.sharedInstance)
     }
     

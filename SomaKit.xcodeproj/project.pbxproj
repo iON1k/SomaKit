@@ -281,8 +281,8 @@
 		24E3CDDE1D1FE7B3001BCDB2 /* Network */ = {
 			isa = PBXGroup;
 			children = (
-				24E3CDDF1D1FE7B3001BCDB2 /* AbstractApiClient.swift */,
 				24E3CDE01D1FE7B3001BCDB2 /* Request */,
+				24E3CDDF1D1FE7B3001BCDB2 /* AbstractApiClient.swift */,
 				24E3CDE61D1FE7B3001BCDB2 /* Request+DataLoader.swift */,
 			);
 			path = Network;
