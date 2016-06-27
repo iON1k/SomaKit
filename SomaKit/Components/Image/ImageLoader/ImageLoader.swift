@@ -77,7 +77,7 @@ public class ImageLoader<TKey: StringKeyConvertiable> {
         var cachingKey = imageCacheKey
         
         for plugin in plugins {
-            cachingKey += plugin.cachingKey
+            cachingKey += plugin.stringCachingKey
         }
         
         return cachingKey

@@ -14,6 +14,7 @@
 		24E2CFB11D211AE200967097 /* FileImageSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E2CFB01D211AE200967097 /* FileImageSource.swift */; };
 		24E2CFB51D21239500967097 /* FakeStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E2CFB41D21239500967097 /* FakeStore.swift */; };
 		24E2CFB71D21291500967097 /* NetworkImageSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E2CFB61D21291500967097 /* NetworkImageSource.swift */; };
+		24E2CFB91D2132C700967097 /* StringCachingKeyProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E2CFB81D2132C700967097 /* StringCachingKeyProvider.swift */; };
 		24E3CDAD1D1FE753001BCDB2 /* SomaKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 24E3CDAC1D1FE753001BCDB2 /* SomaKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		24E3CDF21D1FE7B3001BCDB2 /* CacheableDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E3CDB61D1FE7B3001BCDB2 /* CacheableDataProvider.swift */; };
 		24E3CDF31D1FE7B3001BCDB2 /* CacheManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E3CDB71D1FE7B3001BCDB2 /* CacheManagedObject.swift */; };
@@ -78,6 +79,7 @@
 		24E2CFB01D211AE200967097 /* FileImageSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileImageSource.swift; sourceTree = "<group>"; };
 		24E2CFB41D21239500967097 /* FakeStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakeStore.swift; sourceTree = "<group>"; };
 		24E2CFB61D21291500967097 /* NetworkImageSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkImageSource.swift; sourceTree = "<group>"; };
+		24E2CFB81D2132C700967097 /* StringCachingKeyProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringCachingKeyProvider.swift; sourceTree = "<group>"; };
 		24E3CDA91D1FE753001BCDB2 /* SomaKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SomaKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		24E3CDAC1D1FE753001BCDB2 /* SomaKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SomaKit.h; sourceTree = "<group>"; };
 		24E3CDAE1D1FE753001BCDB2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -199,6 +201,7 @@
 		24E3CDB51D1FE7B3001BCDB2 /* Cache */ = {
 			isa = PBXGroup;
 			children = (
+				24E2CFB81D2132C700967097 /* StringCachingKeyProvider.swift */,
 				24E3CDB61D1FE7B3001BCDB2 /* CacheableDataProvider.swift */,
 				24E3CDB71D1FE7B3001BCDB2 /* CacheManagedObject.swift */,
 				24E3CDB81D1FE7B3001BCDB2 /* CacheStore.swift */,
@@ -527,6 +530,7 @@
 				24E3CE151D1FE7B3001BCDB2 /* ApiRequest.swift in Sources */,
 				24AF8AEB1D20A71B00E40CCB /* AnyImageSource.swift in Sources */,
 				24E3CE241D1FE84E001BCDB2 /* DataLoader.swift in Sources */,
+				24E2CFB91D2132C700967097 /* StringCachingKeyProvider.swift in Sources */,
 				24E3CE161D1FE7B3001BCDB2 /* RequestConvertibleType.swift in Sources */,
 				24E2CFAF1D21163D00967097 /* BundleImageSource.swift in Sources */,
 				24E2CFB51D21239500967097 /* FakeStore.swift in Sources */,
