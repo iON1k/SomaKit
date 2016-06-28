@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		24273D2B1D21F0E00071C283 /* DiskMemoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24273D2A1D21F0E00071C283 /* DiskMemoryStore.swift */; };
 		24AF8AE91D20A71100E40CCB /* ImageSourceConvertiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24AF8AE81D20A71100E40CCB /* ImageSourceConvertiable.swift */; };
 		24AF8AEB1D20A71B00E40CCB /* AnyImageSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24AF8AEA1D20A71B00E40CCB /* AnyImageSource.swift */; };
 		24AF8AEF1D20BF1400E40CCB /* StringKeyConvertiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24AF8AEE1D20BF1400E40CCB /* StringKeyConvertiable.swift */; };
@@ -74,6 +75,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		24273D2A1D21F0E00071C283 /* DiskMemoryStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiskMemoryStore.swift; sourceTree = "<group>"; };
 		24AF8AE81D20A71100E40CCB /* ImageSourceConvertiable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageSourceConvertiable.swift; sourceTree = "<group>"; };
 		24AF8AEA1D20A71B00E40CCB /* AnyImageSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyImageSource.swift; sourceTree = "<group>"; };
 		24AF8AEE1D20BF1400E40CCB /* StringKeyConvertiable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringKeyConvertiable.swift; sourceTree = "<group>"; };
@@ -330,6 +332,7 @@
 				24E3CDF01D1FE7B3001BCDB2 /* TransformStore.swift */,
 				24E3CDF11D1FE7B3001BCDB2 /* UserDefaultsStore.swift */,
 				24E2CFB41D21239500967097 /* FakeStore.swift */,
+				24273D2A1D21F0E00071C283 /* DiskMemoryStore.swift */,
 			);
 			path = Store;
 			sourceTree = "<group>";
@@ -511,6 +514,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				24273D2B1D21F0E00071C283 /* DiskMemoryStore.swift in Sources */,
 				24E3CDF91D1FE7B3001BCDB2 /* ConverterConvertibleType.swift in Sources */,
 				24E3CE0A1D1FE7B3001BCDB2 /* Synchronized.swift in Sources */,
 				24E3CE181D1FE7B3001BCDB2 /* RequestType.swift in Sources */,

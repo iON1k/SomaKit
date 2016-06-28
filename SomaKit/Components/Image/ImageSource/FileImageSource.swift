@@ -11,22 +11,18 @@ import RxSwift
 public class FileImageSource: ImageSourceType {
     public typealias KeyType = String
     
-    private let options: NSDataReadingOptions
-    
     public func loadImage(key: KeyType) -> Observable<UIImage> {
         return Observable.deferred({ () -> Observable<UIImage> in
-            let imageData = try NSData(contentsOfFile: key, options: self.options)
-            let image = UIImage(data: imageData)
-            guard let resultImage = image else {
-                throw SomaError("Wrong image data with file path \(key)")
+            guard let imageData = NSData(contentsOfFile: key) else {
+                throw SomaError("Image data loading failed with path \(key)")
             }
             
-            return Observable.just(resultImage)
+            guard let image = UIImage(data: imageData) else {
+                throw SomaError("Wrong image data with path \(key)")
+            }
+            
+            return Observable.just(image)
         })
-    }
-    
-    public init(options: NSDataReadingOptions = NSDataReadingOptions.DataReadingMappedIfSafe) {
-        self.options = options
     }
 }
 
