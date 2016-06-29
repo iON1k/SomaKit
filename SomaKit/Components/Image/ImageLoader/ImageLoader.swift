@@ -14,7 +14,7 @@ public class ImageLoader<TKey: StringKeyConvertiable> {
     private let imageCache: AnyStore<String, UIImage>
     private let processedImageCache: AnyStore<String, UIImage>
     
-    public func loadImage(key: TKey, placeholder: UIImage?, plugins: [ImagePluginType]) -> Observable<UIImage> {
+    public func loadImage(key: TKey, placeholder: UIImage? = nil, plugins: [ImagePluginType] = []) -> Observable<UIImage> {
         return Observable.deferred({ () -> Observable<UIImage> in
             let imageCacheKey = key.stringKey
             let processedImageCacheKey = self.pluginsCachingKey(imageCacheKey, plugins: plugins)
@@ -92,7 +92,7 @@ public class ImageLoader<TKey: StringKeyConvertiable> {
 }
 
 extension ImageLoader {
-    public func loadImage(key: TKey, placeholder: UIImage, plugins: ImagePluginType ...) -> Observable<UIImage> {
+    public func loadImage(key: TKey, placeholder: UIImage?, plugins: ImagePluginType ...) -> Observable<UIImage> {
         return self.loadImage(key, placeholder:placeholder, plugins: plugins)
     }
     

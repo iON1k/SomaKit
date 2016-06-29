@@ -117,3 +117,21 @@ extension Dictionary: StringKeyConvertiable {
         return resultString
     }
 }
+
+extension NSString: StringKeyConvertiable {
+    public var stringKey: String {
+        return self as String
+    }
+}
+
+extension CGFloat: StringKeyConvertiable {
+    public var stringKey: String {
+        return String(self)
+    }
+}
+
+extension NSNumber: StringKeyConvertiable {
+    public var stringKey: String {
+        return stringValue
+    }
+}

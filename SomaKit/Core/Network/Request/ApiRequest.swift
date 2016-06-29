@@ -71,7 +71,7 @@ public class ApiRequest<TResponse>: RequestType, StringCachingKeyProvider {
         self.params = params
         self.headers = headers
         
-        stringCachingKeyCache.setupInitializeHandler(buildStringCachingKey)
+        stringCachingKeyCache.initialize(buildStringCachingKey)
     }
     
     private func buildStringCachingKey() -> String {
