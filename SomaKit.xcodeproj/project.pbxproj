@@ -75,6 +75,22 @@
 		24E5C2D41D209E7F0098AB3A /* ImageSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E5C2D01D209E7F0098AB3A /* ImageSource.swift */; };
 		24E5C2DF1D20A2010098AB3A /* ImagePlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E5C2DE1D20A2010098AB3A /* ImagePlugin.swift */; };
 		24E5C2E41D20A28F0098AB3A /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E5C2E31D20A28F0098AB3A /* ImageLoader.swift */; };
+		24EB57D71D2C0E8A0062DDDB /* ModuleBuidler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB57C71D2C0E8A0062DDDB /* ModuleBuidler.swift */; };
+		24EB57D81D2C0E8A0062DDDB /* SomaModuleBuidler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB57C81D2C0E8A0062DDDB /* SomaModuleBuidler.swift */; };
+		24EB57D91D2C0E8A0062DDDB /* EmptyInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB57CA1D2C0E8A0062DDDB /* EmptyInteractor.swift */; };
+		24EB57DA1D2C0E8A0062DDDB /* Interactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB57CB1D2C0E8A0062DDDB /* Interactor.swift */; };
+		24EB57DB1D2C0E8A0062DDDB /* EmptyRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB57CD1D2C0E8A0062DDDB /* EmptyRouter.swift */; };
+		24EB57DC1D2C0E8A0062DDDB /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB57CE1D2C0E8A0062DDDB /* Router.swift */; };
+		24EB57DD1D2C0E8A0062DDDB /* ModuleTransitionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB57D01D2C0E8A0062DDDB /* ModuleTransitionHandler.swift */; };
+		24EB57DE1D2C0E8A0062DDDB /* UIViewController+ModuleTransitionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB57D11D2C0E8A0062DDDB /* UIViewController+ModuleTransitionHandler.swift */; };
+		24EB57DF1D2C0E8A0062DDDB /* ModuleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB57D31D2C0E8A0062DDDB /* ModuleViewModel.swift */; };
+		24EB57E01D2C0E8A0062DDDB /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB57D51D2C0E8A0062DDDB /* ViewModel.swift */; };
+		24EB57E11D2C0E8A0062DDDB /* ViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB57D61D2C0E8A0062DDDB /* ViewPresenter.swift */; };
+		24EB57E41D2C1A220062DDDB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB57E31D2C1A220062DDDB /* ViewController.swift */; };
+		24EB57E81D2C229C0062DDDB /* SomaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB57E71D2C229C0062DDDB /* SomaViewController.swift */; };
+		24EB57EA1D2C25920062DDDB /* ModuleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB57E91D2C25920062DDDB /* ModuleViewController.swift */; };
+		24EB57ED1D2C2C0F0062DDDB /* UiBindable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB57EC1D2C2C0F0062DDDB /* UiBindable.swift */; };
+		24EB57EF1D2C2DC40062DDDB /* SomaUIBindable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB57EE1D2C2DC40062DDDB /* SomaUIBindable.swift */; };
 		6AF3BA1EDD5E1C849FA7035A /* Pods_SomaKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42956B8F15DB5942D9E3CAB4 /* Pods_SomaKit.framework */; };
 /* End PBXBuildFile section */
 
@@ -149,6 +165,22 @@
 		24E5C2D01D209E7F0098AB3A /* ImageSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageSource.swift; sourceTree = "<group>"; };
 		24E5C2DE1D20A2010098AB3A /* ImagePlugin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePlugin.swift; sourceTree = "<group>"; };
 		24E5C2E31D20A28F0098AB3A /* ImageLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
+		24EB57C71D2C0E8A0062DDDB /* ModuleBuidler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModuleBuidler.swift; sourceTree = "<group>"; };
+		24EB57C81D2C0E8A0062DDDB /* SomaModuleBuidler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SomaModuleBuidler.swift; sourceTree = "<group>"; };
+		24EB57CA1D2C0E8A0062DDDB /* EmptyInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyInteractor.swift; sourceTree = "<group>"; };
+		24EB57CB1D2C0E8A0062DDDB /* Interactor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Interactor.swift; sourceTree = "<group>"; };
+		24EB57CD1D2C0E8A0062DDDB /* EmptyRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyRouter.swift; sourceTree = "<group>"; };
+		24EB57CE1D2C0E8A0062DDDB /* Router.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
+		24EB57D01D2C0E8A0062DDDB /* ModuleTransitionHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModuleTransitionHandler.swift; sourceTree = "<group>"; };
+		24EB57D11D2C0E8A0062DDDB /* UIViewController+ModuleTransitionHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+ModuleTransitionHandler.swift"; sourceTree = "<group>"; };
+		24EB57D31D2C0E8A0062DDDB /* ModuleViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModuleViewModel.swift; sourceTree = "<group>"; };
+		24EB57D51D2C0E8A0062DDDB /* ViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		24EB57D61D2C0E8A0062DDDB /* ViewPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewPresenter.swift; sourceTree = "<group>"; };
+		24EB57E31D2C1A220062DDDB /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		24EB57E71D2C229C0062DDDB /* SomaViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SomaViewController.swift; sourceTree = "<group>"; };
+		24EB57E91D2C25920062DDDB /* ModuleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModuleViewController.swift; sourceTree = "<group>"; };
+		24EB57EC1D2C2C0F0062DDDB /* UiBindable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UiBindable.swift; sourceTree = "<group>"; };
+		24EB57EE1D2C2DC40062DDDB /* SomaUIBindable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SomaUIBindable.swift; sourceTree = "<group>"; };
 		42956B8F15DB5942D9E3CAB4 /* Pods_SomaKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SomaKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		52251226EA2BC454904777B7 /* Pods-SomaKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SomaKit.release.xcconfig"; path = "Pods/Target Support Files/Pods-SomaKit/Pods-SomaKit.release.xcconfig"; sourceTree = "<group>"; };
 		7A0120809CF5D00DCB32AAA7 /* Pods-SomaKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SomaKit.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SomaKit/Pods-SomaKit.debug.xcconfig"; sourceTree = "<group>"; };
@@ -166,13 +198,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		24E1C0DA1D22F78F00533D4E /* UI */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = UI;
-			sourceTree = "<group>";
-		};
 		24E3CD9F1D1FE753001BCDB2 = {
 			isa = PBXGroup;
 			children = (
@@ -355,7 +380,7 @@
 		24E5C2C11D2097CE0098AB3A /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				24E1C0DA1D22F78F00533D4E /* UI */,
+				24EB57C41D2C0E8A0062DDDB /* UI */,
 				24E5C2CC1D209E7F0098AB3A /* Image */,
 			);
 			path = Components;
@@ -402,6 +427,101 @@
 				24E5C2E31D20A28F0098AB3A /* ImageLoader.swift */,
 			);
 			path = ImageLoader;
+			sourceTree = "<group>";
+		};
+		24EB57C41D2C0E8A0062DDDB /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				24EB57EB1D2C2BFC0062DDDB /* UiBindable */,
+				24EB57E21D2C187D0062DDDB /* ViewController */,
+				24EB57C51D2C0E8A0062DDDB /* Module */,
+				24EB57D41D2C0E8A0062DDDB /* ViewModel */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		24EB57C51D2C0E8A0062DDDB /* Module */ = {
+			isa = PBXGroup;
+			children = (
+				24EB57C61D2C0E8A0062DDDB /* Builder */,
+				24EB57C91D2C0E8A0062DDDB /* Interactor */,
+				24EB57CC1D2C0E8A0062DDDB /* Router */,
+				24EB57CF1D2C0E8A0062DDDB /* TransitionHandler */,
+				24EB57D21D2C0E8A0062DDDB /* ViewModel */,
+			);
+			path = Module;
+			sourceTree = "<group>";
+		};
+		24EB57C61D2C0E8A0062DDDB /* Builder */ = {
+			isa = PBXGroup;
+			children = (
+				24EB57C71D2C0E8A0062DDDB /* ModuleBuidler.swift */,
+				24EB57C81D2C0E8A0062DDDB /* SomaModuleBuidler.swift */,
+			);
+			path = Builder;
+			sourceTree = "<group>";
+		};
+		24EB57C91D2C0E8A0062DDDB /* Interactor */ = {
+			isa = PBXGroup;
+			children = (
+				24EB57CA1D2C0E8A0062DDDB /* EmptyInteractor.swift */,
+				24EB57CB1D2C0E8A0062DDDB /* Interactor.swift */,
+			);
+			path = Interactor;
+			sourceTree = "<group>";
+		};
+		24EB57CC1D2C0E8A0062DDDB /* Router */ = {
+			isa = PBXGroup;
+			children = (
+				24EB57CD1D2C0E8A0062DDDB /* EmptyRouter.swift */,
+				24EB57CE1D2C0E8A0062DDDB /* Router.swift */,
+			);
+			path = Router;
+			sourceTree = "<group>";
+		};
+		24EB57CF1D2C0E8A0062DDDB /* TransitionHandler */ = {
+			isa = PBXGroup;
+			children = (
+				24EB57D01D2C0E8A0062DDDB /* ModuleTransitionHandler.swift */,
+				24EB57D11D2C0E8A0062DDDB /* UIViewController+ModuleTransitionHandler.swift */,
+			);
+			path = TransitionHandler;
+			sourceTree = "<group>";
+		};
+		24EB57D21D2C0E8A0062DDDB /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				24EB57D31D2C0E8A0062DDDB /* ModuleViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		24EB57D41D2C0E8A0062DDDB /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				24EB57D51D2C0E8A0062DDDB /* ViewModel.swift */,
+				24EB57D61D2C0E8A0062DDDB /* ViewPresenter.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		24EB57E21D2C187D0062DDDB /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				24EB57E31D2C1A220062DDDB /* ViewController.swift */,
+				24EB57E71D2C229C0062DDDB /* SomaViewController.swift */,
+				24EB57E91D2C25920062DDDB /* ModuleViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		24EB57EB1D2C2BFC0062DDDB /* UiBindable */ = {
+			isa = PBXGroup;
+			children = (
+				24EB57EC1D2C2C0F0062DDDB /* UiBindable.swift */,
+				24EB57EE1D2C2DC40062DDDB /* SomaUIBindable.swift */,
+			);
+			path = UiBindable;
 			sourceTree = "<group>";
 		};
 		4FA14D6864D75A2735BDA133 /* Frameworks */ = {
@@ -544,8 +664,12 @@
 				24E3CDFF1D1FE7B3001BCDB2 /* DataProviderConvertibleType.swift in Sources */,
 				24E2CFB11D211AE200967097 /* FileImageSource.swift in Sources */,
 				24E3CE121D1FE7B3001BCDB2 /* UnsafeJSONMapper.swift in Sources */,
+				24EB57E81D2C229C0062DDDB /* SomaViewController.swift in Sources */,
+				24EB57EA1D2C25920062DDDB /* ModuleViewController.swift in Sources */,
+				24EB57ED1D2C2C0F0062DDDB /* UiBindable.swift in Sources */,
 				24E3CE211D1FE7B3001BCDB2 /* TransformStore.swift in Sources */,
 				24E3CE0B1D1FE7B3001BCDB2 /* URLConvertible.swift in Sources */,
+				24EB57EF1D2C2DC40062DDDB /* SomaUIBindable.swift in Sources */,
 				24E3CDF51D1FE7B3001BCDB2 /* CacheValue.swift in Sources */,
 				24E3CE091D1FE7B3001BCDB2 /* SomaFunc.swift in Sources */,
 				24E3CE1C1D1FE7B3001BCDB2 /* StoreConvertibleType.swift in Sources */,
@@ -556,13 +680,18 @@
 				24E3CE031D1FE7B3001BCDB2 /* TransformDataProvider.swift in Sources */,
 				24E3CE0D1D1FE7B3001BCDB2 /* Log+Extension.swift in Sources */,
 				24E3CE171D1FE7B3001BCDB2 /* RequestError.swift in Sources */,
+				24EB57E41D2C1A220062DDDB /* ViewController.swift in Sources */,
 				24E3CE191D1FE7B3001BCDB2 /* Request+DataLoader.swift in Sources */,
 				24E3CE151D1FE7B3001BCDB2 /* ApiRequest.swift in Sources */,
 				24AF8AEB1D20A71B00E40CCB /* AnyImageSource.swift in Sources */,
 				24E3CE241D1FE84E001BCDB2 /* DataLoader.swift in Sources */,
 				24E2CFB91D2132C700967097 /* StringCachingKeyProvider.swift in Sources */,
+				24EB57D81D2C0E8A0062DDDB /* SomaModuleBuidler.swift in Sources */,
+				24EB57DB1D2C0E8A0062DDDB /* EmptyRouter.swift in Sources */,
 				24E3CE161D1FE7B3001BCDB2 /* RequestConvertibleType.swift in Sources */,
+				24EB57DF1D2C0E8A0062DDDB /* ModuleViewModel.swift in Sources */,
 				24E2CFAF1D21163D00967097 /* BundleImageSource.swift in Sources */,
+				24EB57D91D2C0E8A0062DDDB /* EmptyInteractor.swift in Sources */,
 				24E1C0D31D22EB5600533D4E /* ImageResizing.swift in Sources */,
 				24E2CFB51D21239500967097 /* FakeStore.swift in Sources */,
 				24E3CDF21D1FE7B3001BCDB2 /* CacheableDataProvider.swift in Sources */,
@@ -575,6 +704,7 @@
 				24E3CDF41D1FE7B3001BCDB2 /* CacheStore.swift in Sources */,
 				24E3CE011D1FE7B3001BCDB2 /* Observable+DataProviderType.swift in Sources */,
 				24E1C0D71D22F14200533D4E /* ImageFiltering.swift in Sources */,
+				24EB57E11D2C0E8A0062DDDB /* ViewPresenter.swift in Sources */,
 				24E5C2E41D20A28F0098AB3A /* ImageLoader.swift in Sources */,
 				24E3CE081D1FE7B3001BCDB2 /* SomaError.swift in Sources */,
 				24E3CE111D1FE7B3001BCDB2 /* JSONMappingConverter.swift in Sources */,
@@ -582,10 +712,12 @@
 				24E3CE041D1FE7B3001BCDB2 /* Collection+Extension.swift in Sources */,
 				24E1C0D51D22ED3300533D4E /* ImageRounding.swift in Sources */,
 				24E1C0D91D22F48C00533D4E /* ImageBluring.swift in Sources */,
+				24EB57DD1D2C0E8A0062DDDB /* ModuleTransitionHandler.swift in Sources */,
 				24E3CDF81D1FE7B3001BCDB2 /* AnyConverter.swift in Sources */,
 				24E3CE101D1FE7B3001BCDB2 /* Observable+Log.swift in Sources */,
 				24E3CE021D1FE7B3001BCDB2 /* PagedDataProvider.swift in Sources */,
 				24E3CDFD1D1FE7B3001BCDB2 /* AnyDataProvider.swift in Sources */,
+				24EB57DE1D2C0E8A0062DDDB /* UIViewController+ModuleTransitionHandler.swift in Sources */,
 				24E3CE221D1FE7B3001BCDB2 /* UserDefaultsStore.swift in Sources */,
 				24E3CE201D1FE7B3001BCDB2 /* StoreType.swift in Sources */,
 				24E3CE061D1FE7B3001BCDB2 /* Observable+Extensions.swift in Sources */,
@@ -595,8 +727,12 @@
 				24E5C2D41D209E7F0098AB3A /* ImageSource.swift in Sources */,
 				24E3CDFA1D1FE7B3001BCDB2 /* ConverterType.swift in Sources */,
 				24E3CE0F1D1FE7B3001BCDB2 /* NativeLogProcessor.swift in Sources */,
+				24EB57DA1D2C0E8A0062DDDB /* Interactor.swift in Sources */,
 				24E3CE1B1D1FE7B3001BCDB2 /* MemoryStore.swift in Sources */,
+				24EB57E01D2C0E8A0062DDDB /* ViewModel.swift in Sources */,
 				24E3CE001D1FE7B3001BCDB2 /* DataProviderType.swift in Sources */,
+				24EB57D71D2C0E8A0062DDDB /* ModuleBuidler.swift in Sources */,
+				24EB57DC1D2C0E8A0062DDDB /* Router.swift in Sources */,
 				24AF8AEF1D20BF1400E40CCB /* StringKeyConvertiable.swift in Sources */,
 				24E3CDF31D1FE7B3001BCDB2 /* CacheManagedObject.swift in Sources */,
 				24E3CE0E1D1FE7B3001BCDB2 /* Log.swift in Sources */,
