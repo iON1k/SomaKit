@@ -10,12 +10,10 @@ public final class SomaModuleBuidler<TModulePresenter: UIViewController where TM
     TModulePresenter.ViewModel: ModuleViewModel>: ModuleBuidler {
     public typealias ModulPresenterBuilder = Void -> TModulePresenter
     public typealias ViewModelBuilder = Void -> TModulePresenter.ViewModel
-    public typealias InteractorBuilder = Void -> TModulePresenter.ViewModel.Interactor
     public typealias RouterBuilder = Void -> TModulePresenter.ViewModel.Router
     
     private var modulePresenterBuilder: ModulPresenterBuilder
     private var viewModelBuilder: ViewModelBuilder?
-    private var interactorBuilder: InteractorBuilder?
     private var routerBuilder: RouterBuilder?
     
     public init(modulePresenterBuilder: ModulPresenterBuilder) {
@@ -30,10 +28,6 @@ public final class SomaModuleBuidler<TModulePresenter: UIViewController where TM
         self.routerBuilder = routerBuilder
     }
     
-    public func bindInteractor(interactorBuilder: InteractorBuilder?) {
-        self.interactorBuilder = interactorBuilder
-    }
-    
     public func buildModule() -> UIViewController {
         let modulePresenter = modulePresenterBuilder()
         
@@ -43,9 +37,6 @@ public final class SomaModuleBuidler<TModulePresenter: UIViewController where TM
             let router = routerBuilder?()
             router?.bindTransitionHandler(modulePresenter)
             viewModel.bindRouter(router)
-            
-            let interactor = interactorBuilder?()
-            viewModel.bindInteractor(interactor)
             
             modulePresenter.bindViewModel(viewModel)
         }

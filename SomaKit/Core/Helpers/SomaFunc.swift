@@ -13,6 +13,10 @@ public final class SomaFunc {
         //Nothing
     }
     
+    public static func emptyFunc<TValue>(value: TValue) {
+        //Nothing
+    }
+    
     public static func emptyTransform<TValue>(value: TValue) -> TValue {
         return value
     }

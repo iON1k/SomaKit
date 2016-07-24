@@ -49,6 +49,6 @@ public class PagedDataProvider<TData>: DataProviderType {
     }
     
     public func _createPageDataProvider(pageNumber: PageType) -> Observable<TData> {
-        abstractMethod(#function)
+        Utils.abstractMethod(#function)
     }
 }

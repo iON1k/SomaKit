@@ -8,8 +8,6 @@
 
 public protocol ModuleViewModel: ViewModelType {
     associatedtype Router: RouterType
-    associatedtype Interactor: InteractorType
     
     func bindRouter(router: Router?)
-    func bindInteractor(interactor: Interactor?)
 }

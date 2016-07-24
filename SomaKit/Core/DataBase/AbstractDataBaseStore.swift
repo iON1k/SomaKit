@@ -44,7 +44,7 @@ public class AbstractDataBaseStore<TKey, TData, TDataBase: NSManagedObject>: Sto
                 }
                 
                 guard let resultDBRecord = dbRecord else {
-                    let dataBaseName = typeName(TDataBase)
+                    let dataBaseName = Utils.typeName(TDataBase)
                     error = SomaError("DataBase \(dataBaseName) entity creating failed")
                     return
                 }
@@ -73,7 +73,7 @@ public class AbstractDataBaseStore<TKey, TData, TDataBase: NSManagedObject>: Sto
     
     private func keyObject(key: KeyType) throws -> AnyObject {
         guard let keyObj = key as? AnyObject else {
-            throw SomaError("Database store wrong key type \(typeName(KeyType)). Expected type AnyObject.")
+            throw SomaError("Database store wrong key type \(Utils.typeName(KeyType)). Expected type AnyObject.")
         }
         
         return keyObj

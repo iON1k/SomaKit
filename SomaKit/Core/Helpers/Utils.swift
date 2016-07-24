@@ -8,10 +8,18 @@
 
 import Foundation
 
-@noreturn public func abstractMethod(methodName: String = "Method") {
-    fatalError("\(methodName) has not been implemented")
-}
-
-func typeName(classType: Any.Type) -> String {
-    return String(classType)
+public final class Utils {
+    @noreturn public static func abstractMethod(methodName: String = "Method") {
+        fatalError("\(methodName) has not been implemented")
+    }
+    
+    public static func typeName(classType: Any.Type) -> String {
+        return String(classType)
+    }
+    
+    public static func ensureMainThread() {
+        guard NSThread.isMainThread() else {
+            fatalError("Is not main thread")
+        }
+    }
 }

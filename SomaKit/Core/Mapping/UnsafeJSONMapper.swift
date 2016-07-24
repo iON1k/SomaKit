@@ -50,6 +50,6 @@ public class UnsafeJSONMapper {
     }
     
     private func defaultKeyForType<TObject>(mappableType: TObject.Type) -> String {
-        return typeName(mappableType)
+        return Utils.typeName(mappableType)
     }
 }
