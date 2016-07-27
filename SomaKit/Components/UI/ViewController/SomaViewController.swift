@@ -6,14 +6,10 @@
 //  Copyright © 2016 iON1k. All rights reserved.
 //
 
-public class SomaViewController: UIViewController, ViewControllerType {
+public class SomaViewController: UIViewController {
     public enum InitContext {
         case NibName(nibNameOrNil: String?, nibBundleOrNil: NSBundle?)
         case Coder(aDecoder: NSCoder)
-    }
-    
-    public var instantinationType: ViewControllerInstantinationType {
-        return .New
     }
     
     public convenience override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
