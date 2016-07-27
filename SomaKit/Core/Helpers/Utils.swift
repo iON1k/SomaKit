@@ -17,9 +17,21 @@ public final class Utils {
         return String(classType)
     }
     
-    public static func ensureMainThread() {
+    public static func ensureIsMainThread() {
         guard NSThread.isMainThread() else {
             fatalError("Is not main thread")
         }
+    }
+    
+    public static func unsafeCast<T, E>(sourceValue: T) -> E {
+        if let castedValue = sourceValue as? E {
+            return castedValue
+        }
+        
+        fatalError("Failing unsafe casting value with type \(T.self) to type \(E.self)")
+    }
+    
+    private init() {
+        //Nothing
     }
 }

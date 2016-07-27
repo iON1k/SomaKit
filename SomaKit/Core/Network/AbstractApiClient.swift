@@ -41,7 +41,7 @@ public class AbstractJSONApiClient: ApiRequestMaganer {
             .doOnNext({ (responseString) in
                 Log.debug("Api request get response: \(responseString)")
             })
-            .map(SomaFunc.emptyTransform)
+            .map(SomaFunc.sameTransform)
     }
     
     public func apiResponseMappingEngine<TResponse>(request: ApiRequest<TResponse>, sourceResponse: Any) -> Observable<TResponse> {

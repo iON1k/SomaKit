@@ -24,7 +24,7 @@ extension ViewControllerType where Self: UIViewController  {
             return Self.init()
         case .Storyboard(let storyboard, let identifier):
             let viewController = storyboard.instantiateViewControllerWithIdentifier(identifier)
-            return SomaFunc.unsafeCast(viewController)
+            return Utils.unsafeCast(viewController)
         }
     }
 }
