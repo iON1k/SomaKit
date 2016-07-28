@@ -16,11 +16,6 @@ extension TableElementsProvider {
         _internalRegisterViewGenerator(elementGenerator)
     }
     
-    public func registerCellGenerator<TViewModel: ViewModelType,
-                                      TCell: UITableViewCell where TCell: TableElementPresenterType>(cellGenerator: (TViewModel, UITableView) -> TCell) {
-        registerTableElementGenerator(cellGenerator)
-    }
-    
     public func registerCellClass<TViewModel: ViewModelType, TCell: UITableViewCell
         where TCell: TableElementPresenterType, TCell.ViewModel == TViewModel>(viewModelType: TViewModel.Type, cellType: TCell.Type, reuseId: String? = nil) {
         let normalizedReuseId = normalizeReuseId(reuseId, cellType: cellType)
@@ -56,7 +51,7 @@ extension TableElementsProvider {
     
     private func registerCellGenerator<TViewModel: ViewModelType, TCell: UITableViewCell
         where TCell: TableElementPresenterType, TCell.ViewModel == TViewModel>(viewModelType: TViewModel.Type, cellType: TCell.Type, reuseId: String) {
-        registerCellGenerator { (viewModel: TViewModel, tableView) -> TCell in
+        registerTableElementGenerator { (viewModel: TViewModel, tableView) -> TCell in
             guard let cell = tableView.dequeueReusableCellWithIdentifier(reuseId) else {
                 Log.error("Table view dequeue reusable cell with id \(reuseId) failed")
                 return TCell()
