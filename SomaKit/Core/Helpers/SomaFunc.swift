@@ -13,7 +13,7 @@ public final class SomaFunc {
         //Nothing
     }
     
-    public static func emptyFunc<TValue>(value: TValue) {
+    public static func emptyFunc(value: Any) {
         //Nothing
     }
     
@@ -21,11 +21,11 @@ public final class SomaFunc {
         return value
     }
     
-    public static func truePredicate<TValue>(value: TValue) -> Bool {
+    public static func truePredicate(value: Any) -> Bool {
         return true
     }
     
-    public static func falsePredicate<TValue>(value: TValue) -> Bool {
+    public static func falsePredicate(value: Any) -> Bool {
         return false
     }
     

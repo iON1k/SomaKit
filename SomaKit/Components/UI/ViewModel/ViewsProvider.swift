@@ -33,16 +33,16 @@ public class ViewsProvider<TContext> {
         }
     }
     
-    public func viewForViewModel<TViewModel: ViewModelType>(viewModel: TViewModel) -> UIView {
+    public func viewForViewModel(viewModel: ViewModelType) -> UIView {
         return viewDataForViewModel(viewModel).viewGenerator(viewModel, context)
     }
     
-    public func viewTypeForViewModel<TViewModel: ViewModelType>(viewModel: TViewModel) -> UIView.Type {
+    public func viewTypeForViewModel(viewModel: ViewModelType) -> UIView.Type {
         return viewDataForViewModel(viewModel).viewType
     }
     
-    private func viewDataForViewModel<TViewModel: ViewModelType>(viewModel: TViewModel) -> ViewData {
-        let generatorKey = viewGeneratorKey(TViewModel)
+    private func viewDataForViewModel(viewModel: ViewModelType) -> ViewData {
+        let generatorKey = viewGeneratorKey(viewModel.dynamicType)
         guard let viewData = registeredViewsData[generatorKey] else {
             Log.error("ViewsProvider: view data with key \(generatorKey) not registered")
             return emptyViewData

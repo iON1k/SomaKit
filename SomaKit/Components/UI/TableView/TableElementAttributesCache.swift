@@ -8,18 +8,26 @@
 
 import RxSwift
 
-public protocol TableElementAttributesCacheSource {
+public protocol TableElementAttributesCacheSource: class {
     func tableElementAttributes(tableElementAttributesCache: TableElementAttributesCache, indexPath: NSIndexPath) -> TableElementAttributes
 }
 
 public class TableElementAttributesCache {
     private typealias CacheByIndexType = [NSIndexPath : TableElementAttributes]
     
-    private let source: TableElementAttributesCacheSource
+    private var isSourceBinded = false
+    private weak var source: TableElementAttributesCacheSource?
     private var attributesByIndex = CacheByIndexType()
     
-    public init(source: TableElementAttributesCacheSource) {
+    public func bindSource(source: TableElementAttributesCacheSource) {
+        Utils.ensureIsMainThread()
+        if isSourceBinded {
+            Log.error("TableElementAttributesCache source is already binded")
+            return
+        }
+        
         self.source = source
+        isSourceBinded = true
     }
     
     public func tableElementAttributes(indexPath: NSIndexPath) -> TableElementAttributes {
@@ -51,7 +59,11 @@ public class TableElementAttributesCache {
     }
     
     private func _reloadCache(indexPath: NSIndexPath) -> TableElementAttributes {
-        let tableElementAttributes = source.tableElementAttributes(self, indexPath: indexPath)
+        guard let strongSource = source else {
+            fatalError("TableElementAttributesCache source is nil")
+        }
+        
+        let tableElementAttributes = strongSource.tableElementAttributes(self, indexPath: indexPath)
         attributesByIndex[indexPath] = tableElementAttributes
         
         return tableElementAttributes

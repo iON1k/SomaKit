@@ -23,12 +23,12 @@ public final class Utils {
         }
     }
     
-    public static func unsafeCast<T, E>(sourceValue: T) -> E {
-        if let castedValue = sourceValue as? E {
+    public static func unsafeCast<T>(sourceValue: Any) -> T {
+        if let castedValue = sourceValue as? T {
             return castedValue
         }
         
-        fatalError("Failing unsafe casting value with type \(T.self) to type \(E.self)")
+        fatalError("Failing unsafe casting value with type \(T.self) to type \(sourceValue.dynamicType)")
     }
     
     private init() {

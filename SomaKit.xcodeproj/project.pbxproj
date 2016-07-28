@@ -12,6 +12,8 @@
 		24468C0E1D455AE4003E1344 /* TableElementAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24468C0D1D455AE4003E1344 /* TableElementAttributes.swift */; };
 		24468C101D455B42003E1344 /* TableElementAttributesCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24468C0F1D455B42003E1344 /* TableElementAttributesCache.swift */; };
 		2457267F1D4A2B7600D9FC63 /* TableElementPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2457267E1D4A2B7600D9FC63 /* TableElementPresenter.swift */; };
+		245726811D4A550A00D9FC63 /* TableViewWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245726801D4A550A00D9FC63 /* TableViewWrapper.swift */; };
+		245726831D4A625100D9FC63 /* TableViewSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245726821D4A625100D9FC63 /* TableViewSection.swift */; };
 		247F9C3D1D331205004D7C68 /* ObjectGenerator+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 247F9C3C1D331205004D7C68 /* ObjectGenerator+Extension.swift */; };
 		24AF8AE91D20A71100E40CCB /* ImageSourceConvertiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24AF8AE81D20A71100E40CCB /* ImageSourceConvertiable.swift */; };
 		24AF8AEB1D20A71B00E40CCB /* AnyImageSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24AF8AEA1D20A71B00E40CCB /* AnyImageSource.swift */; };
@@ -106,6 +108,8 @@
 		24468C0D1D455AE4003E1344 /* TableElementAttributes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableElementAttributes.swift; sourceTree = "<group>"; };
 		24468C0F1D455B42003E1344 /* TableElementAttributesCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableElementAttributesCache.swift; sourceTree = "<group>"; };
 		2457267E1D4A2B7600D9FC63 /* TableElementPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableElementPresenter.swift; sourceTree = "<group>"; };
+		245726801D4A550A00D9FC63 /* TableViewWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewWrapper.swift; sourceTree = "<group>"; };
+		245726821D4A625100D9FC63 /* TableViewSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewSection.swift; sourceTree = "<group>"; };
 		247F9C3C1D331205004D7C68 /* ObjectGenerator+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ObjectGenerator+Extension.swift"; sourceTree = "<group>"; };
 		24AF8AE81D20A71100E40CCB /* ImageSourceConvertiable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageSourceConvertiable.swift; sourceTree = "<group>"; };
 		24AF8AEA1D20A71B00E40CCB /* AnyImageSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyImageSource.swift; sourceTree = "<group>"; };
@@ -217,6 +221,8 @@
 				24468C0F1D455B42003E1344 /* TableElementAttributesCache.swift */,
 				242EE3241D47BB990024F9AE /* TableElementsProvider.swift */,
 				2457267E1D4A2B7600D9FC63 /* TableElementPresenter.swift */,
+				245726801D4A550A00D9FC63 /* TableViewWrapper.swift */,
+				245726821D4A625100D9FC63 /* TableViewSection.swift */,
 			);
 			path = TableView;
 			sourceTree = "<group>";
@@ -717,6 +723,7 @@
 				24E3CE0D1D1FE7B3001BCDB2 /* Log+Extension.swift in Sources */,
 				2457267F1D4A2B7600D9FC63 /* TableElementPresenter.swift in Sources */,
 				242EE3251D47BB990024F9AE /* TableElementsProvider.swift in Sources */,
+				245726831D4A625100D9FC63 /* TableViewSection.swift in Sources */,
 				24E3CE171D1FE7B3001BCDB2 /* RequestError.swift in Sources */,
 				24EB57E41D2C1A220062DDDB /* StoryboardProvider.swift in Sources */,
 				24E3CE191D1FE7B3001BCDB2 /* Request+DataLoader.swift in Sources */,
@@ -772,6 +779,7 @@
 				24E3CE1B1D1FE7B3001BCDB2 /* MemoryStore.swift in Sources */,
 				24EB57E01D2C0E8A0062DDDB /* ViewModel.swift in Sources */,
 				24E3CE001D1FE7B3001BCDB2 /* DataProviderType.swift in Sources */,
+				245726811D4A550A00D9FC63 /* TableViewWrapper.swift in Sources */,
 				24EB57D71D2C0E8A0062DDDB /* ModuleBuidler.swift in Sources */,
 				24EB57DC1D2C0E8A0062DDDB /* Router.swift in Sources */,
 				24AF8AEF1D20BF1400E40CCB /* StringKeyConvertiable.swift in Sources */,

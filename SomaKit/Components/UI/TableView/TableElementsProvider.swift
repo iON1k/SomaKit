@@ -7,7 +7,9 @@
 //
 
 public class TableElementsProvider: ViewsProvider<UITableView> {
-    
+    public init(tableView: UITableView) {
+        super.init(context: tableView)
+    }
 }
 
 extension TableElementsProvider {
@@ -38,7 +40,7 @@ extension TableElementsProvider {
         registerCellNib(viewModelType, cellType: cellType, nib: cellType.loadNib(), reuseId: reuseId)
     }
     
-    public func cellForViewModel<TViewModel: ViewModelType>(viewModel: TViewModel) -> UITableViewCell {
+    public func cellForViewModel(viewModel: ViewModelType) -> UITableViewCell {
         let generatedView = viewForViewModel(viewModel)
         
         guard let cell = generatedView as? UITableViewCell else {
