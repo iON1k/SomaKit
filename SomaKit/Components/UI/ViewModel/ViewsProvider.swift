@@ -8,19 +8,24 @@
 
 public class ViewsProvider<TContext> {
     public typealias ViewGenerator = (ViewModelType, TContext) -> UIView
+    public typealias ViewData = (viewType: UIView.Type, viewGenerator: ViewGenerator)
     
     public let context: TContext
     
-    private var registeredViewsGenerators = [String : ViewGenerator]()
+    private var registeredViewsData = [String : ViewData]()
+    
+    private let emptyViewData = ViewData(UIView.self) { (viewModel, context) -> UIView in
+        return UIView()
+    }
     
     public init(context: TContext) {
         self.context = context
     }
     
-    public func registerViewGenerator<TViewModel: ViewModelType>(viewModelType: TViewModel.Type, viewGenerator: (TViewModel, TContext) -> UIView) {
-        _registerViewGenerator(viewGeneratorKey(viewModelType)) { (viewModel, context) -> UIView in
+    public func _internalRegisterViewGenerator<TViewModel: ViewModelType, TView: UIView>(viewGenerator: (TViewModel, TContext) -> TView) {
+        registerViewGenerator(viewGeneratorKey(TViewModel), viewType: TView.self) { (viewModel, context) -> UIView in
             guard let castedViewModel = viewModel as? TViewModel else {
-                Log.error("ViewsProvider: view model wrong type \(viewModel.dynamicType). Expected type \(viewModelType)")
+                Log.error("ViewsProvider: view model wrong type \(viewModel.dynamicType). Expected type \(TViewModel.self)")
                 return UIView()
             }
             
@@ -29,24 +34,32 @@ public class ViewsProvider<TContext> {
     }
     
     public func viewForViewModel<TViewModel: ViewModelType>(viewModel: TViewModel) -> UIView {
-        let generatorKey = viewGeneratorKey(TViewModel)
-        guard let viewGenerator = registeredViewsGenerators[generatorKey] else {
-            Log.error("ViewsProvider: view generator with key \(generatorKey) not registered")
-            return UIView()
-        }
-        
-        return viewGenerator(viewModel, context)
+        return viewDataForViewModel(viewModel).viewGenerator(viewModel, context)
     }
     
-    private func _registerViewGenerator(viewKey: String, viewGenerator: ViewGenerator) {
+    public func viewTypeForViewModel<TViewModel: ViewModelType>(viewModel: TViewModel) -> UIView.Type {
+        return viewDataForViewModel(viewModel).viewType
+    }
+    
+    private func viewDataForViewModel<TViewModel: ViewModelType>(viewModel: TViewModel) -> ViewData {
+        let generatorKey = viewGeneratorKey(TViewModel)
+        guard let viewData = registeredViewsData[generatorKey] else {
+            Log.error("ViewsProvider: view data with key \(generatorKey) not registered")
+            return emptyViewData
+        }
+        
+        return viewData
+    }
+    
+    private func registerViewGenerator(viewKey: String, viewType: UIView.Type, viewGenerator: ViewGenerator) {
         Utils.ensureIsMainThread()
         
-        guard registeredViewsGenerators[viewKey] == nil else {
+        guard registeredViewsData[viewKey] == nil else {
             Log.error("ViewsProvider: view generator with key \(viewKey) already registered")
             return
         }
         
-        registeredViewsGenerators[viewKey] = viewGenerator
+        registeredViewsData[viewKey] = ViewData(viewType, viewGenerator)
     }
     
     private func viewGeneratorKey(viewModelType: ViewModelType.Type) -> String {
