@@ -10,7 +10,7 @@ import Foundation
 
 public final class Utils {
     @noreturn public static func abstractMethod(methodName: String = "Method") {
-        fatalError("\(methodName) has not been implemented")
+        Debug.fatalError("\(methodName) has not been implemented")
     }
     
     public static func typeName(classType: Any.Type) -> String {
@@ -19,7 +19,7 @@ public final class Utils {
     
     public static func ensureIsMainThread() {
         guard NSThread.isMainThread() else {
-            fatalError("Is not main thread")
+            Debug.fatalError("Is not main thread")
         }
     }
     
@@ -28,7 +28,7 @@ public final class Utils {
             return castedValue
         }
         
-        fatalError("Failing unsafe casting value with type \(T.self) to type \(sourceValue.dynamicType)")
+        Debug.fatalError("Failing unsafe casting value with type \(T.self) to type \(sourceValue.dynamicType)")
     }
     
     private init() {

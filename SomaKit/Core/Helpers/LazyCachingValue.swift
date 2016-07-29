@@ -22,7 +22,7 @@ public class LazyCachingValue<TValue> {
             }
             
             guard let initializeHandler = self.initializeHandler else {
-                fatalError("LazyReadOnly not setted up initializeHandler")
+                Debug.fatalError("LazyReadOnly not setted up initializeHandler")
             }
             
             let initializedValue = initializeHandler()
@@ -35,7 +35,7 @@ public class LazyCachingValue<TValue> {
     public func initialize(initializeHandler: InitializeHandler) {
         lock.sync {
             guard let initializeHandler = self.initializeHandler else {
-                fatalError("LazyReadOnly already seted up initializeHandler")
+                Debug.fatalError("LazyReadOnly already seted up initializeHandler")
             }
             
             self.initializeHandler = initializeHandler

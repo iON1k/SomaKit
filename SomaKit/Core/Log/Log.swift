@@ -51,7 +51,7 @@ public struct LogPriority: Equatable, CustomStringConvertible {
             case LogPriority.All:
                 return "All"
             default:
-                fatalError("Unknown log priority")
+                Debug.fatalError("Unknown log priority")
             }
         }
     }
@@ -87,7 +87,7 @@ public final class Log {
     
     public static func log(logLevel: LogLevel, message: String, args: Any...) {
         guard let logInstance = logInstance else {
-            fatalError("Log not initialized")
+            Debug.fatalError("Log not initialized")
         }
         
         logInstance.log(logLevel, message: message, args: args)

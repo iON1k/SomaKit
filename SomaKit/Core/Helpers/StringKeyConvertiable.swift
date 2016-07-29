@@ -88,7 +88,7 @@ extension Array: StringKeyConvertiable {
         
         for element in self {
             guard let cachingKeyElement = element as? StringKeyConvertiable else {
-                fatalError("Array has not implemented StringKeyConvertiable element \(element.dynamicType)")
+                Debug.fatalError("Array has not implemented StringKeyConvertiable element \(element.dynamicType)")
             }
             
             resultString += cachingKeyElement.stringKey
@@ -104,11 +104,11 @@ extension Dictionary: StringKeyConvertiable {
         
         for (key, value) in self {
             guard let cachingKeyKey = key as? StringKeyConvertiable else {
-                fatalError("Dictionary has not implemented StringKeyConvertiable key \(key.dynamicType)")
+                Debug.fatalError("Dictionary has not implemented StringKeyConvertiable key \(key.dynamicType)")
             }
             
             guard let cachingKeyValue = value as? StringKeyConvertiable else {
-                fatalError("Dictionary has not implemented StringKeyConvertiable element \(value.dynamicType)")
+                Debug.fatalError("Dictionary has not implemented StringKeyConvertiable element \(value.dynamicType)")
             }
             
             resultString += cachingKeyKey.stringKey + cachingKeyValue.stringKey

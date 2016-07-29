@@ -6,14 +6,14 @@
 //  Copyright © 2016 iON1k. All rights reserved.
 //
 
-public class TableViewSectionModel {
+public struct TableViewSectionModel {
     public let cellsViewModels: [ViewModelType]
-    public let header: ViewModelType?
-    public let footer: ViewModelType?
+    public let headerViewModel: ViewModelType?
+    public let footerViewModel: ViewModelType?
     
-    public init(cellsViewModels: [ViewModelType], header: ViewModelType? = nil, footer: ViewModelType? = nil) {
+    public init(cellsViewModels: [ViewModelType], headerViewModel: ViewModelType? = nil, footerViewModel: ViewModelType? = nil) {
         self.cellsViewModels = cellsViewModels
-        self.header = header
-        self.footer = footer
+        self.headerViewModel = headerViewModel
+        self.footerViewModel = footerViewModel
     }
 }
