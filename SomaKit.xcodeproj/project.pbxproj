@@ -12,10 +12,12 @@
 		242B40001D4BD6400010C3CB /* TableSectionElementsAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 242B3FFF1D4BD6400010C3CB /* TableSectionElementsAttributes.swift */; };
 		242B40021D4BE0060010C3CB /* Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 242B40011D4BE0060010C3CB /* Debug.swift */; };
 		242B40041D4BE5F30010C3CB /* DefaultTableElementAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 242B40031D4BE5F30010C3CB /* DefaultTableElementAttributes.swift */; };
+		242B584D1D4CAC80008B7F7C /* SomaProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = 242B584B1D4CAC80008B7F7C /* SomaProxy.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		242B584E1D4CAC80008B7F7C /* SomaProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 242B584C1D4CAC80008B7F7C /* SomaProxy.m */; };
 		242EE3251D47BB990024F9AE /* TableElementsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 242EE3241D47BB990024F9AE /* TableElementsProvider.swift */; };
 		24468C0E1D455AE4003E1344 /* TableElementAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24468C0D1D455AE4003E1344 /* TableElementAttributes.swift */; };
 		24468C101D455B42003E1344 /* TableElementAttributesCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24468C0F1D455B42003E1344 /* TableElementAttributesCache.swift */; };
-		2457267F1D4A2B7600D9FC63 /* TableElementAttributesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2457267E1D4A2B7600D9FC63 /* TableElementAttributesProvider.swift */; };
+		2457267F1D4A2B7600D9FC63 /* TableElementBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2457267E1D4A2B7600D9FC63 /* TableElementBehavior.swift */; };
 		245726811D4A550A00D9FC63 /* TableViewWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245726801D4A550A00D9FC63 /* TableViewWrapper.swift */; };
 		245726831D4A625100D9FC63 /* TableViewSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245726821D4A625100D9FC63 /* TableViewSection.swift */; };
 		247F9C3D1D331205004D7C68 /* ObjectGenerator+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 247F9C3C1D331205004D7C68 /* ObjectGenerator+Extension.swift */; };
@@ -112,10 +114,12 @@
 		242B3FFF1D4BD6400010C3CB /* TableSectionElementsAttributes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableSectionElementsAttributes.swift; sourceTree = "<group>"; };
 		242B40011D4BE0060010C3CB /* Debug.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Debug.swift; sourceTree = "<group>"; };
 		242B40031D4BE5F30010C3CB /* DefaultTableElementAttributes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultTableElementAttributes.swift; sourceTree = "<group>"; };
+		242B584B1D4CAC80008B7F7C /* SomaProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SomaProxy.h; sourceTree = "<group>"; };
+		242B584C1D4CAC80008B7F7C /* SomaProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SomaProxy.m; sourceTree = "<group>"; };
 		242EE3241D47BB990024F9AE /* TableElementsProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableElementsProvider.swift; sourceTree = "<group>"; };
 		24468C0D1D455AE4003E1344 /* TableElementAttributes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableElementAttributes.swift; sourceTree = "<group>"; };
 		24468C0F1D455B42003E1344 /* TableElementAttributesCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableElementAttributesCache.swift; sourceTree = "<group>"; };
-		2457267E1D4A2B7600D9FC63 /* TableElementAttributesProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableElementAttributesProvider.swift; sourceTree = "<group>"; };
+		2457267E1D4A2B7600D9FC63 /* TableElementBehavior.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableElementBehavior.swift; sourceTree = "<group>"; };
 		245726801D4A550A00D9FC63 /* TableViewWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewWrapper.swift; sourceTree = "<group>"; };
 		245726821D4A625100D9FC63 /* TableViewSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewSection.swift; sourceTree = "<group>"; };
 		247F9C3C1D331205004D7C68 /* ObjectGenerator+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ObjectGenerator+Extension.swift"; sourceTree = "<group>"; };
@@ -228,7 +232,7 @@
 				24468C0D1D455AE4003E1344 /* TableElementAttributes.swift */,
 				24468C0F1D455B42003E1344 /* TableElementAttributesCache.swift */,
 				242EE3241D47BB990024F9AE /* TableElementsProvider.swift */,
-				2457267E1D4A2B7600D9FC63 /* TableElementAttributesProvider.swift */,
+				2457267E1D4A2B7600D9FC63 /* TableElementBehavior.swift */,
 				245726801D4A550A00D9FC63 /* TableViewWrapper.swift */,
 				242B3FFD1D4BD1350010C3CB /* TableElementPresenterType.swift */,
 				245726821D4A625100D9FC63 /* TableViewSection.swift */,
@@ -365,6 +369,8 @@
 				24E3CDD51D1FE7B3001BCDB2 /* Utils.swift */,
 				24E2CFBC1D21459500967097 /* LazyCachingValue.swift */,
 				242B40011D4BE0060010C3CB /* Debug.swift */,
+				242B584B1D4CAC80008B7F7C /* SomaProxy.h */,
+				242B584C1D4CAC80008B7F7C /* SomaProxy.m */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -602,6 +608,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				24E3CDAD1D1FE753001BCDB2 /* SomaKit.h in Headers */,
+				242B584D1D4CAC80008B7F7C /* SomaProxy.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -733,7 +740,7 @@
 				247F9C3D1D331205004D7C68 /* ObjectGenerator+Extension.swift in Sources */,
 				24E3CE031D1FE7B3001BCDB2 /* TransformDataProvider.swift in Sources */,
 				24E3CE0D1D1FE7B3001BCDB2 /* Log+Extension.swift in Sources */,
-				2457267F1D4A2B7600D9FC63 /* TableElementAttributesProvider.swift in Sources */,
+				2457267F1D4A2B7600D9FC63 /* TableElementBehavior.swift in Sources */,
 				242EE3251D47BB990024F9AE /* TableElementsProvider.swift in Sources */,
 				245726831D4A625100D9FC63 /* TableViewSection.swift in Sources */,
 				24E3CE171D1FE7B3001BCDB2 /* RequestError.swift in Sources */,
@@ -768,6 +775,7 @@
 				24B329BC1D330BA7002F817E /* ObjectGenerator.swift in Sources */,
 				24EB57E11D2C0E8A0062DDDB /* ViewPresenter.swift in Sources */,
 				24E5C2E41D20A28F0098AB3A /* ImageLoader.swift in Sources */,
+				242B584E1D4CAC80008B7F7C /* SomaProxy.m in Sources */,
 				24E3CE081D1FE7B3001BCDB2 /* SomaError.swift in Sources */,
 				24E3CE111D1FE7B3001BCDB2 /* JSONMappingConverter.swift in Sources */,
 				24AF8AE91D20A71100E40CCB /* ImageSourceConvertiable.swift in Sources */,
@@ -903,6 +911,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7A0120809CF5D00DCB32AAA7 /* Pods-SomaKit.debug.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -913,6 +922,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.iON1k.SomaKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -920,6 +930,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 52251226EA2BC454904777B7 /* Pods-SomaKit.release.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;

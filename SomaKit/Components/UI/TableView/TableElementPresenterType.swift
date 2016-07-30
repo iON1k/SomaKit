@@ -6,6 +6,6 @@
 //  Copyright © 2016 iON1k. All rights reserved.
 //
 
-public protocol TableElementPresenterType: ViewPresenterType, TableElementAttributesProvider {
+public protocol TableElementPresenterType: ViewPresenterType, TableElementBehavior {
     //Nothing
 }

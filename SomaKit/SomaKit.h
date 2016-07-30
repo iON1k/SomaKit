@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#import "SomaProxy.h"
+
 //! Project version number for SomaKit.
 FOUNDATION_EXPORT double SomaKitVersionNumber;
 

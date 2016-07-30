@@ -9,17 +9,24 @@
 import RxSwift
 import RxCocoa
 
-public class TableViewWrapper: NSObject, UITableViewDataSource, UITableViewDelegate, TableElementAttributesCacheSource {
+public class TableViewWrapper: SomaProxy, UITableViewDataSource, UITableViewDelegate, TableElementAttributesCacheSource {
     public let tableView: UITableView
     
-    public typealias SectionModels = [TableViewSectionModel]
+    public typealias ForwardObjectType = protocol<UITableViewDataSource, UITableViewDelegate>
+    
+    public typealias SectionsModels = [TableViewSectionModel]
     
     private let elementsAttributesCache = TableElementAttributesCache()
     private let elementsProvider: TableElementsProvider
     
     private let defaultElementsAttributes = DefaultTableElementAttributes(prefferedHeight: 10)
     
-    private let sectionsModels = Variable(SectionModels())
+    private let preparingSectionsModels = Variable(SectionsModels())
+    private let sectionsModels = Variable(SectionsModels())
+    
+    private weak var forwardObject: ForwardObjectType?
+    
+    private let tableViewUpdatingTimeInterval = 0.1
     
     public init(tableView: UITableView) {
         self.tableView = tableView
@@ -32,20 +39,68 @@ public class TableViewWrapper: NSObject, UITableViewDataSource, UITableViewDeleg
         tableView.rx_delegate.setForwardToDelegate(self, retainDelegate: false)
         tableView.rx_dataSource.setForwardToDelegate(self, retainDelegate: false)
         
-        _ = sectionsModels.asObservable()
-            .flatMapLatest({ [weak self] (sectionsModels) -> Observable<Void> in
+        _ = preparingSectionsModels.asObservable()
+            .skip(1)
+            .takeUntil(rx_deallocated)
+            .flatMapLatest({ [weak self] (sectionsModels) -> Observable<SectionsModels> in
                 guard let strongSelf = self else {
                     return Observable.empty()
                 }
                 
-                return strongSelf.tableViewUpdatingObservable(sectionsModels)
+                return strongSelf.prepareSectionDataObservable(sectionsModels)
+            })
+            .throttle(tableViewUpdatingTimeInterval, scheduler: ConcurrentDispatchQueueScheduler(globalConcurrentQueueQOS: .Default))
+            .observeOn(MainScheduler.instance)
+            .bindTo(sectionsModels)
+        
+        _ = sectionsModels.asObservable()
+            .doOnNext({ [weak self] (_) in
+                guard let strongSelf = self else {
+                    return
+                }
+                
+                strongSelf.onSectionsDataDidUpdated()
             })
             .takeUntil(rx_deallocated)
             .subscribe()
     }
     
-    public func bindDataSource(dataSource: Observable<SectionModels>) -> Disposable {
-        return dataSource.bindTo(sectionsModels)
+    public func bindForwardObject(forwardObject: ForwardObjectType?, retain: Bool) {
+        Utils.ensureIsMainThread()
+        
+        self.forwardObject = forwardObject
+        _bindForwardObject(forwardObject, withRetain: retain)
+    }
+    
+    public func resetForwardObject() {
+        Utils.ensureIsMainThread()
+        
+        bindForwardObject(nil, retain: false)
+    }
+    
+    public func bindDataSource(dataSource: Observable<SectionsModels>) -> Disposable {
+        return dataSource.bindTo(preparingSectionsModels)
+    }
+    
+    public func reloadDataAsync(sectionsModels: SectionsModels) {
+        preparingSectionsModels.value = sectionsModels
+    }
+    
+    public func reloadDataAsync() {
+        reloadDataAsync(sectionsModels.value)
+    }
+    
+    public func reloadData(sectionsModels: SectionsModels) {
+        Utils.ensureIsMainThread()
+        
+        self.sectionsModels.value = sectionsModels
+        elementsAttributesCache.invalidateCache()
+        
+        onSectionsDataDidUpdated()
+    }
+    
+    public func reloadData() {
+        reloadData(sectionsModels.value)
     }
     
     //TableElementAttributesCacheSource
@@ -80,16 +135,17 @@ public class TableViewWrapper: NSObject, UITableViewDataSource, UITableViewDeleg
     }
     
     public func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        forwardObject?.tableView(tableView, numberOfRowsInSection: section)
         return rowsCount(section)
     }
     
     public func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let viewModel = cellViewModel(indexPath)
-        let cell = elementsProvider.cellForViewModel(viewModel)
+        forwardObject?.tableView(tableView, cellForRowAtIndexPath: indexPath)
         
-        if let elementAttributesProvider = cell as? TableElementAttributesProvider {
-            elementAttributesProvider.bindTableElementAttributes(elementsAttributesCache.cellAttributes(indexPath))
-        }
+        let viewModel = cellViewModel(indexPath)
+        
+        let cell = elementsProvider.cellForViewModel(viewModel)
+        bindAttributes(elementsAttributesCache.cellAttributes(indexPath), view: cell)
         
         return cell
     }
@@ -97,42 +153,61 @@ public class TableViewWrapper: NSObject, UITableViewDataSource, UITableViewDeleg
     //UITableViewDelegate
     
     public func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        forwardObject?.tableView?(tableView, heightForRowAtIndexPath: indexPath)
         return elementsAttributesCache.cellAttributes(indexPath).estimatedHeight
     }
 
     public func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        forwardObject?.tableView?(tableView, heightForHeaderInSection: section)
         return elementsAttributesCache.sectionHeaderAttributes(section).estimatedHeight
     }
 
     public func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        forwardObject?.tableView?(tableView, heightForFooterInSection: section)
         return elementsAttributesCache.sectionFooterAttributes(section).estimatedHeight
     }
     
     
     public func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        forwardObject?.tableView?(tableView, viewForHeaderInSection: section)
+        
         guard let headerViewModel = headerViewModel(section) else {
             return nil
         }
         
         let headerView = elementsProvider.viewForViewModel(headerViewModel)
-        
-        if let elementAttributesProvider = headerView as? TableElementAttributesProvider {
-            elementAttributesProvider.bindTableElementAttributes(elementsAttributesCache.sectionHeaderAttributes(section))
-        }
+        bindAttributes(elementsAttributesCache.sectionHeaderAttributes(section), view: headerView)
         
         return headerView
     }
     
+    public func tableView(tableView: UITableView, didEndDisplayingCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        forwardObject?.tableView?(tableView, didEndDisplayingCell: cell, forRowAtIndexPath: indexPath)
+        
+        onViewDidEndDisplaying(cell)
+    }
+    
+    public func tableView(tableView: UITableView, didEndDisplayingHeaderView view: UIView, forSection section: Int) {
+        forwardObject?.tableView?(tableView, didEndDisplayingHeaderView: view, forSection: section)
+        
+        onViewDidEndDisplaying(view)
+    }
+    
+    public func tableView(tableView: UITableView, didEndDisplayingFooterView view: UIView, forSection section: Int) {
+        forwardObject?.tableView?(tableView, didEndDisplayingFooterView: view, forSection: section)
+        
+        onViewDidEndDisplaying(view)
+    }
+    
     public func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        forwardObject?.tableView?(tableView, viewForFooterInSection: section)
+        
         guard let footerViewModel = footerViewModel(section) else {
             return nil
         }
         
         let footerView = elementsProvider.viewForViewModel(footerViewModel)
-        
-        if let elementAttributesProvider = footerView as? TableElementAttributesProvider {
-            elementAttributesProvider.bindTableElementAttributes(elementsAttributesCache.sectionHeaderAttributes(section))
-        }
+        bindAttributes(elementsAttributesCache.sectionHeaderAttributes(section), view: footerView)
         
         return footerView
     }
@@ -163,26 +238,46 @@ public class TableViewWrapper: NSObject, UITableViewDataSource, UITableViewDeleg
         return currentSections().count
     }
     
-    private func currentSections() -> SectionModels {
+    private func currentSections() -> SectionsModels {
         return sectionsModels.value
     }
     
-    private func tableViewUpdatingObservable(sectionsModels: SectionModels) -> Observable<Void> {
-        elementsAttributesCache.invalidateCache()
-        tableView.reloadData()
+    private func onSectionsDataDidUpdated() {
+        Utils.ensureIsMainThread()
         
+        tableView.reloadData()
+    }
+    
+    private func prepareSectionDataObservable(sectionsModels: SectionsModels) -> Observable<SectionsModels> {
         //TODO: ???
-        return Observable.just()
+        return Observable.just(sectionsModels)
     }
     
     private func generateTableElementAttributes(viewModel: ViewModelType) -> TableElementAttributes {
         let viewType = elementsProvider.viewTypeForViewModel(viewModel)
         
-        guard let elementAttributesProviderType = viewType as? TableElementAttributesProvider.Type else {
+        guard let elementBehaviorType = viewType as? TableElementBehavior.Type else {
             Debug.error("View type \(viewType) for view model \(viewModel.dynamicType) has no implementation for TableElementPresenterType protocol")
             return defaultElementsAttributes
         }
         
-        return elementAttributesProviderType.tableElementAttributes(viewModel)
+        return elementBehaviorType.tableElementAttributes(viewModel)
+    }
+    
+    private func onViewDidEndDisplaying(view: UIView) {
+        tableElementBehavior(view)?.tableElementReset()
+    }
+    
+    private func bindAttributes(attributes: TableElementAttributes, view: UIView) {
+        tableElementBehavior(view)?.bindTableElementAttributes(attributes)
+    }
+    
+    private func tableElementBehavior(view: UIView) -> TableElementBehavior? {
+        guard let tableElementBehavior = view as? TableElementBehavior else {
+            Debug.error("View type \(view.dynamicType) not implemented TableElementBehavior protocol")
+            return nil
+        }
+        
+        return tableElementBehavior
     }
 }
