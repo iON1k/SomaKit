@@ -59,6 +59,14 @@ public class TableElementAttributesCache {
         return sectionAttributesByIndex(sectionIndex).copy()
     }
     
+    public func resetCacheWithPreloadedData(preloadedData: [TableSectionElementsAttributes]) {
+        invalidateCache()
+        
+        for (index, sectionData) in preloadedData.enumerate() {
+            _sectionAttributesByIndex[index] = sectionData.mutableCopy()
+        }
+    }
+    
     public func invalidateCache() {
         Utils.ensureIsMainThread()
         
