@@ -15,18 +15,19 @@ public class TableViewWrapper: SomaProxy, UITableViewDataSource, UITableViewDele
     public typealias ForwardObjectType = protocol<UITableViewDataSource, UITableViewDelegate>
     
     public typealias SectionsModels = [TableViewSectionModel]
+    public typealias PreparingSections = (sections: SectionsModels, async: Bool)
     
     private let elementsAttributesCache = TableElementAttributesCache()
     private let elementsProvider: TableElementsProvider
     
     private let defaultElementsAttributes = DefaultTableElementAttributes(prefferedHeight: 10)
     
-    private let preparingSectionsModels = Variable(SectionsModels())
-    private let sectionsModels = Variable(SectionsModels())
+    private let preparingSectionsModels = Variable(PreparingSections(sections: SectionsModels(), async: false))
+    private var sectionsModels = SectionsModels()
     
     private weak var forwardObject: ForwardObjectType?
     
-    private let tableViewUpdatingTimeInterval = 0.1
+    private static let tableViewUpdatingTimeInterval = 0.1
     
     public init(tableView: UITableView) {
         self.tableView = tableView
@@ -41,26 +42,19 @@ public class TableViewWrapper: SomaProxy, UITableViewDataSource, UITableViewDele
         
         _ = preparingSectionsModels.asObservable()
             .skip(1)
-            .takeUntil(rx_deallocated)
-            .flatMapLatest({ [weak self] (sectionsModels) -> Observable<SectionsModels> in
+            .flatMapLatest({ [weak self] (sectionsModels, async) -> Observable<SectionsModels> in
                 guard let strongSelf = self else {
                     return Observable.empty()
                 }
                 
-                return strongSelf.prepareSectionDataObservable(sectionsModels)
-            })
-            .throttle(tableViewUpdatingTimeInterval, scheduler: ConcurrentDispatchQueueScheduler(globalConcurrentQueueQOS: .Default))
-            .observeOn(MainScheduler.instance)
-            .bindTo(sectionsModels)
-        
-        _ = sectionsModels.asObservable()
-            .doOnNext({ [weak self] (_) in
-                guard let strongSelf = self else {
-                    return
+                if async {
+                    return strongSelf.prepareSectionDataObservable(sectionsModels)
+                } else {
+                    strongSelf.elementsAttributesCache.invalidateCache()
+                    return Observable.just(sectionsModels)
                 }
-                
-                strongSelf.onSectionsDataDidUpdated()
             })
+            .doOnNext(onUpdateSectionsData)
             .takeUntil(rx_deallocated)
             .subscribe()
     }
@@ -79,28 +73,27 @@ public class TableViewWrapper: SomaProxy, UITableViewDataSource, UITableViewDele
     }
     
     public func bindDataSource(dataSource: Observable<SectionsModels>) -> Disposable {
-        return dataSource.bindTo(preparingSectionsModels)
+        return dataSource.map({ (sectionsData) -> PreparingSections in
+            return PreparingSections(sections: sectionsData, async: true)
+        })
+        .bindTo(preparingSectionsModels)
     }
     
     public func reloadDataAsync(sectionsModels: SectionsModels) {
-        preparingSectionsModels.value = sectionsModels
+        _reloadData(sectionsModels, async: true)
     }
     
     public func reloadDataAsync() {
-        reloadDataAsync(sectionsModels.value)
+        reloadDataAsync(sectionsModels)
     }
     
     public func reloadData(sectionsModels: SectionsModels) {
         Utils.ensureIsMainThread()
-        
-        self.sectionsModels.value = sectionsModels
-        elementsAttributesCache.invalidateCache()
-        
-        onSectionsDataDidUpdated()
+        _reloadData(sectionsModels, async: false)
     }
     
     public func reloadData() {
-        reloadData(sectionsModels.value)
+        reloadData(sectionsModels)
     }
     
     //TableElementAttributesCacheSource
@@ -227,7 +220,7 @@ public class TableViewWrapper: SomaProxy, UITableViewDataSource, UITableViewDele
     }
     
     private func sectionModel(sectionIndex: Int) -> TableViewSectionModel {
-        return currentSections()[sectionIndex]
+        return sectionsModels[sectionIndex]
     }
     
     private func rowsCount(sectionIndex: Int) -> Int {
@@ -235,22 +228,21 @@ public class TableViewWrapper: SomaProxy, UITableViewDataSource, UITableViewDele
     }
     
     private func sectionsCount() -> Int {
-        return currentSections().count
+        return sectionsModels.count
     }
     
-    private func currentSections() -> SectionsModels {
-        return sectionsModels.value
-    }
-    
-    private func onSectionsDataDidUpdated() {
+    private func onUpdateSectionsData(sectionsData: SectionsModels) {
         Utils.ensureIsMainThread()
         
+        sectionsModels = sectionsData
         tableView.reloadData()
     }
     
     private func prepareSectionDataObservable(sectionsModels: SectionsModels) -> Observable<SectionsModels> {
         //TODO: ???
         return Observable.just(sectionsModels)
+            .throttle(TableViewWrapper.tableViewUpdatingTimeInterval, scheduler: ConcurrentDispatchQueueScheduler(globalConcurrentQueueQOS: .Default))
+            .observeOnMainScheduler()
     }
     
     private func generateTableElementAttributes(viewModel: ViewModelType) -> TableElementAttributes {
@@ -279,5 +271,9 @@ public class TableViewWrapper: SomaProxy, UITableViewDataSource, UITableViewDele
         }
         
         return tableElementBehavior
+    }
+    
+    private func _reloadData(sectionsModels: SectionsModels, async: Bool) {
+        preparingSectionsModels.value = PreparingSections(sections: sectionsModels, async: async)
     }
 }

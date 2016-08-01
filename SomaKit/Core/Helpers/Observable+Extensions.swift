@@ -27,4 +27,12 @@ public extension Observable {
     public func observeOnBackgroundScheduler() -> Observable<E> {
         return self.observeOn(ConcurrentDispatchQueueScheduler(globalConcurrentQueueQOS: .Default))
     }
+    
+    public func subcribeOnMainScheduler() -> Observable<E> {
+        return self.subscribeOn(MainScheduler.instance)
+    }
+    
+    public func observeOnMainScheduler() -> Observable<E> {
+        return self.observeOn(MainScheduler.instance)
+    }
 }
