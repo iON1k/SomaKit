@@ -19,3 +19,11 @@ extension Dictionary {
         return newDictionary
     }
 }
+
+extension Array where Element: Equivalentable {
+    public func indexOfEquivalent(object: Any) -> Int? {
+        return indexOf({ (element) -> Bool in
+            return element.isEquivalent(object)
+        })
+    }
+}

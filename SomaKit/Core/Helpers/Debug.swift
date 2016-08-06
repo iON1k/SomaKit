@@ -12,10 +12,18 @@ public final class Debug {
     }
     
     public static func error(message: String) {
-#if CRASH_ON_ERROR
-    self.fatalError(message)
+#if DEVELOP_BUILD
+        self.fatalError(message)
 #else
-    Log.debug(message)
+        Log.debug(message)
+#endif
+    }
+    
+    public static func assert(@autoclosure assertion: Void -> Bool, message: String) {
+#if DEVELOP_BUILD
+        if !assertion() {
+            fatalError(message)
+        }
 #endif
     }
     

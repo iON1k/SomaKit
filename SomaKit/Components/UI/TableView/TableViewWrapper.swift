@@ -9,36 +9,32 @@
 import RxSwift
 import RxCocoa
 
-private struct PreparedSectionsData {
-    let sectionsData: [TableViewSectionModel]
-    let preparedSectionsAttributes: [TableSectionElementsAttributes]?
-    
-    init(sectionsData: [TableViewSectionModel], preparedSectionsAttributes: [TableSectionElementsAttributes]? = nil) {
-        self.sectionsData = sectionsData
-        self.preparedSectionsAttributes = preparedSectionsAttributes
-    }
-}
-
 public class TableViewWrapper: SomaProxy, UITableViewDataSource, UITableViewDelegate, TableElementAttributesCacheSource {
     public let tableView: UITableView
     
-    public typealias ForwardObjectType = protocol<UITableViewDataSource, UITableViewDelegate>
-    
     public typealias SectionsModels = [TableViewSectionModel]
-    public typealias UpdateDataEvent = (sections: SectionsModels, async: Bool)
+    public typealias UpdatingHandler = (tableView: UITableView) -> Void
     
-    private let elementsAttributesCache = TableElementAttributesCache()
-    private let elementsProvider: TableElementsProvider
+    public let elementsAttributesCache = TableElementAttributesCache()
+    public let elementsProvider: TableElementsProvider
     
     private let defaultElementsAttributes = DefaultTableElementAttributes(prefferedHeight: 10)
     
-    private let updateDataEvents = Variable(UpdateDataEvent(sections: SectionsModels(), async: false))
+    private let updateDataEvents = Variable(UpdatingEvent(sectionsData: SectionsModels(), asyncUpdating: false, updatingHandler: TableViewWrapper.reloadTable))
     private var sectionsModels = SectionsModels()
     
-    private weak var forwardObject: ForwardObjectType?
+    private let updatingHandler: UpdatingHandler
     
-    public init(tableView: UITableView, setupElementsProviderHandler: TableElementsProvider -> Void) {
+    private weak var forwardDelegate: UITableViewDelegate?
+    private weak var forwardDataSource: UITableViewDataSource?
+    
+    public convenience init(tableView: UITableView) {
+        self.init(tableView: tableView, updatingHandler: TableViewWrapper.reloadTable)
+    }
+    
+    public init(tableView: UITableView, updatingHandler: UpdatingHandler) {
         self.tableView = tableView
+        self.updatingHandler = updatingHandler
         elementsProvider = TableElementsProvider(tableView: tableView)
         
         super.init()
@@ -48,33 +44,14 @@ public class TableViewWrapper: SomaProxy, UITableViewDataSource, UITableViewDele
         tableView.rx_delegate.setForwardToDelegate(self, retainDelegate: false)
         tableView.rx_dataSource.setForwardToDelegate(self, retainDelegate: false)
         
-        _ = updateDataEvents.asObservable()
-            .skip(1)
-            .flatMapLatest({ [weak self] (sectionsModels, async) -> Observable<PreparedSectionsData> in
-                if async {
-                    guard let strongSelf = self else {
-                        return Observable.empty()
-                    }
-                    
-                    return strongSelf.prepareSectionsDataBackgroundObservable(sectionsModels)
-                } else {
-                    return Observable.just(PreparedSectionsData(sectionsData: sectionsModels))
-                }
-            })
-            .observeOnMainScheduler()
-            .doOnNext({ [weak self] (preparedData) in
-                self?.updateSectionsData(preparedData)
-            })
-            .takeUntil(rx_deallocated)
-            .subscribe()
-        
-        setupElementsProviderHandler(elementsProvider)
+        startObserveUpdatingEvents()
     }
     
-    public func bindForwardObject(forwardObject: ForwardObjectType?, retain: Bool) {
+    public func bindForwardObject(forwardObject: AnyObject?, retain: Bool) {
         Utils.ensureIsMainThread()
         
-        self.forwardObject = forwardObject
+        forwardDelegate = forwardObject as? UITableViewDelegate
+        forwardDataSource = forwardObject as? UITableViewDataSource
         _bindForwardObject(forwardObject, withRetain: retain)
     }
     
@@ -85,14 +62,22 @@ public class TableViewWrapper: SomaProxy, UITableViewDataSource, UITableViewDele
     }
     
     public func bindDataSource(dataSource: Observable<SectionsModels>) -> Disposable {
-        return dataSource.map({ (sectionsData) -> UpdateDataEvent in
-            return UpdateDataEvent(sections: sectionsData, async: true)
+        return dataSource.map({ (sectionsData) -> UpdatingEvent in
+            return UpdatingEvent(sectionsData: sectionsData, asyncUpdating: true, updatingHandler: self.updatingHandler)
         })
         .bindTo(updateDataEvents)
     }
     
+    public func updateDataAsync(sectionsModels: SectionsModels, updatingHandler: UpdatingHandler) {
+        updateSectionsData(sectionsModels, asyncUpdating: true, updatingHandler: updatingHandler)
+    }
+    
+    public func updateData(sectionsModels: SectionsModels, updatingHandler: UpdatingHandler) {
+        updateSectionsData(sectionsModels, asyncUpdating: false, updatingHandler: updatingHandler)
+    }
+    
     public func reloadDataAsync(sectionsModels: SectionsModels) {
-        _reloadData(sectionsModels, async: true)
+        reloadSectionsData(sectionsModels, asyncUpdating: true)
     }
     
     public func reloadDataAsync() {
@@ -101,7 +86,7 @@ public class TableViewWrapper: SomaProxy, UITableViewDataSource, UITableViewDele
     
     public func reloadData(sectionsModels: SectionsModels) {
         Utils.ensureIsMainThread()
-        _reloadData(sectionsModels, async: false)
+        reloadSectionsData(sectionsModels, asyncUpdating: false)
     }
     
     public func reloadData() {
@@ -140,12 +125,12 @@ public class TableViewWrapper: SomaProxy, UITableViewDataSource, UITableViewDele
     }
     
     public func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        forwardObject?.tableView(tableView, numberOfRowsInSection: section)
+        forwardDataSource?.tableView(tableView, numberOfRowsInSection: section)
         return rowsCount(section)
     }
     
     public func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        forwardObject?.tableView(tableView, cellForRowAtIndexPath: indexPath)
+        forwardDataSource?.tableView(tableView, cellForRowAtIndexPath: indexPath)
         
         let viewModel = cellViewModel(indexPath)
         
@@ -158,23 +143,23 @@ public class TableViewWrapper: SomaProxy, UITableViewDataSource, UITableViewDele
     //UITableViewDelegate
     
     public func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        forwardObject?.tableView?(tableView, heightForRowAtIndexPath: indexPath)
+        forwardDelegate?.tableView?(tableView, heightForRowAtIndexPath: indexPath)
         return elementsAttributesCache.cellAttributes(indexPath).estimatedHeight
     }
 
     public func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        forwardObject?.tableView?(tableView, heightForHeaderInSection: section)
+        forwardDelegate?.tableView?(tableView, heightForHeaderInSection: section)
         return elementsAttributesCache.sectionHeaderAttributes(section).estimatedHeight
     }
 
     public func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        forwardObject?.tableView?(tableView, heightForFooterInSection: section)
+        forwardDelegate?.tableView?(tableView, heightForFooterInSection: section)
         return elementsAttributesCache.sectionFooterAttributes(section).estimatedHeight
     }
     
     
     public func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        forwardObject?.tableView?(tableView, viewForHeaderInSection: section)
+        forwardDelegate?.tableView?(tableView, viewForHeaderInSection: section)
         
         guard let headerViewModel = headerViewModel(section) else {
             return nil
@@ -187,25 +172,25 @@ public class TableViewWrapper: SomaProxy, UITableViewDataSource, UITableViewDele
     }
     
     public func tableView(tableView: UITableView, didEndDisplayingCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        forwardObject?.tableView?(tableView, didEndDisplayingCell: cell, forRowAtIndexPath: indexPath)
+        forwardDelegate?.tableView?(tableView, didEndDisplayingCell: cell, forRowAtIndexPath: indexPath)
         
         onViewDidEndDisplaying(cell)
     }
     
     public func tableView(tableView: UITableView, didEndDisplayingHeaderView view: UIView, forSection section: Int) {
-        forwardObject?.tableView?(tableView, didEndDisplayingHeaderView: view, forSection: section)
+        forwardDelegate?.tableView?(tableView, didEndDisplayingHeaderView: view, forSection: section)
         
         onViewDidEndDisplaying(view)
     }
     
     public func tableView(tableView: UITableView, didEndDisplayingFooterView view: UIView, forSection section: Int) {
-        forwardObject?.tableView?(tableView, didEndDisplayingFooterView: view, forSection: section)
+        forwardDelegate?.tableView?(tableView, didEndDisplayingFooterView: view, forSection: section)
         
         onViewDidEndDisplaying(view)
     }
     
     public func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        forwardObject?.tableView?(tableView, viewForFooterInSection: section)
+        forwardDelegate?.tableView?(tableView, viewForFooterInSection: section)
         
         guard let footerViewModel = footerViewModel(section) else {
             return nil
@@ -219,15 +204,15 @@ public class TableViewWrapper: SomaProxy, UITableViewDataSource, UITableViewDele
     
     //Other
     
-    private func headerViewModel(sectionIndex: Int) -> ViewModelType? {
+    private func headerViewModel(sectionIndex: Int) -> TableElementViewModel? {
         return sectionModel(sectionIndex).headerViewModel
     }
     
-    private func footerViewModel(sectionIndex: Int) -> ViewModelType? {
+    private func footerViewModel(sectionIndex: Int) -> TableElementViewModel? {
         return sectionModel(sectionIndex).footerViewModel
     }
     
-    private func cellViewModel(indexPath: NSIndexPath) -> ViewModelType {
+    private func cellViewModel(indexPath: NSIndexPath) -> TableElementViewModel {
         return sectionModel(indexPath.section).cellsViewModels[indexPath.row]
     }
     
@@ -243,32 +228,28 @@ public class TableViewWrapper: SomaProxy, UITableViewDataSource, UITableViewDele
         return sectionsModels.count
     }
     
-    private func updateSectionsData(sectionsData: SectionsModels) {
-        updateSectionsData(PreparedSectionsData(sectionsData: sectionsData))
-    }
-    
-    private func updateSectionsData(preparedData: PreparedSectionsData) {
+    private func beginUpdating(updatingEvent: UpdatingEvent, updatingData: UpdatingData) {
         Utils.ensureIsMainThread()
         
-        sectionsModels = preparedData.sectionsData
-        if let preparedSectionsAttributes = preparedData.preparedSectionsAttributes {
-            elementsAttributesCache.resetCacheWithPreloadedData(preparedSectionsAttributes)
+        sectionsModels = updatingData.sectionsData
+        if let sectionsAttributes = updatingData.sectionsAttributes {
+            elementsAttributesCache.resetCacheWithPreloadedData(sectionsAttributes)
         } else {
             elementsAttributesCache.invalidateCache()
         }
         
-        tableView.reloadData()
+        updatingEvent.updatingHandler(tableView: tableView)
     }
     
-    private func prepareSectionsDataBackgroundObservable(sectionsModels: SectionsModels) -> Observable<PreparedSectionsData> {
-        return Observable.deferred({ () -> Observable<PreparedSectionsData> in
-                return Observable.just(self.prepareSectionsData(sectionsModels))
+    private func prepareUpdatingDataBackgroundObservable(sectionsModels: SectionsModels) -> Observable<UpdatingData> {
+        return Observable.deferred({ () -> Observable<UpdatingData> in
+                return Observable.just(self.prepareUpdatingData(sectionsModels))
             })
             .subcribeOnBackgroundScheduler()
     }
     
-    private func prepareSectionsData(sectionsModels: SectionsModels) -> PreparedSectionsData {
-        var preparedSectionsAttributes = [TableSectionElementsAttributes]()
+    private func prepareUpdatingData(sectionsModels: SectionsModels) -> UpdatingData {
+        var sectionsAttributes = [TableSectionElementsAttributes]()
         
         for sectionModel in sectionsModels {
             var sectionHeaderAttributes: TableElementAttributes?
@@ -289,13 +270,13 @@ public class TableViewWrapper: SomaProxy, UITableViewDataSource, UITableViewDele
             let sectionAttributes = TableSectionElementsAttributes(cellsAttributes: cellsAttributes,
                                                                    headerAttributes: sectionHeaderAttributes, footerAttributes: sectionFooterAttributes)
             
-            preparedSectionsAttributes.append(sectionAttributes)
+            sectionsAttributes.append(sectionAttributes)
         }
         
-        return PreparedSectionsData(sectionsData: sectionsModels, preparedSectionsAttributes: preparedSectionsAttributes)
+        return UpdatingData(sectionsData: sectionsModels, sectionsAttributes: sectionsAttributes)
     }
     
-    private func generateTableElementAttributes(viewModel: ViewModelType) -> TableElementAttributes {
+    private func generateTableElementAttributes(viewModel: TableElementViewModel) -> TableElementAttributes {
         let viewType = elementsProvider.viewTypeForViewModel(viewModel)
         
         guard let elementBehaviorType = viewType as? TableElementBehavior.Type else {
@@ -323,7 +304,67 @@ public class TableViewWrapper: SomaProxy, UITableViewDataSource, UITableViewDele
         return tableElementBehavior
     }
     
-    private func _reloadData(sectionsModels: SectionsModels, async: Bool) {
-        updateDataEvents.value = UpdateDataEvent(sections: sectionsModels, async: async)
+    private func reloadSectionsData(sectionsModels: SectionsModels, asyncUpdating: Bool) {
+        updateSectionsData(sectionsModels, asyncUpdating: asyncUpdating, updatingHandler: TableViewWrapper.reloadTable)
+    }
+    
+    private func updateSectionsData(sectionsModels: SectionsModels, asyncUpdating: Bool, updatingHandler: UpdatingHandler) {
+        updateDataEvents.value = UpdatingEvent(sectionsData: sectionsModels, asyncUpdating: asyncUpdating, updatingHandler: updatingHandler)
+    }
+    
+    private func startObserveUpdatingEvents() {
+        _ = updateDataEvents.asObservable()
+            .skip(1)
+            .flatMapLatest({ [weak self] (updatingEvent) -> Observable<(UpdatingEvent, UpdatingData)> in
+                let sectionsData = updatingEvent.sectionsData
+                
+                
+                if updatingEvent.asyncUpdating {
+                    guard let strongSelf = self else {
+                        return Observable.empty()
+                    }
+                    
+                    let updatingEventObservable = Observable.just(updatingEvent)
+                    let updatingDataObservable = strongSelf.prepareUpdatingDataBackgroundObservable(sectionsData)
+                    return Observable.combineLatest(updatingEventObservable, updatingDataObservable, resultSelector: { (event, data) -> (UpdatingEvent, UpdatingData) in
+                        return (event, data)
+                    })
+                } else {
+                    let updatingData = UpdatingData(sectionsData: sectionsData)
+                    return Observable.just((updatingEvent, updatingData))
+                }
+                })
+            .observeOnMainScheduler()
+            .doOnNext({ [weak self] (updatingEvent, updatingData) in
+                self?.beginUpdating(updatingEvent, updatingData: updatingData)
+                })
+            .takeUntil(rx_deallocated)
+            .subscribe()
+    }
+    
+    private static func reloadTable(tableView: UITableView) {
+        tableView.reloadData()
+    }
+    
+    private struct UpdatingData {
+        let sectionsData: [TableViewSectionModel]
+        let sectionsAttributes: [TableSectionElementsAttributes]?
+        
+        init(sectionsData: [TableViewSectionModel], sectionsAttributes: [TableSectionElementsAttributes]? = nil) {
+            self.sectionsData = sectionsData
+            self.sectionsAttributes = sectionsAttributes
+        }
+    }
+    
+    private struct UpdatingEvent {
+        let sectionsData: SectionsModels
+        let asyncUpdating: Bool
+        let updatingHandler: UpdatingHandler
+        
+        init(sectionsData: SectionsModels, asyncUpdating: Bool, updatingHandler: UpdatingHandler) {
+            self.sectionsData = sectionsData
+            self.asyncUpdating = asyncUpdating
+            self.updatingHandler = updatingHandler
+        }
     }
 }

@@ -31,6 +31,10 @@ public final class Utils {
         Debug.fatalError("Failing unsafe casting value with type \(T.self) to type \(sourceValue.dynamicType)")
     }
     
+    public static func sameTypes(first: Any, second: Any) -> Bool {
+        return first.dynamicType == second.dynamicType
+    }
+    
     private init() {
         //Nothing
     }

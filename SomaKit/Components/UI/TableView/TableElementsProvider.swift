@@ -13,34 +13,34 @@ public class TableElementsProvider: ViewsProvider<UITableView> {
 }
 
 extension TableElementsProvider {
-    public func registerTableElementGenerator<TViewModel: ViewModelType,
+    public func registerTableElementGenerator<TViewModel: TableElementViewModel,
                                       TView: UIView where TView: TableElementPresenterType>(elementGenerator: (TViewModel, UITableView) -> TView) {
         _internalRegisterViewGenerator(elementGenerator)
     }
     
-    public func registerCellClass<TViewModel: ViewModelType, TCell: UITableViewCell
-        where TCell: TableElementPresenterType, TCell.ViewModel == TViewModel>(viewModelType: TViewModel.Type, cellType: TCell.Type, reuseId: String? = nil) {
+    public func registerCellClass<TViewModel: TableElementViewModel, TCell: UITableViewCell
+        where TCell: TableElementPresenterType, TCell.ViewModel == TViewModel>(TableElementViewModel: TViewModel.Type, cellType: TCell.Type, reuseId: String? = nil) {
         let normalizedReuseId = normalizeReuseId(reuseId, cellType: cellType)
         context.registerClass(cellType, forCellReuseIdentifier: normalizedReuseId)
         
-        registerCellGenerator(viewModelType, cellType: cellType, reuseId: normalizedReuseId)
+        registerCellGenerator(TableElementViewModel, cellType: cellType, reuseId: normalizedReuseId)
     }
     
-    public func registerCellNib<TViewModel: ViewModelType, TCell: UITableViewCell
-        where TCell: TableElementPresenterType, TCell.ViewModel == TViewModel>(viewModelType: TViewModel.Type, cellType: TCell.Type, nib: UINib, reuseId: String? = nil) -> Void {
+    public func registerCellNib<TViewModel: TableElementViewModel, TCell: UITableViewCell
+        where TCell: TableElementPresenterType, TCell.ViewModel == TViewModel>(TableElementViewModel: TViewModel.Type, cellType: TCell.Type, nib: UINib, reuseId: String? = nil) -> Void {
         let normalizedReuseId = normalizeReuseId(reuseId, cellType: cellType)
         context.registerNib(nib, forCellReuseIdentifier: normalizedReuseId)
         
-        registerCellGenerator(viewModelType, cellType: cellType, reuseId: normalizedReuseId)
+        registerCellGenerator(TableElementViewModel, cellType: cellType, reuseId: normalizedReuseId)
     }
     
-    public func registerCellNib<TViewModel: ViewModelType, TCell: UITableViewCell
-        where TCell: TableElementPresenterType, TCell: NibProviderType, TCell.ViewModel == TViewModel>(viewModelType: TViewModel.Type,
+    public func registerCellNib<TViewModel: TableElementViewModel, TCell: UITableViewCell
+        where TCell: TableElementPresenterType, TCell: NibProviderType, TCell.ViewModel == TViewModel>(TableElementViewModel: TViewModel.Type,
                                                                                                cellType: TCell.Type, reuseId: String? = nil) -> Void {
-        registerCellNib(viewModelType, cellType: cellType, nib: cellType.loadNib(), reuseId: reuseId)
+        registerCellNib(TableElementViewModel, cellType: cellType, nib: cellType.loadNib(), reuseId: reuseId)
     }
     
-    public func cellForViewModel(viewModel: ViewModelType) -> UITableViewCell {
+    public func cellForViewModel(viewModel: TableElementViewModel) -> UITableViewCell {
         let generatedView = viewForViewModel(viewModel)
         
         guard let cell = generatedView as? UITableViewCell else {
@@ -51,8 +51,8 @@ extension TableElementsProvider {
         return cell;
     }
     
-    private func registerCellGenerator<TViewModel: ViewModelType, TCell: UITableViewCell
-        where TCell: TableElementPresenterType, TCell.ViewModel == TViewModel>(viewModelType: TViewModel.Type, cellType: TCell.Type, reuseId: String) {
+    private func registerCellGenerator<TViewModel: TableElementViewModel, TCell: UITableViewCell
+        where TCell: TableElementPresenterType, TCell.ViewModel == TViewModel>(TableElementViewModel: TViewModel.Type, cellType: TCell.Type, reuseId: String) {
         registerTableElementGenerator { (viewModel: TViewModel, tableView) -> TCell in
             guard let cell = tableView.dequeueReusableCellWithIdentifier(reuseId) else {
                 Log.error("Table view dequeue reusable cell with id \(reuseId) failed")
