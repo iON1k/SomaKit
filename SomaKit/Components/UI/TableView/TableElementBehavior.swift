@@ -7,7 +7,7 @@
 //
 
 public protocol TableElementBehavior {
-    static func tableElementAttributes(viewModel: TableElementViewModel) -> TableElementAttributes
+    static func tableElementAttributes(viewModel: ViewModelType) -> TableElementAttributes
     func bindTableElementAttributes(attributes: TableElementAttributes)
     func tableElementReset()
 }

@@ -204,15 +204,15 @@ public class TableViewWrapper: SomaProxy, UITableViewDataSource, UITableViewDele
     
     //Other
     
-    private func headerViewModel(sectionIndex: Int) -> TableElementViewModel? {
+    private func headerViewModel(sectionIndex: Int) -> ViewModelType? {
         return sectionModel(sectionIndex).headerViewModel
     }
     
-    private func footerViewModel(sectionIndex: Int) -> TableElementViewModel? {
+    private func footerViewModel(sectionIndex: Int) -> ViewModelType? {
         return sectionModel(sectionIndex).footerViewModel
     }
     
-    private func cellViewModel(indexPath: NSIndexPath) -> TableElementViewModel {
+    private func cellViewModel(indexPath: NSIndexPath) -> ViewModelType {
         return sectionModel(indexPath.section).cellsViewModels[indexPath.row]
     }
     
@@ -276,7 +276,7 @@ public class TableViewWrapper: SomaProxy, UITableViewDataSource, UITableViewDele
         return UpdatingData(sectionsData: sectionsModels, sectionsAttributes: sectionsAttributes)
     }
     
-    private func generateTableElementAttributes(viewModel: TableElementViewModel) -> TableElementAttributes {
+    private func generateTableElementAttributes(viewModel: ViewModelType) -> TableElementAttributes {
         let viewType = elementsProvider.viewTypeForViewModel(viewModel)
         
         guard let elementBehaviorType = viewType as? TableElementBehavior.Type else {
@@ -360,11 +360,5 @@ public class TableViewWrapper: SomaProxy, UITableViewDataSource, UITableViewDele
         let sectionsData: SectionsModels
         let asyncUpdating: Bool
         let updatingHandler: UpdatingHandler
-        
-        init(sectionsData: SectionsModels, asyncUpdating: Bool, updatingHandler: UpdatingHandler) {
-            self.sectionsData = sectionsData
-            self.asyncUpdating = asyncUpdating
-            self.updatingHandler = updatingHandler
-        }
     }
 }

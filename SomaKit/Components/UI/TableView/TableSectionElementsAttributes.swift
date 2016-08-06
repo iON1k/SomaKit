@@ -13,12 +13,6 @@ public struct TableSectionElementsAttributes {
     public let headerAttributes: TableElementAttributes?
     public let footerAttributes: TableElementAttributes?
     
-    public init(cellsAttributes: CellsAttributes, headerAttributes: TableElementAttributes? = nil, footerAttributes: TableElementAttributes? = nil) {
-        self.cellsAttributes = cellsAttributes
-        self.headerAttributes = headerAttributes
-        self.footerAttributes = footerAttributes
-    }
-    
     public func mutableCopy() -> MutableTableSectionElementsAttributes {
         return MutableTableSectionElementsAttributes(cellsAttributes: cellsAttributes, headerAttributes: headerAttributes, footerAttributes: footerAttributes)
     }
