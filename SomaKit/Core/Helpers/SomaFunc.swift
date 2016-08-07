@@ -37,6 +37,10 @@ public final class SomaFunc {
         return !value
     }
     
+    public static func justNil<TValue>() -> TValue? {
+        return nil
+    }
+    
     private init() {
         //Nothing
     }
