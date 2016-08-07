@@ -1,5 +1,5 @@
 //
-//  TableViewWrapper.swift
+//  TableViewManager.swift
 //  SomaKit
 //
 //  Created by Anton on 28.07.16.
@@ -9,7 +9,7 @@
 import RxSwift
 import RxCocoa
 
-public class TableViewWrapper: SomaProxy, UITableViewDataSource, UITableViewDelegate, TableElementAttributesCacheSource {
+public class TableViewManager: SomaProxy, UITableViewDataSource, UITableViewDelegate, TableElementAttributesCacheSource {
     public let tableView: UITableView
     
     public typealias SectionsModels = [TableViewSectionModel]
@@ -272,7 +272,7 @@ public class TableViewWrapper: SomaProxy, UITableViewDataSource, UITableViewDele
     private func startObserveUpdatingEvents() {
         _ = updateDataEvents.asObservable()
             .skip(1)
-            .flatMap({ [weak self] (updatingEvent) -> Observable<(UpdatingEvent, UpdatingData)> in
+            .map({ [weak self] (updatingEvent) -> Observable<(UpdatingEvent, UpdatingData)> in
                 guard !updatingEvent.disposable.disposed else {
                     return Observable.empty()
                 }
@@ -285,8 +285,9 @@ public class TableViewWrapper: SomaProxy, UITableViewDataSource, UITableViewDele
                 let updatingData = updatingEvent.needPrepareData ? strongSelf.prepareUpdatingData(sectionsData) : UpdatingData(sectionsData: sectionsData)
                 
                 return Observable.just((updatingEvent, updatingData))
+                    .observeOnMainScheduler()
             })
-            .observeOnMainScheduler()
+            .concat()
             .doOnNext({ [weak self] (updatingEvent, updatingData) in
                 self?.beginUpdating(updatingEvent, updatingData: updatingData)
             })

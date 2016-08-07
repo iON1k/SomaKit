@@ -1,5 +1,5 @@
 //
-//  TableViewWrapper+Extension.swift
+//  TableViewManager+Extension.swift
 //  SomaKit
 //
 //  Created by Anton on 07.08.16.
@@ -8,7 +8,7 @@
 
 import RxSwift
 
-extension TableViewWrapper {
+extension TableViewManager {
     public func updateDataObservable(sectionsData: SectionsModels, updatingHandler: UpdatingHandler = UpdatingEvent.defaultUpdatingHandler) -> Observable<Void> {
         return Observable.create({ (observer) -> Disposable in
             let updatingEvent = UpdatingEvent(sectionsData: sectionsData, needPrepareData: false) { (tableView, updatingData) in
