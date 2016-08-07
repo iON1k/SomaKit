@@ -27,13 +27,17 @@ public struct ArrayChange<TElement> {
 public class ArrayChangesCalculator {
     private typealias EquivalentIndexesPair = (oldIndex: Int, newIndex: Int)
     
-    public static func calculateChanges<TElement: Equivalentable>(oldSource: [TElement], newSource: [TElement]) -> [ArrayChange<TElement>] {
+    public static func calculateChanges<TElement>(oldSource: [TElement], newSource: [TElement]) -> [ArrayChange<TElement>] {
         var resultChanges = [ArrayChange<TElement>]()
         
         var equivalentElementsIndexes = [EquivalentIndexesPair]()
         
         for (newIndex, newElement) in newSource.enumerate() {
-            if let oldIndex = oldSource.indexOfEquivalent(newElement) {
+            guard let equivalentableElement = newElement as? Equivalentable else {
+                continue;
+            }
+            
+            if let oldIndex = oldSource.indexOfEquivalent(equivalentableElement) {
                 equivalentElementsIndexes.append((oldIndex, newIndex))
             }
         }
@@ -49,7 +53,7 @@ public class ArrayChangesCalculator {
         return resultChanges
     }
     
-    private static func getChanges<TElement: Equivalentable>(oldSource: [TElement], newSource: [TElement],
+    private static func getChanges<TElement>(oldSource: [TElement], newSource: [TElement],
                          leftIndexesPair: EquivalentIndexesPair?, rightIndexesPair: EquivalentIndexesPair?) -> [ArrayChange<TElement>] {
         let newSourceLeftIndex = leftIndexesPair?.newIndex ?? -1
         let oldSourceLeftIndex = leftIndexesPair?.oldIndex ?? -1
