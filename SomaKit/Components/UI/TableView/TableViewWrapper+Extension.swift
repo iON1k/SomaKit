@@ -38,12 +38,22 @@ extension TableViewWrapper {
             .subscribe()
     }
     
+    public func reloadDataObservable() -> Observable<Void> {
+        return updateDataObservable(sectionsData)
+    }
+    
+    public func reloadDataAsyncObservable() -> Observable<Void> {
+        return updateDataAsyncObservable(sectionsData)
+    }
+    
     public func reloadData() -> Disposable {
-        return updateData(sectionsData)
+        return reloadDataObservable()
+            .subscribe()
     }
     
     public func reloadDataAsync() -> Disposable {
-        return updateDataAsync(sectionsData)
+        return reloadDataAsyncObservable()
+            .subscribe()
     }
     
     public func bindDataSource(dataSource: Observable<SectionsModels>, updatingHandler: UpdatingHandler = UpdatingEvent.defaultUpdatingHandler) -> Disposable {
