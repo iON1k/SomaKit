@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2425A8F01D574B02009A45D1 /* Variable+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2425A8EF1D574B02009A45D1 /* Variable+Extension.swift */; };
 		24273D2B1D21F0E00071C283 /* DiskMemoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24273D2A1D21F0E00071C283 /* DiskMemoryStore.swift */; };
 		242B3FFE1D4BD1350010C3CB /* TableElementPresenterType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 242B3FFD1D4BD1350010C3CB /* TableElementPresenterType.swift */; };
 		242B40001D4BD6400010C3CB /* TableSectionElementsAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 242B3FFF1D4BD6400010C3CB /* TableSectionElementsAttributes.swift */; };
@@ -111,6 +112,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2425A8EF1D574B02009A45D1 /* Variable+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Variable+Extension.swift"; sourceTree = "<group>"; };
 		24273D2A1D21F0E00071C283 /* DiskMemoryStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiskMemoryStore.swift; sourceTree = "<group>"; };
 		242B3FFD1D4BD1350010C3CB /* TableElementPresenterType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableElementPresenterType.swift; sourceTree = "<group>"; };
 		242B3FFF1D4BD6400010C3CB /* TableSectionElementsAttributes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableSectionElementsAttributes.swift; sourceTree = "<group>"; };
@@ -237,11 +239,11 @@
 				24468C0F1D455B42003E1344 /* TableElementAttributesCache.swift */,
 				242EE3241D47BB990024F9AE /* TableElementsProvider.swift */,
 				2457267E1D4A2B7600D9FC63 /* TableElementBehavior.swift */,
-				245726801D4A550A00D9FC63 /* TableViewWrapper.swift */,
 				242B3FFD1D4BD1350010C3CB /* TableElementPresenterType.swift */,
 				245726821D4A625100D9FC63 /* TableViewSection.swift */,
 				242B3FFF1D4BD6400010C3CB /* TableSectionElementsAttributes.swift */,
 				242B40031D4BE5F30010C3CB /* DefaultTableElementAttributes.swift */,
+				245726801D4A550A00D9FC63 /* TableViewWrapper.swift */,
 			);
 			path = TableView;
 			sourceTree = "<group>";
@@ -377,6 +379,7 @@
 				242B584C1D4CAC80008B7F7C /* SomaProxy.m */,
 				244179AD1D5651F3003B6089 /* Equivalentable.swift */,
 				244179B31D565A5A003B6089 /* ArrayChanges.swift */,
+				2425A8EF1D574B02009A45D1 /* Variable+Extension.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -810,6 +813,7 @@
 				24E3CE1B1D1FE7B3001BCDB2 /* MemoryStore.swift in Sources */,
 				24EB57E01D2C0E8A0062DDDB /* ViewModel.swift in Sources */,
 				24E3CE001D1FE7B3001BCDB2 /* DataProviderType.swift in Sources */,
+				2425A8F01D574B02009A45D1 /* Variable+Extension.swift in Sources */,
 				245726811D4A550A00D9FC63 /* TableViewWrapper.swift in Sources */,
 				24EB57D71D2C0E8A0062DDDB /* ModuleBuidler.swift in Sources */,
 				24EB57DC1D2C0E8A0062DDDB /* Router.swift in Sources */,

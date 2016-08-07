@@ -20,10 +20,10 @@ extension Dictionary {
     }
 }
 
-extension Array {
-    public func indexOfEquivalent(object: Equivalentable) -> Int? {
+extension Array where Element: Equivalentable {
+    public func indexOfEquivalent(object: Element) -> Int? {
         return indexOf({ (element) -> Bool in
-            return object.isEquivalent(element)
+            return element.isEquivalent(object)
         })
     }
 }

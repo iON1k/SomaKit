@@ -34,12 +34,12 @@ public class StoreDataProvider<TData, TKey>: DataProviderType {
     
     public func setData(data: DataType) throws {
         try store.saveData(key, data: data)
-        dataValue.value = data
+        dataValue <= data
     }
     
     public func loadData() throws -> DataType {
         let data = normalizeData(try store.loadData(key))
-        dataValue.value = data
+        dataValue <= data
         return data
     }
     

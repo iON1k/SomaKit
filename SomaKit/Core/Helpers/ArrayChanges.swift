@@ -6,22 +6,29 @@
 //  Copyright © 2016 iON1k. All rights reserved.
 //
 
-public enum ChangeType {
+public enum ArrayChangeType {
     case Replace
     case Insert
     case Delete
 }
 
-public struct ArrayChange {
-    public let type: ChangeType
+public struct ArrayChange<TElement> {
+    public let type: ArrayChangeType
     public let index: Int
+    public let element: TElement
+    
+    public init(type: ArrayChangeType, index: Int, element: TElement) {
+        self.type = type
+        self.index = index
+        self.element = element
+    }
 }
 
 public class ArrayChangesCalculator {
     private typealias EquivalentIndexesPair = (oldIndex: Int, newIndex: Int)
     
-    public static func calculateChanges(oldSource: [Equivalentable], newSource: [Equivalentable]) -> [ArrayChange] {
-        var resultChanges = [ArrayChange]()
+    public static func calculateChanges<TElement: Equivalentable>(oldSource: [TElement], newSource: [TElement]) -> [ArrayChange<TElement>] {
+        var resultChanges = [ArrayChange<TElement>]()
         
         var equivalentElementsIndexes = [EquivalentIndexesPair]()
         
@@ -42,8 +49,8 @@ public class ArrayChangesCalculator {
         return resultChanges
     }
     
-    private static func getChanges(oldSource: [Equivalentable], newSource: [Equivalentable],
-                            leftIndexesPair: EquivalentIndexesPair?, rightIndexesPair: EquivalentIndexesPair?) -> [ArrayChange] {
+    private static func getChanges<TElement: Equivalentable>(oldSource: [TElement], newSource: [TElement],
+                         leftIndexesPair: EquivalentIndexesPair?, rightIndexesPair: EquivalentIndexesPair?) -> [ArrayChange<TElement>] {
         let newSourceLeftIndex = leftIndexesPair?.newIndex ?? -1
         let oldSourceLeftIndex = leftIndexesPair?.oldIndex ?? -1
         let newSourceRightIndex = rightIndexesPair?.newIndex ?? newSource.count
@@ -52,10 +59,10 @@ public class ArrayChangesCalculator {
         var newIndex = newSourceLeftIndex + 1
         var oldIndex = oldSourceLeftIndex + 1
         
-        var resultChanges = [ArrayChange]()
+        var resultChanges = [ArrayChange<TElement>]()
         
         while newIndex < newSourceRightIndex && oldIndex < oldSourceRightIndex {
-            resultChanges.append(ArrayChange(type: .Replace, index: oldIndex))
+            resultChanges.append(ArrayChange(type: .Replace, index: oldIndex, element: newSource[newIndex]))
             newIndex += 1
             oldIndex += 1
         }
@@ -64,13 +71,13 @@ public class ArrayChangesCalculator {
         
         let deletingIndex = lastOldIndex
         while oldIndex < oldSourceRightIndex {
-            resultChanges.append(ArrayChange(type: .Delete, index: deletingIndex))
+            resultChanges.append(ArrayChange(type: .Delete, index: deletingIndex, element: newSource[deletingIndex]))
             oldIndex += 1
         }
         
         var insertingIndex = lastOldIndex
         while newIndex < newSourceRightIndex {
-            resultChanges.append(ArrayChange(type: .Insert, index: insertingIndex))
+            resultChanges.append(ArrayChange(type: .Insert, index: insertingIndex, element: newSource[newIndex]))
             newIndex += 1
             insertingIndex += 1
         }

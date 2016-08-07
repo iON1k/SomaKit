@@ -28,7 +28,7 @@ public class DataLoader<TData>: DataProviderType {
     public func fetchData() -> Observable<DataType> {
         return sourceProvider.rxData()
             .doOnNext { (data) in
-                self.dataValue.value = data
+                self.dataValue <= data
             }
     }
     

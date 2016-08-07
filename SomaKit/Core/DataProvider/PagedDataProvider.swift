@@ -44,7 +44,7 @@ public class PagedDataProvider<TData>: DataProviderType {
         dataSyncLock.sync { 
             var newData = data
             newData[pageNumber] = newPageData
-            dataVar.value = newData
+            dataVar <= newData
         }
     }
     
