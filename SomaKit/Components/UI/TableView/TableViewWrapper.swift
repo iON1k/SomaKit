@@ -13,31 +13,27 @@ public class TableViewWrapper: SomaProxy, UITableViewDataSource, UITableViewDele
     public let tableView: UITableView
     
     public typealias SectionsModels = [TableViewSectionModel]
+    public typealias SectionsAttributes = [TableSectionElementsAttributes]
     public typealias UpdatingHandler = (tableView: UITableView, updatingData: UpdatingData) -> Void
     
-    public let elementsAttributesCache = TableElementAttributesCache()
-    public let elementsProvider: TableElementsProvider
+    private let elementsAttributesCache = TableElementAttributesCache()
+    private let elementsProvider: TableElementsProvider
     
     private let defaultElementsAttributes = DefaultTableElementAttributes(prefferedHeight: 10)
     
-    private let updateDataEvents = Variable(UpdatingEvent(sectionsData: SectionsModels(), asyncUpdating: false, updatingHandler: TableViewWrapper.reloadTable))
-    private var sectionsModels = SectionsModels()
-    
-    private let updatingHandler: UpdatingHandler
+    private let updateDataEvents = Variable(UpdatingEvent(sectionsData: SectionsModels()))
+    public private(set) var sectionsData = SectionsModels()
     
     private weak var forwardDelegate: UITableViewDelegate?
     private weak var forwardDataSource: UITableViewDataSource?
     
-    public convenience init(tableView: UITableView) {
-        self.init(tableView: tableView, updatingHandler: TableViewWrapper.reloadTable)
-    }
-    
-    public init(tableView: UITableView, updatingHandler: UpdatingHandler) {
+    public init(tableView: UITableView, elementsProviderHandler: TableElementsProvider -> Void) {
         self.tableView = tableView
-        self.updatingHandler = updatingHandler
         elementsProvider = TableElementsProvider(tableView: tableView)
         
         super.init()
+        
+        elementsProviderHandler(elementsProvider)
         
         elementsAttributesCache.source = self
         
@@ -189,7 +185,7 @@ public class TableViewWrapper: SomaProxy, UITableViewDataSource, UITableViewDele
     }
     
     private func sectionModel(sectionIndex: Int) -> TableViewSectionModel {
-        return sectionsModels[sectionIndex]
+        return sectionsData[sectionIndex]
     }
     
     private func rowsCount(sectionIndex: Int) -> Int {
@@ -197,13 +193,17 @@ public class TableViewWrapper: SomaProxy, UITableViewDataSource, UITableViewDele
     }
     
     private func sectionsCount() -> Int {
-        return sectionsModels.count
+        return sectionsData.count
     }
     
     private func beginUpdating(updatingEvent: UpdatingEvent, updatingData: UpdatingData) {
         Utils.ensureIsMainThread()
         
-        sectionsModels = updatingData.sectionsData
+        guard !updatingEvent.disposable.disposed else {
+            return
+        }
+        
+        sectionsData = updatingData.sectionsData
         if let sectionsAttributes = updatingData.sectionsAttributes {
             elementsAttributesCache.resetCacheWithPreloadedData(sectionsAttributes)
         } else {
@@ -213,15 +213,8 @@ public class TableViewWrapper: SomaProxy, UITableViewDataSource, UITableViewDele
         updatingEvent.updatingHandler(tableView: tableView, updatingData: updatingData)
     }
     
-    private func prepareUpdatingDataBackgroundObservable(sectionsModels: SectionsModels) -> Observable<UpdatingData> {
-        return Observable.deferred({ () -> Observable<UpdatingData> in
-                return Observable.just(self.prepareUpdatingData(sectionsModels))
-            })
-            .subcribeOnBackgroundScheduler()
-    }
-    
     private func prepareUpdatingData(sectionsModels: SectionsModels) -> UpdatingData {
-        var sectionsAttributes = [TableSectionElementsAttributes]()
+        var sectionsAttributes = SectionsAttributes()
         
         for sectionModel in sectionsModels {
             var sectionHeaderAttributes: TableElementAttributes?
@@ -279,91 +272,53 @@ public class TableViewWrapper: SomaProxy, UITableViewDataSource, UITableViewDele
     private func startObserveUpdatingEvents() {
         _ = updateDataEvents.asObservable()
             .skip(1)
-            .flatMapLatest({ [weak self] (updatingEvent) -> Observable<(UpdatingEvent, UpdatingData)> in
-                let sectionsData = updatingEvent.sectionsData
-                
-                
-                if updatingEvent.asyncUpdating {
-                    guard let strongSelf = self else {
-                        return Observable.empty()
-                    }
-                    
-                    let updatingEventObservable = Observable.just(updatingEvent)
-                    let updatingDataObservable = strongSelf.prepareUpdatingDataBackgroundObservable(sectionsData)
-                    return Observable.combineLatest(updatingEventObservable, updatingDataObservable, resultSelector: { (event, data) -> (UpdatingEvent, UpdatingData) in
-                        return (event, data)
-                    })
-                } else {
-                    let updatingData = UpdatingData(sectionsData: sectionsData)
-                    return Observable.just((updatingEvent, updatingData))
+            .flatMap({ [weak self] (updatingEvent) -> Observable<(UpdatingEvent, UpdatingData)> in
+                guard !updatingEvent.disposable.disposed else {
+                    return Observable.empty()
                 }
-                })
+                
+                guard let strongSelf = self else {
+                    return Observable.empty()
+                }
+                
+                let sectionsData = updatingEvent.sectionsData
+                let updatingData = updatingEvent.needPrepareData ? strongSelf.prepareUpdatingData(sectionsData) : UpdatingData(sectionsData: sectionsData)
+                
+                return Observable.just((updatingEvent, updatingData))
+            })
             .observeOnMainScheduler()
             .doOnNext({ [weak self] (updatingEvent, updatingData) in
                 self?.beginUpdating(updatingEvent, updatingData: updatingData)
-                })
+            })
             .takeUntil(rx_deallocated)
             .subscribe()
     }
     
-    private static func reloadTable(tableView: UITableView, updatingData: UpdatingData) {
-        tableView.reloadData()
-    }
-    
     public struct UpdatingData {
-        let sectionsData: [TableViewSectionModel]
-        let sectionsAttributes: [TableSectionElementsAttributes]?
+        public let sectionsData: SectionsModels
+        public let sectionsAttributes: SectionsAttributes?
         
-        init(sectionsData: [TableViewSectionModel], sectionsAttributes: [TableSectionElementsAttributes]? = nil) {
+        init(sectionsData: SectionsModels, sectionsAttributes: SectionsAttributes? = nil) {
             self.sectionsData = sectionsData
             self.sectionsAttributes = sectionsAttributes
         }
     }
     
     public struct UpdatingEvent {
-        let sectionsData: SectionsModels
-        let asyncUpdating: Bool
-        let updatingHandler: UpdatingHandler
-    }
-}
-
-extension TableViewWrapper {
-    public func bindDataSource(dataSource: Observable<SectionsModels>) -> Disposable {
-        return dataSource.map({ (sectionsData) -> UpdatingEvent in
-            return UpdatingEvent(sectionsData: sectionsData, asyncUpdating: true, updatingHandler: self.updatingHandler)
-        })
-        .doOnNext { (updatingEvent) in
-            self.updateData(updatingEvent)
+        public let sectionsData: SectionsModels
+        public let needPrepareData: Bool
+        public let updatingHandler: UpdatingHandler
+        public let disposable = BooleanDisposable()
+        
+        init(sectionsData: [TableViewSectionModel], needPrepareData: Bool = true,
+             updatingHandler: UpdatingHandler = UpdatingEvent.defaultUpdatingHandler) {
+            self.sectionsData = sectionsData
+            self.needPrepareData = needPrepareData
+            self.updatingHandler = updatingHandler
         }
-        .subscribe()
-    }
-    
-    
-    public func updateDataAsync(sectionsData: SectionsModels, updatingHandler: UpdatingHandler) {
-        updateData(UpdatingEvent(sectionsData: sectionsData, asyncUpdating: true, updatingHandler: TableViewWrapper.reloadTable))
-    }
-    
-    public func updateData(sectionsData: SectionsModels, updatingHandler: UpdatingHandler) {
-        updateData(UpdatingEvent(sectionsData: sectionsData, asyncUpdating: false, updatingHandler: TableViewWrapper.reloadTable))
-    }
-    
-    public func reloadDataAsync(sectionsModels: SectionsModels) {
-        reloadData(sectionsModels, asyncUpdating: true)
-    }
-    
-    public func reloadDataAsync() {
-        reloadDataAsync(sectionsModels)
-    }
-    
-    public func reloadData(sectionsModels: SectionsModels) {
-        reloadData(sectionsModels, asyncUpdating: false)
-    }
-    
-    public func reloadData() {
-        reloadData(sectionsModels)
-    }
-    
-    public func reloadData(sectionsData: SectionsModels, asyncUpdating: Bool) {
-        updateData(UpdatingEvent(sectionsData: sectionsData, asyncUpdating: asyncUpdating, updatingHandler: TableViewWrapper.reloadTable))
+        
+        public static func defaultUpdatingHandler(tableView: UITableView, updatingData: UpdatingData) {
+            tableView.reloadData()
+        }
     }
 }
