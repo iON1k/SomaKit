@@ -288,6 +288,7 @@ public class TableViewManager: SomaProxy, UITableViewDataSource, UITableViewDele
                     return Observable.just((updatingEvent, updatingData))
                 })
             })
+            .observeOnMainScheduler()
             .concat()
             .doOnNext({ [weak self] (updatingEvent, updatingData) in
                 self?.beginUpdating(updatingEvent, updatingData: updatingData)
