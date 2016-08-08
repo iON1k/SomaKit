@@ -272,24 +272,21 @@ public class TableViewManager: SomaProxy, UITableViewDataSource, UITableViewDele
     private func startObserveUpdatingEvents() {
         _ = updateDataEvents.asObservable()
             .skip(1)
-            .map({ (updatingEvent) -> Observable<(UpdatingEvent, UpdatingData)> in
-                return Observable.deferred({ [weak self] () -> Observable<(UpdatingEvent, UpdatingData)> in
-                    guard !updatingEvent.disposable.disposed else {
-                        return Observable.empty()
-                    }
-                    
-                    guard let strongSelf = self else {
-                        return Observable.empty()
-                    }
-                    
-                    let sectionsData = updatingEvent.sectionsData
-                    let updatingData = updatingEvent.needPrepareData ? strongSelf.prepareUpdatingData(sectionsData) : UpdatingData(sectionsData: sectionsData)
-                    
-                    return Observable.just((updatingEvent, updatingData))
-                })
+            .flatMap({ [weak self] (updatingEvent) -> Observable<(UpdatingEvent, UpdatingData)> in
+                guard !updatingEvent.disposable.disposed else {
+                    return Observable.empty()
+                }
+                
+                guard let strongSelf = self else {
+                    return Observable.empty()
+                }
+                
+                let sectionsData = updatingEvent.sectionsData
+                let updatingData = updatingEvent.needPrepareData ? strongSelf.prepareUpdatingData(sectionsData) : UpdatingData(sectionsData: sectionsData)
+                
+                return Observable.just((updatingEvent, updatingData))
             })
             .observeOnMainScheduler()
-            .concat()
             .doOnNext({ [weak self] (updatingEvent, updatingData) in
                 self?.beginUpdating(updatingEvent, updatingData: updatingData)
             })
