@@ -213,6 +213,22 @@ public class TableViewManager: SomaProxy, UITableViewDataSource, UITableViewDele
         updatingEvent.updatingHandler(tableView: tableView, updatingData: updatingData)
     }
     
+    private func prepareUpdatingDataObserver(updatingEvent: UpdatingEvent) -> Observable<UpdatingData> {
+        return Observable.create({ (observer) -> Disposable in
+            guard !updatingEvent.disposable.disposed else {
+                return NopDisposable.instance
+            }
+            
+            let sectionsData = updatingEvent.sectionsData
+            let updatingData = updatingEvent.needPrepareData ? self.prepareUpdatingData(sectionsData) : UpdatingData(sectionsData: sectionsData)
+            
+            observer.onNext(updatingData)
+            observer.onCompleted()
+            
+            return updatingEvent.disposable
+        })
+    }
+    
     private func prepareUpdatingData(sectionsModels: SectionsModels) -> UpdatingData {
         var sectionsAttributes = SectionsAttributes()
         
@@ -272,19 +288,15 @@ public class TableViewManager: SomaProxy, UITableViewDataSource, UITableViewDele
     private func startObserveUpdatingEvents() {
         _ = updateDataEvents.asObservable()
             .skip(1)
-            .flatMap({ [weak self] (updatingEvent) -> Observable<(UpdatingEvent, UpdatingData)> in
-                guard !updatingEvent.disposable.disposed else {
-                    return Observable.empty()
-                }
-                
+            .flatMapLatest({ [weak self] (updatingEvent) -> Observable<(UpdatingEvent, UpdatingData)> in
                 guard let strongSelf = self else {
                     return Observable.empty()
                 }
                 
-                let sectionsData = updatingEvent.sectionsData
-                let updatingData = updatingEvent.needPrepareData ? strongSelf.prepareUpdatingData(sectionsData) : UpdatingData(sectionsData: sectionsData)
-                
-                return Observable.just((updatingEvent, updatingData))
+                return strongSelf.prepareUpdatingDataObserver(updatingEvent)
+                    .map({ (updatingData) -> (UpdatingEvent, UpdatingData) in
+                        return (updatingEvent, updatingData)
+                    })
             })
             .observeOnMainScheduler()
             .doOnNext({ [weak self] (updatingEvent, updatingData) in
@@ -305,16 +317,19 @@ public class TableViewManager: SomaProxy, UITableViewDataSource, UITableViewDele
     }
     
     public struct UpdatingEvent {
+        public typealias DisposableType = protocol<Disposable, Cancelable>
+        
         public let sectionsData: SectionsModels
         public let needPrepareData: Bool
         public let updatingHandler: UpdatingHandler
-        public let disposable = BooleanDisposable()
+        public let disposable: DisposableType
         
-        init(sectionsData: [TableViewSectionModel], needPrepareData: Bool = true,
+        init(sectionsData: [TableViewSectionModel], needPrepareData: Bool = true, disposable: DisposableType = BooleanDisposable(),
              updatingHandler: UpdatingHandler = UpdatingEvent.defaultUpdatingHandler) {
             self.sectionsData = sectionsData
             self.needPrepareData = needPrepareData
             self.updatingHandler = updatingHandler
+            self.disposable = disposable
         }
         
         public static func defaultUpdatingHandler(tableView: UITableView, updatingData: UpdatingData) {

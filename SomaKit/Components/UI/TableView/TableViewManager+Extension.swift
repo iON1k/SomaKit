@@ -11,7 +11,11 @@ import RxSwift
 extension TableViewManager {
     public func updateDataObservable(sectionsData: SectionsModels, updatingHandler: UpdatingHandler = UpdatingEvent.defaultUpdatingHandler) -> Observable<Void> {
         return Observable.create({ (observer) -> Disposable in
-            let updatingEvent = UpdatingEvent(sectionsData: sectionsData, needPrepareData: false) { (tableView, updatingData) in
+            let disposable = AnonymousDisposable() {
+                observer.onCompleted()
+            }
+            
+            let updatingEvent = UpdatingEvent(sectionsData: sectionsData, needPrepareData: false, disposable: disposable) { (tableView, updatingData) in
                 updatingHandler(tableView: tableView, updatingData: updatingData)
                 observer.onNext()
                 observer.onCompleted()
@@ -19,7 +23,7 @@ extension TableViewManager {
             
             self.updateData(updatingEvent)
             
-            return updatingEvent.disposable
+            return disposable
         })
     }
     
@@ -57,8 +61,8 @@ extension TableViewManager {
     }
     
     public func bindDataSource(dataSource: Observable<SectionsModels>, updatingHandler: UpdatingHandler = UpdatingEvent.defaultUpdatingHandler) -> Disposable {
-        return dataSource.flatMapLatest({ (sectionsData) -> Observable<Void> in
-            return self.updateDataAsyncObservable(sectionsData, updatingHandler: updatingHandler)
+        return dataSource.doOnNext({ (sectionsData) in
+            self.updateDataAsync(sectionsData, updatingHandler: updatingHandler)
         })
         .subscribe()
     }
