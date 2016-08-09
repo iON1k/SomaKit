@@ -11,24 +11,24 @@ import RxSwift
 extension TableViewManager {
     public func updateDataObservable(sectionsData: SectionsModels, updatingHandler: UpdatingHandler = UpdatingEvent.defaultUpdatingHandler) -> Observable<Void> {
         return Observable.create({ (observer) -> Disposable in
-            let disposable = AnonymousDisposable() {
-                observer.onCompleted()
-            }
-            
-            let updatingEvent = UpdatingEvent(sectionsData: sectionsData, needPrepareData: false, disposable: disposable) { (tableView, updatingData) in
+            let eventUpdatingHandler: UpdatingHandler = { (tableView, updatingData) in
                 updatingHandler(tableView: tableView, updatingData: updatingData)
                 observer.onNext()
                 observer.onCompleted()
             }
             
+            let updatingEvent = UpdatingEvent(sectionsData: sectionsData, needPrepareData: false, updatingHandler: eventUpdatingHandler) {
+                observer.onCompleted()
+            }
+            
             self.updateData(updatingEvent)
             
-            return disposable
+            return NopDisposable.instance
         })
     }
     
-    public func updateData(sectionsData: SectionsModels, updatingHandler: UpdatingHandler = UpdatingEvent.defaultUpdatingHandler) -> Disposable {
-        return updateDataObservable(sectionsData, updatingHandler: updatingHandler)
+    public func updateData(sectionsData: SectionsModels, updatingHandler: UpdatingHandler = UpdatingEvent.defaultUpdatingHandler) {
+        _ = updateDataObservable(sectionsData, updatingHandler: updatingHandler)
             .subscribe()
     }
     
@@ -37,26 +37,26 @@ extension TableViewManager {
             .subcribeOnBackgroundScheduler()
     }
     
-    public func updateDataAsync(sectionsData: SectionsModels, updatingHandler: UpdatingHandler = UpdatingEvent.defaultUpdatingHandler) -> Disposable {
-        return updateDataAsyncObservable(sectionsData, updatingHandler: updatingHandler)
+    public func updateDataAsync(sectionsData: SectionsModels, updatingHandler: UpdatingHandler = UpdatingEvent.defaultUpdatingHandler) {
+        _ = updateDataAsyncObservable(sectionsData, updatingHandler: updatingHandler)
             .subscribe()
     }
     
-    public func reloadDataObservable() -> Observable<Void> {
-        return updateDataObservable(sectionsData)
+    public func reloadDataObservable(updatingHandler: UpdatingHandler = UpdatingEvent.defaultUpdatingHandler) -> Observable<Void> {
+        return updateDataObservable(actualSectionsData, updatingHandler: updatingHandler)
     }
     
-    public func reloadDataAsyncObservable() -> Observable<Void> {
-        return updateDataAsyncObservable(sectionsData)
+    public func reloadDataAsyncObservable(updatingHandler: UpdatingHandler = UpdatingEvent.defaultUpdatingHandler) -> Observable<Void> {
+        return updateDataAsyncObservable(actualSectionsData, updatingHandler: updatingHandler)
     }
     
-    public func reloadData() -> Disposable {
-        return reloadDataObservable()
+    public func reloadData(updatingHandler: UpdatingHandler = UpdatingEvent.defaultUpdatingHandler) -> Disposable {
+        return reloadDataObservable(updatingHandler)
             .subscribe()
     }
     
-    public func reloadDataAsync() -> Disposable {
-        return reloadDataAsyncObservable()
+    public func reloadDataAsync(updatingHandler: UpdatingHandler = UpdatingEvent.defaultUpdatingHandler) -> Disposable {
+        return reloadDataAsyncObservable(updatingHandler)
             .subscribe()
     }
     

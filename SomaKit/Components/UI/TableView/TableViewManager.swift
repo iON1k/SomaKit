@@ -21,8 +21,15 @@ public class TableViewManager: SomaProxy, UITableViewDataSource, UITableViewDele
     
     private let defaultElementsAttributes = DefaultTableElementAttributes(prefferedHeight: 10)
     
-    private let updateDataEvents = Variable(UpdatingEvent(sectionsData: SectionsModels()))
-    public private(set) var sectionsData = SectionsModels()
+    private static let defautSectionsData = SectionsModels()
+    
+    private let updateDataEvents = Variable(UpdatingEvent(sectionsData: defautSectionsData))
+    
+    public private(set) var showingSectionsData = defautSectionsData
+    
+    public var actualSectionsData: SectionsModels {
+        return updateDataEvents.value.sectionsData
+    }
     
     private weak var forwardDelegate: UITableViewDelegate?
     private weak var forwardDataSource: UITableViewDataSource?
@@ -185,7 +192,7 @@ public class TableViewManager: SomaProxy, UITableViewDataSource, UITableViewDele
     }
     
     private func sectionModel(sectionIndex: Int) -> TableViewSectionModel {
-        return sectionsData[sectionIndex]
+        return showingSectionsData[sectionIndex]
     }
     
     private func rowsCount(sectionIndex: Int) -> Int {
@@ -193,17 +200,13 @@ public class TableViewManager: SomaProxy, UITableViewDataSource, UITableViewDele
     }
     
     private func sectionsCount() -> Int {
-        return sectionsData.count
+        return showingSectionsData.count
     }
     
     private func beginUpdating(updatingEvent: UpdatingEvent, updatingData: UpdatingData) {
         Utils.ensureIsMainThread()
         
-        guard !updatingEvent.disposable.disposed else {
-            return
-        }
-        
-        sectionsData = updatingData.sectionsData
+        showingSectionsData = updatingData.sectionsData
         if let sectionsAttributes = updatingData.sectionsAttributes {
             elementsAttributesCache.resetCacheWithPreloadedData(sectionsAttributes)
         } else {
@@ -215,17 +218,15 @@ public class TableViewManager: SomaProxy, UITableViewDataSource, UITableViewDele
     
     private func prepareUpdatingDataObserver(updatingEvent: UpdatingEvent) -> Observable<UpdatingData> {
         return Observable.create({ (observer) -> Disposable in
-            guard !updatingEvent.disposable.disposed else {
-                return NopDisposable.instance
-            }
-            
             let sectionsData = updatingEvent.sectionsData
             let updatingData = updatingEvent.needPrepareData ? self.prepareUpdatingData(sectionsData) : UpdatingData(sectionsData: sectionsData)
             
             observer.onNext(updatingData)
             observer.onCompleted()
             
-            return updatingEvent.disposable
+            return AnonymousDisposable() {
+                updatingEvent.cancellationHandler?()
+            }
         })
     }
     
@@ -317,19 +318,19 @@ public class TableViewManager: SomaProxy, UITableViewDataSource, UITableViewDele
     }
     
     public struct UpdatingEvent {
-        public typealias DisposableType = protocol<Disposable, Cancelable>
+        public typealias CancellationHandler = Void -> Void
         
         public let sectionsData: SectionsModels
         public let needPrepareData: Bool
         public let updatingHandler: UpdatingHandler
-        public let disposable: DisposableType
+        public let cancellationHandler: CancellationHandler?
         
-        init(sectionsData: [TableViewSectionModel], needPrepareData: Bool = true, disposable: DisposableType = BooleanDisposable(),
-             updatingHandler: UpdatingHandler = UpdatingEvent.defaultUpdatingHandler) {
+        init(sectionsData: [TableViewSectionModel], needPrepareData: Bool = true, updatingHandler: UpdatingHandler = UpdatingEvent.defaultUpdatingHandler,
+             cancellationHandler: CancellationHandler? = nil) {
             self.sectionsData = sectionsData
             self.needPrepareData = needPrepareData
             self.updatingHandler = updatingHandler
-            self.disposable = disposable
+            self.cancellationHandler = cancellationHandler
         }
         
         public static func defaultUpdatingHandler(tableView: UITableView, updatingData: UpdatingData) {
