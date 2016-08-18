@@ -15,8 +15,8 @@ public class TransformDataProvider<TData, TSourceData>: DataProviderType {
     private let sourceDataProvider: AnyDataProvider<TSourceData>
     private let transformHandler: TransformHandler
     
-    public func rxData() -> Observable<DataType> {
-        return transformHandler(sourceDataProvider.rxData())
+    public func dataObservable() -> Observable<DataType> {
+        return transformHandler(sourceDataProvider.dataObservable())
     }
     
     public init<TDataProvider: DataProviderConvertibleType where TDataProvider.DataType == TSourceData>(dataProvider: TDataProvider, transformHandler: TransformHandler) {

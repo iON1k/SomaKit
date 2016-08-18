@@ -16,7 +16,7 @@ public class LazyValue<TValue> {
             return innerValue
         }
         
-        return lock.sync { () -> TValue in
+        return lock.sync {
             if let innerValue = innerValue {
                 return innerValue
             }

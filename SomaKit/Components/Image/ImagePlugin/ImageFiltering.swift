@@ -14,7 +14,7 @@ public class ImageFiltering: ImagePluginType {
     private let filterName: String
     private let filterParams: FitlerParamsType?
     
-    public var stringCachingKey: String {
+    public var imagePluginKey: String {
         var resultKey = filterName
         if let filterParams = filterParams {
             resultKey += filterParams.stringKey

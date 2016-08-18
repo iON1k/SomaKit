@@ -16,6 +16,12 @@ public struct TableSectionElementsAttributes {
     public func mutableCopy() -> MutableTableSectionElementsAttributes {
         return MutableTableSectionElementsAttributes(cellsAttributes: cellsAttributes, headerAttributes: headerAttributes, footerAttributes: footerAttributes)
     }
+    
+    public init(cellsAttributes: CellsAttributes, headerAttributes: TableElementAttributes? = nil, footerAttributes: TableElementAttributes? = nil) {
+        self.cellsAttributes = cellsAttributes
+        self.headerAttributes = headerAttributes
+        self.footerAttributes = footerAttributes
+    }
 }
 
 public struct MutableTableSectionElementsAttributes {

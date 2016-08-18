@@ -18,7 +18,7 @@ public class ImageResizing: ImagePluginType {
     private let mode: ImageResizingMode
     private let size: CGSize
     
-    public var stringCachingKey: String {
+    public var imagePluginKey: String {
         return mode.rawValue + String(size.width) + String(size.height)
     }
     

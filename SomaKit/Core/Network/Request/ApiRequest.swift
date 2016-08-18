@@ -20,7 +20,7 @@ public protocol ApiRequestMaganer {
     func apiRequestCompleted<TResponse>(request: ApiRequest<TResponse>, response: TResponse)
 }
 
-public class ApiRequest<TResponse>: RequestType, StringCachingKeyProvider {
+public class ApiRequest<TResponse>: RequestType, CachingKeyProvider {
     public typealias ResponseType = TResponse
     public typealias ParamsType = [String : StringKeyConvertiable]?
     public typealias HeadersType = [String : String]?
@@ -31,10 +31,10 @@ public class ApiRequest<TResponse>: RequestType, StringCachingKeyProvider {
     public let params: ParamsType
     public let headers: HeadersType
     
-    private let stringCachingKeyValue = LazyValue<String>()
+    private let cachingKeyValue = LazyValue<String>()
     
-    public var stringCachingKey: String {
-        return stringCachingKeyValue.value
+    public var cachingKey: String {
+        return cachingKeyValue.value
     }
     
     public func rxResponse() -> Observable<ResponseType> {
@@ -71,10 +71,10 @@ public class ApiRequest<TResponse>: RequestType, StringCachingKeyProvider {
         self.params = params
         self.headers = headers
         
-        stringCachingKeyValue.initialize(buildStringCachingKey)
+        cachingKeyValue.initialize(buildcachingKey)
     }
     
-    private func buildStringCachingKey() -> String {
+    private func buildcachingKey() -> String {
         var resultString = ""
         
         resultString += methodType.rawValue

@@ -1,12 +1,12 @@
 //
-//  DataBaseCache.swift
+//  DataBaseCacheStore.swift
 //  SomaKit
 //
 //  Created by Anton on 26.06.16.
 //  Copyright © 2016 iON1k. All rights reserved.
 //
 
-public class DataBaseCache<TData, TDataBase: CacheManagedObject>: AbstractDataBaseStore<String, CacheValue<TData>, TDataBase> {
+public class DataBaseCacheStore<TData, TDataBase: CacheManagedObject>: AbstractDataBaseStore<String, CacheValue<TData>, TDataBase> {
     public typealias GetterCacheHandlerType = TDataBase throws -> TData
     
     public init(setterHandler: SetterHandlerType, getterHandler: GetterCacheHandlerType) {
@@ -14,13 +14,7 @@ public class DataBaseCache<TData, TDataBase: CacheManagedObject>: AbstractDataBa
                 try setterHandler(data, record)
             }) { (record) -> CacheValue<TData> in
                 let data = try getterHandler(record)
-                return CacheValue(data: data, creationTimestamp: record.creationTimestamp)
+                return CacheValue(data: data, creationTime: record.creationTime)
             }
-    }
-}
-
-public extension DataBaseCache {
-    public func asCacheStore(cacheLifeTime: CacheLifeTime = .Forever) -> CacheStore<String, TData> {
-        return CacheStore(sourceStore: self, cacheLifeTime: cacheLifeTime)
     }
 }

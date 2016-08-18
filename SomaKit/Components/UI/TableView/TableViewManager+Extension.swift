@@ -8,6 +8,13 @@
 
 import RxSwift
 
+extension Array where Element: ViewModelType {
+    public func asTableViewSectionsModels() -> TableViewManager.SectionsModels {
+        let sectionsModels = TableViewSectionModel(cellsViewModels: self.map(SomaFunc.sameTransform))
+        return [sectionsModels]
+    }
+}
+
 extension TableViewManager {
     public func updateDataObservable(sectionsData: SectionsModels, updatingHandler: UpdatingHandler = UpdatingEvent.defaultUpdatingHandler) -> Observable<Void> {
         return Observable.create({ (observer) -> Disposable in

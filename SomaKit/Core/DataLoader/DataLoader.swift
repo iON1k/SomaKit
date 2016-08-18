@@ -17,7 +17,7 @@ public class DataLoader<TData>: DataProviderType {
     private let sourceProvider: AnyDataProvider<TData>
     private let defaultValue: DataType
     
-    public func rxData() -> Observable<DataType> {
+    public func dataObservable() -> Observable<DataType> {
         return dataValue.asObservable()
     }
     
@@ -26,7 +26,7 @@ public class DataLoader<TData>: DataProviderType {
     }
     
     public func fetchData() -> Observable<DataType> {
-        return sourceProvider.rxData()
+        return sourceProvider.dataObservable()
             .doOnNext { (data) in
                 self.dataValue <= data
             }

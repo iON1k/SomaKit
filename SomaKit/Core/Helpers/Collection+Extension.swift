@@ -26,4 +26,28 @@ extension Array {
             return object.isEquivalent(element)
         })
     }
+    
+    public func optionalCovariance() -> [Element?] {
+        return map(SomaFunc.sameTransform)
+    }
+}
+
+extension Array: Equivalentable {
+    public func isEquivalent(other: Any) -> Bool {
+        guard let otherArray = other as? [Element] else {
+            return false
+        }
+        
+        guard count == otherArray.count else {
+            return false
+        }
+        
+        for index in 0..<count {
+            if !Utils.isEquivalentValues(self[index], value2: otherArray[index]) {
+                return false
+            }
+        }
+        
+        return true
+    }
 }

@@ -37,7 +37,7 @@ public final class ObjectGenerator<TObject> {
     }
     
     public func generate() -> TObject {
-        let objectFromPool = poolLock.sync { () -> TObject? in
+        let objectFromPool = poolLock.sync {
             return objectsPool.popLast()
         }
         

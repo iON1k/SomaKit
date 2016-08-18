@@ -10,4 +10,10 @@ public struct TableViewSectionModel {
     public let cellsViewModels: [ViewModelType]
     public let headerViewModel: ViewModelType?
     public let footerViewModel: ViewModelType?
+    
+    public init(cellsViewModels: [ViewModelType], headerViewModel: ViewModelType? = nil, footerViewModel: ViewModelType? = nil) {
+        self.cellsViewModels = cellsViewModels
+        self.headerViewModel = headerViewModel
+        self.footerViewModel = footerViewModel
+    }
 }

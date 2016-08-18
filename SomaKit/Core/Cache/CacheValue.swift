@@ -6,12 +6,14 @@
 //  Copyright © 2016 iON1k. All rights reserved.
 //
 
+public typealias CacheTimeType = Double
+
 public class CacheValue<TData> {
     public let data: TData
-    public let creationTimestamp: Double
+    public let creationTime: CacheTimeType
     
-    public init(data: TData, creationTimestamp: Double) {
+    public init(data: TData, creationTime: CacheTimeType) {
         self.data = data
-        self.creationTimestamp = creationTimestamp
+        self.creationTime = creationTime
     }
 }

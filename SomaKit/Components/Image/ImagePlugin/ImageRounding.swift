@@ -8,11 +8,11 @@
 
 import AlamofireImage
 
-public enum ImageRoundingMode: StringCachingKeyProvider {
+public enum ImageRoundingMode {
     case Cicrular
     case Corners(radius: CGFloat)
     
-    public var stringCachingKey: String {
+    public var imagePluginKey: String {
         switch self {
         case .Cicrular:
             return "Circular"
@@ -25,8 +25,8 @@ public enum ImageRoundingMode: StringCachingKeyProvider {
 public class ImageRounding: ImagePluginType {
     private let mode: ImageRoundingMode
     
-    public var stringCachingKey: String {
-        return mode.stringCachingKey
+    public var imagePluginKey: String {
+        return mode.imagePluginKey
     }
     
     public func transform(image: UIImage) throws -> UIImage {

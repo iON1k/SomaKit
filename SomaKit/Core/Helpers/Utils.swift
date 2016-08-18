@@ -9,6 +9,12 @@
 import Foundation
 
 public final class Utils {
+    private init() {
+        //Nothing
+    }
+}
+
+extension Utils {
     @noreturn public static func abstractMethod(methodName: String = "Method") {
         Debug.fatalError("\(methodName) has not been implemented")
     }
@@ -35,7 +41,25 @@ public final class Utils {
         return first.dynamicType == second.dynamicType
     }
     
-    private init() {
-        //Nothing
+    public static func isEquivalentValues<TValue>(value1: TValue, value2: TValue) -> Bool {
+        if let optionalValue1 = value1 as? OptionalType, optionalValue2 = value2 as? OptionalType {
+            let hasValue1 = optionalValue1.hasValue
+            let hasValue2 = optionalValue2.hasValue
+            guard hasValue1 && hasValue2 else {
+                return !hasValue1 && !hasValue2
+            }
+        }
+        
+        if let value1Object = value1 as? AnyObject, value2Object = value2 as? AnyObject {
+            guard value1Object !== value2Object else {
+                return true
+            }
+        }
+        
+        guard let equivalentableValue1 = value1 as? Equivalentable else {
+            return false
+        }
+        
+        return equivalentableValue1.isEquivalent(value2)
     }
 }

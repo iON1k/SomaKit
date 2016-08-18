@@ -6,12 +6,18 @@
 //  Copyright © 2016 iON1k. All rights reserved.
 //
 
-public class MemoryCache<TKey: StringKeyConvertiable, TData>: MemoryStore<TKey, CacheValue<TData>> {
-    public override init() {
-        super.init()
+public class MemoryCache<TKey: Hashable, TData>: CacheBase<TKey, TData> {
+    private let memoryStore = MemoryStore<TKey, CacheDataType>()
+    
+    public init(lifeTimeType: CacheLifeTimeType = .Forever) {
+        super.init(sourceStore: memoryStore, lifeTimeType: lifeTimeType)
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(onMemoryWarning),
                                                          name: UIApplicationDidReceiveMemoryWarningNotification, object: UIApplication.sharedApplication())
+    }
+    
+    public convenience init(lifeTime: CacheTimeType) {
+        self.init(lifeTimeType: .Value(lifeTime: lifeTime, timeGenerator: TimeHelper.absoluteTime))
     }
     
     deinit {
@@ -19,12 +25,6 @@ public class MemoryCache<TKey: StringKeyConvertiable, TData>: MemoryStore<TKey, 
     }
     
     @objc private func onMemoryWarning() {
-        removeAllData()
-    }
-}
-
-public extension MemoryCache {
-    public func asCacheStore(cacheLifeTime: CacheLifeTime = .Forever) -> CacheStore<KeyType, TData> {
-        return CacheStore(sourceStore: self, cacheLifeTime: cacheLifeTime)
+        memoryStore.removeAllData()
     }
 }

@@ -12,5 +12,5 @@ public class CacheManagedObject: NSManagedObject {
     public static let DefaultCacheKey = "cacheKey"
     
     @NSManaged var cacheKey: String?
-    @NSManaged var creationTimestamp: Double
+    @NSManaged var creationTime: Double
 }

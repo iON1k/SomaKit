@@ -8,12 +8,15 @@
 
 
 public protocol OptionalType {
-    associatedtype Wrapped
-    var value: Wrapped { get }
     var hasValue: Bool { get }
 }
 
-extension Optional: OptionalType {
+public protocol OptionalValueType: OptionalType {
+    associatedtype Wrapped
+    var value: Wrapped { get }
+}
+
+extension Optional: OptionalValueType {
     public var value: Wrapped {
         return self!
     }
