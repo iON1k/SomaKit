@@ -13,9 +13,9 @@ private let PagedListDataProviderDefaultPageSize = 20
 
 public class PagedListDataProvider<TItem, TPage: ItemsPageType where TPage.ItemType == TItem>: ListDataProviderType {
     public typealias ItemType = TItem
+    public typealias ItemsMergeResult = (items: [TItem?], hasChanges: Bool)
     
-    private var isAllItemsLoadedValue = false
-    private let isAllItemsLoadedSubject = BehaviorSubject(value: false)
+    private var lastPageIndex: Int?
     
     private var itemsValue = [TItem?]()
     private let itemsValueSubject = BehaviorSubject(value: [TItem?]())
@@ -45,32 +45,39 @@ public class PagedListDataProvider<TItem, TPage: ItemsPageType where TPage.ItemT
     
     public var isAllItemsLoaded: Bool {
         return stateSyncLock.sync {
-            return isAllItemsLoadedValue
+            return lastPageIndex != nil
         }
     }
     
-    public var isAllItemsLoadedObservable: Observable<Bool> {
-        return isAllItemsLoadedSubject
-            .distinctUntilChanged()
+    public func loadItem(index: Int) -> Observable<ItemType?> {
+        return Observable.deferred { () -> Observable<ItemType?> in
+            let pageIndex = self.pageForIndex(index)
+            
+            if self.validatePageIndex(pageIndex) {
+                return self.unsafeLoadItem(index)
+            } else {
+                return Observable.just(nil)
+            }
+        }
+        .subscribeOn(workingScheduler)
     }
     
-    public func loadItem(index: Int) -> Observable<ItemType?> {
+    public func unsafeLoadItem(index: Int) -> Observable<ItemType?> {
         return Observable.deferred({ () -> Observable<TPage> in
             let pageIndex = self.pageForIndex(index)
             return self.createLoadingPageObservable(pageIndex)
         })
-        .map({ (page) -> TItem? in
-            let pageIems = page.items
-            let indexOnPage = self.indexOnPage(index)
-            
-            if indexOnPage < pageIems.count {
-                return pageIems[indexOnPage]
-            }
-            
-            return nil
-            
-        })
-        .subscribeOn(workingScheduler)
+            .map({ (page) -> TItem? in
+                let pageIems = page.items
+                let indexOnPage = self.indexOnPage(index)
+                
+                if indexOnPage < pageIems.count {
+                    return pageIems[indexOnPage]
+                }
+                
+                return nil
+                
+            })
     }
     
     private func createLoadingPageObservable(pageIndex: Int) -> Observable<TPage> {
@@ -96,31 +103,59 @@ public class PagedListDataProvider<TItem, TPage: ItemsPageType where TPage.ItemT
     private func onPageDidLoaded(page: TPage, pageIndex: Int) {
         loadingPagesObservables.removeValueForKey(pageIndex)
         loadedPagesMemoryCache.saveDataSafe(pageIndex, data: page)
-        let newItemsValue = mergedItems(page.items, offset: pageIndex * pageSize, count: pageSize)
+        
+        if !validatePageIndex(pageIndex) {
+            return
+        }
+        
+        let mergeResult = mergePage(page, pageIndex: pageIndex)
+        let hasChanges = mergeResult.hasChanges
+        let isLastPage = page.isLastPage
         
         stateSyncLock.sync {
-            if let newItemsValue = newItemsValue {
-                itemsValue = newItemsValue
+            if hasChanges  {
+                itemsValue = mergeResult.items
             }
             
-            isAllItemsLoadedValue = page.isLastPage
+            if isLastPage {
+                lastPageIndex = pageIndex
+            }
         }
         
-        if newItemsValue != nil {
+        if hasChanges {
             itemsValueSubject.onNext(itemsValue)
         }
-        
-        isAllItemsLoadedSubject.onNext(isAllItemsLoadedValue)
     }
     
-    //nil, if no changes
-    private func mergedItems(newItems: [TItem], offset: Int, count: Int) -> [TItem?]? {
+    private func mergePage(page: TPage, pageIndex: Int) -> ItemsMergeResult {
+        let itemsOffset = pageIndex * pageSize
+        let pageItems = page.items
+        let isLastPage = page.isLastPage
+        let newItemsCount = isLastPage ? pageItems.count : pageSize
+        
+        let mergeResult = mergePageItems(pageItems, offset: itemsOffset, count: newItemsCount)
+        
+        var newItemsValue = mergeResult.items
+        var hasChanges = mergeResult.hasChanges
+        
+        if isLastPage {
+            let newItemsCount = itemsOffset + newItemsCount
+            if newItemsValue.count > newItemsCount {
+                newItemsValue = Array(newItemsValue[0..<newItemsCount])
+                hasChanges = true
+            }
+        }
+        
+        return ItemsMergeResult(newItemsValue, hasChanges)
+    }
+    
+    private func mergePageItems(newItems: [TItem], offset: Int, count: Int) -> ItemsMergeResult {
         let maxIndex = offset + count
         
         if maxIndex < itemsValue.count {
             let subItems = Array(itemsValue[offset..<count])
             if subItems.isEquivalent(newItems) {
-                return nil
+                return ItemsMergeResult(itemsValue, false)
             }
         }
         
@@ -143,7 +178,7 @@ public class PagedListDataProvider<TItem, TPage: ItemsPageType where TPage.ItemT
             newItemIndex += 1
         }
         
-        return itemsValue
+        return ItemsMergeResult(allItems, true)
     }
     
     private func pageForIndex(index: Int) -> Int {
@@ -152,6 +187,14 @@ public class PagedListDataProvider<TItem, TPage: ItemsPageType where TPage.ItemT
     
     private func indexOnPage(index: Int) -> Int {
         return index % pageSize
+    }
+    
+    private func validatePageIndex(pageIndex: Int) -> Bool {
+        guard let lastPageIndex = lastPageIndex else {
+            return true
+        }
+        
+        return pageIndex <= lastPageIndex
     }
     
     public func _createLoadingPage(offset: Int, count: Int) -> Observable<TPage> {
