@@ -89,7 +89,7 @@ public class PagedListDataProvider<TItem, TPage: ItemsPageType where TPage.ItemT
             return loadingPage
         }
         
-        let newPageLoadingObservable = _createLoadingPage(pageIndex * pageSize, count: pageSize)
+        let newPageLoadingObservable = _createLoadingPageObservable(pageIndex * pageSize, count: pageSize)
             .observeOn(workingScheduler)
             .doOnNext({ [weak self] (page) in
                 self?.onPageDidLoaded(page, pageIndex: pageIndex)
@@ -197,7 +197,7 @@ public class PagedListDataProvider<TItem, TPage: ItemsPageType where TPage.ItemT
         return pageIndex <= lastPageIndex
     }
     
-    public func _createLoadingPage(offset: Int, count: Int) -> Observable<TPage> {
+    public func _createLoadingPageObservable(offset: Int, count: Int) -> Observable<TPage> {
         Utils.abstractMethod()
     }
 }
