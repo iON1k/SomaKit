@@ -21,9 +21,9 @@ extension Dictionary {
 }
 
 extension Array {
-    public func indexOfEquivalent(object: Equivalentable) -> Int? {
+    public func indexOfEquivalent(object: Element) -> Int? {
         return indexOf({ (element) -> Bool in
-            return object.isEquivalent(element)
+            return Utils.isEquivalentValues(element, value2: object)
         })
     }
     
@@ -33,17 +33,13 @@ extension Array {
 }
 
 extension Array: Equivalentable {
-    public func isEquivalent(other: Any) -> Bool {
-        guard let otherArray = other as? [Element] else {
-            return false
-        }
-        
-        guard count == otherArray.count else {
+    public func isEquivalent(other: Array) -> Bool {
+        guard count == other.count else {
             return false
         }
         
         for index in 0..<count {
-            if !Utils.isEquivalentValues(self[index], value2: otherArray[index]) {
+            if !Utils.isEquivalentValues(self[index], value2: other[index]) {
                 return false
             }
         }

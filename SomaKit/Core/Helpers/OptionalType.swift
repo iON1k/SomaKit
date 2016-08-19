@@ -7,16 +7,23 @@
 //
 
 
-public protocol OptionalType {
+public protocol _OptionalType {
+    var _value: Any { get }
     var hasValue: Bool { get }
 }
 
-public protocol OptionalValueType: OptionalType {
+extension _OptionalType where Self: OptionalType {
+    public var _value: Any {
+        return value
+    }
+}
+
+public protocol OptionalType: _OptionalType {
     associatedtype Wrapped
     var value: Wrapped { get }
 }
 
-extension Optional: OptionalValueType {
+extension Optional: OptionalType {
     public var value: Wrapped {
         return self!
     }

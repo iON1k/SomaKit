@@ -8,12 +8,17 @@
 
 public class MemoryCache<TKey: Hashable, TData>: CacheBase<TKey, TData> {
     private let memoryStore = MemoryStore<TKey, CacheDataType>()
+    private let clearOnMemoryWarning: Bool
     
-    public init(lifeTimeType: CacheLifeTimeType = .Forever) {
+    public init(lifeTimeType: CacheLifeTimeType = .Forever, clearOnMemoryWarning: Bool = false) {
+        self.clearOnMemoryWarning = clearOnMemoryWarning
+        
         super.init(sourceStore: memoryStore, lifeTimeType: lifeTimeType)
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(onMemoryWarning),
-                                                         name: UIApplicationDidReceiveMemoryWarningNotification, object: UIApplication.sharedApplication())
+        if clearOnMemoryWarning {
+            NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(onMemoryWarning),
+                                                             name: UIApplicationDidReceiveMemoryWarningNotification, object: UIApplication.sharedApplication())
+        }
     }
     
     public convenience init(lifeTime: CacheTimeType) {
@@ -21,7 +26,9 @@ public class MemoryCache<TKey: Hashable, TData>: CacheBase<TKey, TData> {
     }
     
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIApplicationDidReceiveMemoryWarningNotification, object: UIApplication.sharedApplication())
+        if clearOnMemoryWarning {
+            NSNotificationCenter.defaultCenter().removeObserver(self, name: UIApplicationDidReceiveMemoryWarningNotification, object: UIApplication.sharedApplication())
+        }
     }
     
     @objc private func onMemoryWarning() {

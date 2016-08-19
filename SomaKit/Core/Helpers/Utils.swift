@@ -42,7 +42,7 @@ extension Utils {
     }
     
     public static func isEquivalentValues<TValue>(value1: TValue, value2: TValue) -> Bool {
-        if let optionalValue1 = value1 as? OptionalType, optionalValue2 = value2 as? OptionalType {
+        if let optionalValue1 = value1 as? _OptionalType, optionalValue2 = value2 as? _OptionalType {
             let hasValue1 = optionalValue1.hasValue
             let hasValue2 = optionalValue2.hasValue
             guard hasValue1 && hasValue2 else {
@@ -56,7 +56,7 @@ extension Utils {
             }
         }
         
-        guard let equivalentableValue1 = value1 as? Equivalentable else {
+        guard let equivalentableValue1 = value1 as? _Equivalentable else {
             return false
         }
         

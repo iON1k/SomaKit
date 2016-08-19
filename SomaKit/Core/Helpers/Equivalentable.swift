@@ -6,16 +6,26 @@
 //  Copyright © 2016 iON1k. All rights reserved.
 //
 
-public protocol Equivalentable {
+public protocol _Equivalentable {
     func isEquivalent(other: Any) -> Bool
 }
 
-extension Equivalentable where Self: Equatable  {
+extension _Equivalentable where Self: Equivalentable {
     public func isEquivalent(other: Any) -> Bool {
-        guard let castedOther = other as? Self else {
+        guard let castedOhter = other as? Self else {
             return false
         }
         
-        return self == castedOther
+        return isEquivalent(castedOhter)
+    }
+}
+
+public protocol Equivalentable: _Equivalentable {
+    func isEquivalent(other: Self) -> Bool
+}
+
+extension Equivalentable where Self: Equatable  {
+    public func isEquivalent(other: Self) -> Bool {
+        return self == other
     }
 }

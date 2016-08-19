@@ -6,7 +6,17 @@
 //  Copyright © 2016 iON1k. All rights reserved.
 //
 
-public protocol DefaultValueType {
+public protocol _DefaultValueType {
+    static var _defaultValue: Any { get }
+}
+
+extension _DefaultValueType where Self: DefaultValueType {
+    public static var _defaultValue: Any {
+        return defaultValue
+    }
+}
+
+public protocol DefaultValueType: _DefaultValueType {
     static var defaultValue: Self { get }
 }
 

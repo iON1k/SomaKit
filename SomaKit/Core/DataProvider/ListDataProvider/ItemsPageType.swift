@@ -11,14 +11,13 @@ public protocol ItemsPageType {
     
     var items: [ItemType] { get }
     var isLastPage: Bool { get }
-    var pageSize: Int { get }
 }
 
 public class SimpleItemsPage<TItem>: ItemsPageType {
     public typealias ItemType = TItem
     
     public let items: [ItemType]
-    public let pageSize: Int
+    private let pageSize: Int
     
     public var isLastPage: Bool {
         return items.count < pageSize

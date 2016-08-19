@@ -8,7 +8,7 @@
 
 import RxSwift
 
-public extension Observable where Element: OptionalValueType {
+public extension Observable where Element: OptionalType {
     public func ignoreNil() -> Observable<E.Wrapped> {
         return self.filter({ (element) -> Bool in
                 return element.hasValue

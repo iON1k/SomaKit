@@ -33,11 +33,7 @@ public class ArrayChangesCalculator {
         var equivalentElementsIndexes = [EquivalentIndexesPair]()
         
         for (newIndex, newElement) in newSource.enumerate() {
-            guard let equivalentableElement = newElement as? Equivalentable else {
-                continue;
-            }
-            
-            if let oldIndex = oldSource.indexOfEquivalent(equivalentableElement) {
+            if let oldIndex = oldSource.indexOfEquivalent(newElement) {
                 equivalentElementsIndexes.append((oldIndex, newIndex))
             }
         }
