@@ -9,7 +9,7 @@
 import Foundation
 
 public class LazyValue<TValue> {
-    public typealias InitializeHandler = Void -> TValue
+    public typealias FactoryType = Void -> TValue
     
     public var value: TValue {
         if let innerValue = innerValue {
@@ -21,28 +21,28 @@ public class LazyValue<TValue> {
                 return innerValue
             }
             
-            guard let initializeHandler = self.initializeHandler else {
+            guard let factory = self.factory else {
                 Debug.fatalError("LazyReadOnly not setted up initializeHandler")
             }
             
-            let initializedValue = initializeHandler()
+            let initializedValue = factory()
             self.innerValue = initializedValue
             
             return initializedValue
         }
     }
     
-    public func initialize(initializeHandler: InitializeHandler) {
+    public func factory(factory: FactoryType) {
         lock.sync {
-            guard let initializeHandler = self.initializeHandler else {
+            guard let factory = self.factory else {
                 Debug.fatalError("LazyReadOnly already seted up initializeHandler")
             }
             
-            self.initializeHandler = initializeHandler
+            self.factory = factory
         }
     }
     
     private var innerValue: TValue?
-    private var initializeHandler: InitializeHandler?
+    private var factory: FactoryType?
     private let lock = SyncLock()
 }

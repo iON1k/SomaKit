@@ -55,10 +55,10 @@ public class ApiRequestBase<TResponse, TManager: ApiRequestManagerType>: Request
     
     public override init() {
         super.init()
-        cachingKeyValue.initialize(buildcachingKey)
+        cachingKeyValue.factory(buildCachingKey)
     }
     
-    private func buildcachingKey() -> String {
+    private func buildCachingKey() -> String {
         var resultString = ""
         
         resultString += methodType.rawValue

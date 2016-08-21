@@ -12,42 +12,44 @@ public class DataLoader<TData>: DataProviderType {
     public typealias DataType = TData
     public typealias SourceDataHandler = Void -> Observable<DataType>
     
-    private let dataValue: Variable<DataType>
-    
+    private let dataValue = Variable<DataType?>(nil)
     private let sourceProvider: AnyDataProvider<TData>
-    private let defaultValue: DataType
+    
+    private let syncLock = SyncLock()
+    private var loadingObservable: Observable<DataType>?
     
     public func dataObservable() -> Observable<DataType> {
         return dataValue.asObservable()
+            .ignoreNil()
     }
     
-    public var data: DataType {
-        return dataValue.value
+    public func loadData() -> Observable<DataType> {
+        return Observable.deferred({ () -> Observable<DataType> in
+            return self.syncLock.sync({ () -> Observable<DataType> in
+                if let loadingObservable = self.loadingObservable {
+                    return loadingObservable
+                } else {
+                    let loadingObservable =
+                        self.sourceProvider.dataObservable()
+                        .doOnNext { (data) in
+                            self.dataValue <= data
+                        }
+                        .shareReplay(1)
+                    
+                    self.loadingObservable = loadingObservable
+                    return loadingObservable
+                }
+            })
+        })
     }
     
-    public func fetchData() -> Observable<DataType> {
-        return sourceProvider.dataObservable()
-            .doOnNext { (data) in
-                self.dataValue <= data
-            }
-    }
-    
-    public init<TDataProvider: DataProviderConvertibleType where TDataProvider.DataType == DataType>(dataProvider: TDataProvider, defaultValue: DataType) {
+    public init<TDataProvider: DataProviderConvertibleType where TDataProvider.DataType == DataType>(dataProvider: TDataProvider) {
         self.sourceProvider = dataProvider.asAnyDataProvider()
-        self.defaultValue = defaultValue
-        
-        dataValue = Variable(defaultValue)
     }
 }
 
 public extension DataProviderConvertibleType {
-    public func asDataLoader(defaultValue: DataType) -> DataLoader<DataType> {
-        return DataLoader(dataProvider: self, defaultValue: defaultValue)
-    }
-}
-
-public extension DataProviderConvertibleType where DataType: DefaultValueType {
     public func asDataLoader() -> DataLoader<DataType> {
-        return asDataLoader(DataType.defaultValue)
+        return DataLoader(dataProvider: self)
     }
 }
