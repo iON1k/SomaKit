@@ -49,8 +49,8 @@ public class ApiRequestBase<TResponse, TManager: ApiRequestManagerType>: Request
         return cachingKeyValue.value
     }
     
-    public override func _requestEngine(manager: ManagerType) -> Observable<TResponse> {
-        return manager.apiRequestEngine(self)
+    public override func _requestEngine() -> Observable<TResponse> {
+        return _manager.apiRequestEngine(self)
     }
     
     public override init(manager: ManagerType) {

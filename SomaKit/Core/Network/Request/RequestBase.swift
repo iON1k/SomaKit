@@ -33,35 +33,42 @@ public class RequestBase<TResponse, TManager: RequestManagerType>: RequestType {
     public typealias ResponseType = TResponse
     public typealias ManagerType = TManager
     
-    private let manager: ManagerType
+    public let _manager: ManagerType
     
     public func response() -> Observable<ResponseType> {
         return Observable.deferred({ () -> Observable<ResponseType> in
-            self.manager.requestStarted(self)
+            self._manager.requestStarted(self)
             
             if let validationError = self._validateParams() {
                 throw validationError
             }
             
-            return self._requestEngine(self.manager)
-        })
-        .observeOn(_workingScheduler)
-        .doOnNext({ (response) in
-            if let responseError = self._validateResponse(response) {
-                throw responseError
-            }
+            return self.execute()
         })
         .doOnNext({ (response) in
-            self.manager.requestGetResponse(self, response: response)
+            self._manager.requestGetResponse(self, response: response)
         })
         .doOnError({ (error) in
-            self.manager.requestFailed(self, error: error)
+            self._manager.requestFailed(self, error: error)
         })
         .subscribeOn(_workingScheduler)
     }
     
+    private func execute() -> Observable<ResponseType> {
+        return self._requestEngine()
+            .observeOn(_workingScheduler)
+            .doOnNext({ (response) in
+                if let responseError = self._validateResponse(response) {
+                    throw responseError
+                }
+            })
+            .retryWhen({ (errors) -> Observable<Void> in
+                return self._retryOnErrors(errors)
+            })
+    }
+    
     public init(manager: ManagerType) {
-        self.manager = manager
+        self._manager = manager
     }
     
     public var _workingScheduler: ImmediateSchedulerType {
@@ -76,7 +83,11 @@ public class RequestBase<TResponse, TManager: RequestManagerType>: RequestType {
         return nil
     }
     
-    public func _requestEngine(manager: ManagerType) -> Observable<ResponseType> {
+    public func _requestEngine() -> Observable<ResponseType> {
         Utils.abstractMethod()
+    }
+    
+    public func _retryOnErrors(errors: Observable<ErrorType>) -> Observable<Void> {
+        return Observable.empty()
     }
 }
