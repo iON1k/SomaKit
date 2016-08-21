@@ -36,22 +36,23 @@ public class RequestBase<TResponse, TManager: RequestManagerType>: RequestType {
     public let _manager: ManagerType
     
     public func response() -> Observable<ResponseType> {
-        return Observable.deferred({ () -> Observable<ResponseType> in
-            self._manager.requestStarted(self)
-            
-            if let validationError = self._validateParams() {
-                throw validationError
-            }
-            
-            return self.execute()
-        })
-        .doOnNext({ (response) in
-            self._manager.requestGetResponse(self, response: response)
-        })
-        .doOnError({ (error) in
-            self._manager.requestFailed(self, error: error)
-        })
-        .subscribeOn(_workingScheduler)
+        return _prepareExecuting()
+            .flatMap({ () -> Observable<ResponseType> in
+                self._manager.requestStarted(self)
+                
+                if let validationError = self._validateParams() {
+                    throw validationError
+                }
+                
+                return self.execute()
+            })
+            .doOnNext({ (response) in
+                self._manager.requestGetResponse(self, response: response)
+            })
+            .doOnError({ (error) in
+                self._manager.requestFailed(self, error: error)
+            })
+            .subscribeOn(_workingScheduler)
     }
     
     private func execute() -> Observable<ResponseType> {
@@ -85,6 +86,10 @@ public class RequestBase<TResponse, TManager: RequestManagerType>: RequestType {
     
     public func _requestEngine() -> Observable<ResponseType> {
         Utils.abstractMethod()
+    }
+    
+    public func _prepareExecuting() -> Observable<Void> {
+        return Observable.just()
     }
     
     public func _retryOnErrors(errors: Observable<ErrorType>) -> Observable<Void> {
