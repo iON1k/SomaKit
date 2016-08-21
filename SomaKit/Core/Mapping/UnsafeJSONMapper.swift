@@ -12,44 +12,57 @@ public class UnsafeJSONMapper {
     private typealias MappingHandler = String -> Any
     private var mappingHandlers: [String : MappingHandler] = [:]
     
+    private let syncLock = SyncLock()
+    
     public func registerType<TMappable: Mappable>(mappableType: TMappable.Type) {
         registerType(mappableType, mapperKey: defaultKeyForType(mappableType))
     }
     
-    public func registerTypeIfNeeded<TMappable: Mappable>(mappableType: TMappable.Type) {
-        let mapperKey = defaultKeyForType(mappableType)
-        if mappingHandlers[mapperKey] != nil {
+    public func registerType<TMappable: Mappable>(mappableType: TMappable.Type, mapperKey: String) {
+        syncLock.sync() {
+            unsafeRegisterType(mappableType, mapperKey: mapperKey)
+        }
+    }
+    
+    public func unsafeRegisterType<TMappable: Mappable>(mappableType: TMappable.Type, mapperKey: String) {
+        guard unsafeMappingHandler(mapperKey) == nil else {
             return
         }
         
-        registerType(mappableType, mapperKey: mapperKey)
-    }
-    
-    public func registerType<TMappable: Mappable>(mappableType: TMappable.Type, mapperKey: String) {
         mappingHandlers[mapperKey] = { (jsonString) -> Any in
             return Mapper<TMappable>().map(jsonString)
         }
     }
     
-    public func map<TObject>(jsonString: String) throws -> TObject {
-        return try map(jsonString, mapperKey: defaultKeyForType(TObject.Type))
+    public func map<TResult>(jsonString: String) throws -> TResult {
+        return try map(jsonString, mapperKey: defaultKeyForType(TResult.Type))
     }
     
-    public func map<TObject>(jsonString: String, mapperKey: String) throws -> TObject {
-        guard let mappingHandler = mappingHandlers[mapperKey] else {
+    public func map<TResult>(jsonString: String, mapperKey: String) throws -> TResult {
+        guard let mappingHandler = mappingHandler(mapperKey) else {
             throw SomaError("UnsafeJSONStringMapper no register type with key \(mapperKey)")
         }
         
         let resultObject = mappingHandler(jsonString)
         
-        if let resultObject = resultObject as? TObject {
+        if let resultObject = resultObject as? TResult {
             return resultObject
         } else {
             throw SomaError("UnsafeJSONStringMapper json mapping error:\n\(jsonString)")
         }
     }
     
-    private func defaultKeyForType<TObject>(mappableType: TObject.Type) -> String {
+    private func mappingHandler(mapperKey: String) -> MappingHandler? {
+        return syncLock.sync() {
+            return unsafeMappingHandler(mapperKey)
+        }
+    }
+    
+    private func unsafeMappingHandler(mapperKey: String) -> MappingHandler? {
+        return mappingHandlers[mapperKey]
+    }
+    
+    private func defaultKeyForType<TResult>(mappableType: TResult.Type) -> String {
         return Utils.typeName(mappableType)
     }
 }

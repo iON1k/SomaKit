@@ -39,6 +39,7 @@
 		24E1C0D51D22ED3300533D4E /* ImageRounding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E1C0D41D22ED3300533D4E /* ImageRounding.swift */; };
 		24E1C0D71D22F14200533D4E /* ImageFiltering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E1C0D61D22F14200533D4E /* ImageFiltering.swift */; };
 		24E1C0D91D22F48C00533D4E /* ImageBluring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E1C0D81D22F48C00533D4E /* ImageBluring.swift */; };
+		24E2C0841D6A406A001025CA /* AlamoApiPartBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E2C0831D6A406A001025CA /* AlamoApiPartBase.swift */; };
 		24E2CFAF1D21163D00967097 /* BundleImageSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E2CFAE1D21163D00967097 /* BundleImageSource.swift */; };
 		24E2CFB11D211AE200967097 /* FileImageSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E2CFB01D211AE200967097 /* FileImageSource.swift */; };
 		24E2CFB51D21239500967097 /* FakeStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E2CFB41D21239500967097 /* FakeStore.swift */; };
@@ -147,6 +148,7 @@
 		24E1C0D41D22ED3300533D4E /* ImageRounding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageRounding.swift; sourceTree = "<group>"; };
 		24E1C0D61D22F14200533D4E /* ImageFiltering.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageFiltering.swift; sourceTree = "<group>"; };
 		24E1C0D81D22F48C00533D4E /* ImageBluring.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageBluring.swift; sourceTree = "<group>"; };
+		24E2C0831D6A406A001025CA /* AlamoApiPartBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlamoApiPartBase.swift; sourceTree = "<group>"; };
 		24E2CFAE1D21163D00967097 /* BundleImageSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BundleImageSource.swift; sourceTree = "<group>"; };
 		24E2CFB01D211AE200967097 /* FileImageSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileImageSource.swift; sourceTree = "<group>"; };
 		24E2CFB41D21239500967097 /* FakeStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakeStore.swift; sourceTree = "<group>"; };
@@ -243,6 +245,7 @@
 			children = (
 				241B948A1D6932B00008D22F /* AlamoJsonRequestManager.swift */,
 				241AF7D21D6A14BA004A8114 /* ApiRequestBase.swift */,
+				24E2C0831D6A406A001025CA /* AlamoApiPartBase.swift */,
 			);
 			path = Api;
 			sourceTree = "<group>";
@@ -792,6 +795,7 @@
 				242B40021D4BE0060010C3CB /* Debug.swift in Sources */,
 				24E3CDF71D1FE7B3001BCDB2 /* MemoryCache.swift in Sources */,
 				242B40001D4BD6400010C3CB /* TableSectionElementsAttributes.swift in Sources */,
+				24E2C0841D6A406A001025CA /* AlamoApiPartBase.swift in Sources */,
 				24E3CE1E1D1FE7B3001BCDB2 /* StoreDataProvider.swift in Sources */,
 				24E2CFBD1D21459500967097 /* LazyValue.swift in Sources */,
 				24E3CDF41D1FE7B3001BCDB2 /* CacheBase.swift in Sources */,
