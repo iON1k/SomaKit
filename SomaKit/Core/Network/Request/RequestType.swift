@@ -8,32 +8,9 @@
 
 import RxSwift
 
-public protocol RequestType: ObservableConvertibleType, DataProviderConvertibleType, RequestConvertibleType {
+public protocol RequestType {
     associatedtype ResponseType
+    associatedtype ManagerType
     
-    func rxResponse() -> Observable<ResponseType>
-}
-
-extension RequestType {
-    public typealias E = ResponseType
-    
-    public func asObservable() -> Observable<ResponseType> {
-        return Observable.deferred({ () -> Observable<ResponseType> in
-            return self.rxResponse()
-        })
-    }
-}
-
-extension RequestType {
-    public typealias DataType = ResponseType
-    
-    public func asAnyDataProvider() -> AnyDataProvider<ResponseType> {
-        return AnyDataProvider(rxResponse)
-    }
-}
-
-extension RequestType {
-    public func asAnyRequest() -> AnyRequest<ResponseType> {
-        return AnyRequest(rxResponse)
-    }
+    func execute(manager: ManagerType) -> Observable<ResponseType>
 }
