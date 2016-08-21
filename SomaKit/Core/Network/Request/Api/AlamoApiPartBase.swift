@@ -15,7 +15,7 @@ public class AlamoApiPartBase<TManager: AlamoJsonRequestManager> {
         self.requestManager = requestManager
     }
     
-    public func _createRequest<TRequest: RequestType where TRequest.ResponseType: Mappable>(requestFactory: TManager -> TRequest) -> TRequest {
+    public func _request<TRequest: RequestType where TRequest.ResponseType: Mappable>(requestFactory: TManager -> TRequest) -> TRequest {
         requestManager.registerResponse(TRequest.ResponseType.self)
         return requestFactory(requestManager)
     }
