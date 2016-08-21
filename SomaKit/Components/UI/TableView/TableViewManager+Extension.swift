@@ -67,10 +67,12 @@ extension TableViewManager {
             .subscribe()
     }
     
-    public func bindDataSource(dataSource: Observable<SectionsModels>, updatingHandler: UpdatingHandler = UpdatingEvent.defaultUpdatingHandler) -> Disposable {
-        return dataSource.doOnNext({ (sectionsData) in
-            self.updateDataAsync(sectionsData, updatingHandler: updatingHandler)
-        })
-        .subscribe()
+    public func bindDataSource<TDataSource: ObservableConvertibleType
+        where TDataSource.E == SectionsModels>(dataSource: TDataSource, updatingHandler: UpdatingHandler = UpdatingEvent.defaultUpdatingHandler) -> Disposable {
+        return dataSource.asObservable()
+            .doOnNext({ (sectionsData) in
+                self.updateDataAsync(sectionsData, updatingHandler: updatingHandler)
+            })
+            .subscribe()
     }
 }

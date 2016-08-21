@@ -26,7 +26,7 @@ public protocol ApiRequestManagerType: RequestManagerType {
     func apiRequestEngine<TRequest: RequestType where TRequest: _ApiRequestBase>(request: TRequest) -> Observable<TRequest.ResponseType>
 }
 
-public class ApiRequestBase<TResponse, TManager: ApiRequestManagerType>: RequestBase<TResponse, TManager>, _ApiRequestBase, CachingKeyProvider {
+public class ApiRequestBase<TResponse, TManager: ApiRequestManagerType>: RequestBase<TResponse, TManager>, _ApiRequestBase {
     public var method: String {
         Utils.abstractMethod()
     }
@@ -53,8 +53,8 @@ public class ApiRequestBase<TResponse, TManager: ApiRequestManagerType>: Request
         return manager.apiRequestEngine(self)
     }
     
-    public override init() {
-        super.init()
+    public override init(manager: ManagerType) {
+        super.init(manager: manager)
         cachingKeyValue.factory(buildCachingKey)
     }
     
@@ -65,13 +65,28 @@ public class ApiRequestBase<TResponse, TManager: ApiRequestManagerType>: Request
         resultString += method
         
         if let params = params {
-            resultString += params.stringKey
+            let filteredParams = params.filter({ (element) -> Bool in
+                return self._shouldUseParamInCachingKey(element.0, paramValue: element.1)
+            })
+            
+            resultString += filteredParams.stringKey
         }
         
         if let headers = headers {
-            resultString += headers.stringKey
+            let filteredHeaderParams = headers.filter({ (element) -> Bool in
+                return self._shouldUseHeaderParamInCachingKey(element.0, paramValue: element.1)
+            })
+            resultString += filteredHeaderParams.stringKey
         }
         
         return resultString
+    }
+    
+    public func _shouldUseParamInCachingKey(paramName: String, paramValue: AnyObject) -> Bool {
+        return true
+    }
+    
+    public func _shouldUseHeaderParamInCachingKey(paramName: String, paramValue: String) -> Bool {
+        return true
     }
 }

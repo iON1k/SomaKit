@@ -33,15 +33,17 @@ public class RequestBase<TResponse, TManager: RequestManagerType>: RequestType {
     public typealias ResponseType = TResponse
     public typealias ManagerType = TManager
     
-    public func execute(manager: ManagerType) -> Observable<ResponseType> {
+    private let manager: ManagerType
+    
+    public func response() -> Observable<ResponseType> {
         return Observable.deferred({ () -> Observable<ResponseType> in
-            manager.requestStarted(self)
+            self.manager.requestStarted(self)
             
             if let validationError = self._validateParams() {
                 throw validationError
             }
             
-            return self._requestEngine(manager)
+            return self._requestEngine(self.manager)
         })
         .observeOn(_workingScheduler)
         .doOnNext({ (response) in
@@ -50,12 +52,16 @@ public class RequestBase<TResponse, TManager: RequestManagerType>: RequestType {
             }
         })
         .doOnNext({ (response) in
-            manager.requestGetResponse(self, response: response)
+            self.manager.requestGetResponse(self, response: response)
         })
         .doOnError({ (error) in
-            manager.requestFailed(self, error: error)
+            self.manager.requestFailed(self, error: error)
         })
         .subscribeOn(_workingScheduler)
+    }
+    
+    public init(manager: ManagerType) {
+        self.manager = manager
     }
     
     public var _workingScheduler: ImmediateSchedulerType {

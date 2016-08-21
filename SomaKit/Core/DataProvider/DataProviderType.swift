@@ -10,7 +10,7 @@ import RxSwift
 
 public protocol DataProviderType: ObservableConvertibleType, DataProviderConvertibleType {
     associatedtype DataType
-    func dataObservable() -> Observable<DataType>
+    func data() -> Observable<DataType>
 }
 
 extension DataProviderType {
@@ -18,13 +18,13 @@ extension DataProviderType {
     
     public func asObservable() -> Observable<DataType> {
         return Observable.deferred({ () -> Observable<DataType> in
-            return self.dataObservable()
+            return self.data()
         })
     }
 }
 
 extension DataProviderType {
     public func asAnyDataProvider() -> AnyDataProvider<DataType> {
-        return AnyDataProvider(dataObservable)
+        return AnyDataProvider(data)
     }
 }

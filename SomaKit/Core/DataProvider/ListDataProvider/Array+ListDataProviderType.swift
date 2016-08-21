@@ -23,7 +23,7 @@ extension Array: DataProviderType {
         return Observable.just(index < count ? self[index] : nil)
     }
     
-    public func dataObservable() -> Observable<[ItemType?]> {
+    public func data() -> Observable<[ItemType?]> {
         return Observable.just(self.optionalCovariance())
     }
 }

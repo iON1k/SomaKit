@@ -8,9 +8,14 @@
 
 import RxSwift
 
-public protocol RequestType {
+public protocol RequestType: DataProviderConvertibleType {
     associatedtype ResponseType
-    associatedtype ManagerType
-    
-    func execute(manager: ManagerType) -> Observable<ResponseType>
+
+    func response() -> Observable<ResponseType>
+}
+
+extension RequestType {
+    public func asAnyDataProvider() -> AnyDataProvider<ResponseType> {
+        return AnyDataProvider(response)
+    }
 }

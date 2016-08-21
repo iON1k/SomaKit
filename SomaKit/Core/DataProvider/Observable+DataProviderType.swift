@@ -12,8 +12,6 @@ extension Observable: DataProviderConvertibleType {
     public typealias DataType = E
     
     public func asAnyDataProvider() -> AnyDataProvider<DataType> {
-        return AnyDataProvider() {
-            return self
-        }
+        return AnyDataProvider({ self })
     }
 }

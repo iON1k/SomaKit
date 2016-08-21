@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		241AF7D31D6A14BA004A8114 /* ApiRequestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241AF7D21D6A14BA004A8114 /* ApiRequestBase.swift */; };
 		241B948D1D6932B00008D22F /* AlamoJsonRequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241B948A1D6932B00008D22F /* AlamoJsonRequestManager.swift */; };
-		241B948F1D6932B00008D22F /* ApiRequestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241B948C1D6932B00008D22F /* ApiRequestBase.swift */; };
 		2425A8F01D574B02009A45D1 /* Variable+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2425A8EF1D574B02009A45D1 /* Variable+Extension.swift */; };
 		24273D2B1D21F0E00071C283 /* DiskMemoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24273D2A1D21F0E00071C283 /* DiskMemoryStore.swift */; };
 		242B3FFE1D4BD1350010C3CB /* TableElementPresenterType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 242B3FFD1D4BD1350010C3CB /* TableElementPresenterType.swift */; };
@@ -47,8 +47,6 @@
 		24E2CFBB1D2134F700967097 /* DataProviderType+Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E2CFBA1D2134F700967097 /* DataProviderType+Cache.swift */; };
 		24E2CFBD1D21459500967097 /* LazyValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E2CFBC1D21459500967097 /* LazyValue.swift */; };
 		24E3480E1D5BDA4100A926B6 /* ItemsPageType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E3480D1D5BDA4100A926B6 /* ItemsPageType.swift */; };
-		24E3BF4E1D69B6B400E0A0D6 /* RequestDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E3BF4D1D69B6B400E0A0D6 /* RequestDataProvider.swift */; };
-		24E3BF501D69BAC700E0A0D6 /* ApiClientBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E3BF4F1D69BAC700E0A0D6 /* ApiClientBase.swift */; };
 		24E3CDAD1D1FE753001BCDB2 /* SomaKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 24E3CDAC1D1FE753001BCDB2 /* SomaKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		24E3CDF21D1FE7B3001BCDB2 /* CacheableDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E3CDB61D1FE7B3001BCDB2 /* CacheableDataProvider.swift */; };
 		24E3CDF31D1FE7B3001BCDB2 /* CacheManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E3CDB71D1FE7B3001BCDB2 /* CacheManagedObject.swift */; };
@@ -117,8 +115,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		241AF7D21D6A14BA004A8114 /* ApiRequestBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiRequestBase.swift; sourceTree = "<group>"; };
 		241B948A1D6932B00008D22F /* AlamoJsonRequestManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlamoJsonRequestManager.swift; sourceTree = "<group>"; };
-		241B948C1D6932B00008D22F /* ApiRequestBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiRequestBase.swift; sourceTree = "<group>"; };
 		2425A8EF1D574B02009A45D1 /* Variable+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Variable+Extension.swift"; sourceTree = "<group>"; };
 		24273D2A1D21F0E00071C283 /* DiskMemoryStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiskMemoryStore.swift; sourceTree = "<group>"; };
 		242B3FFD1D4BD1350010C3CB /* TableElementPresenterType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableElementPresenterType.swift; sourceTree = "<group>"; };
@@ -157,8 +155,6 @@
 		24E2CFBA1D2134F700967097 /* DataProviderType+Cache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DataProviderType+Cache.swift"; sourceTree = "<group>"; };
 		24E2CFBC1D21459500967097 /* LazyValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LazyValue.swift; sourceTree = "<group>"; };
 		24E3480D1D5BDA4100A926B6 /* ItemsPageType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemsPageType.swift; sourceTree = "<group>"; };
-		24E3BF4D1D69B6B400E0A0D6 /* RequestDataProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestDataProvider.swift; sourceTree = "<group>"; };
-		24E3BF4F1D69BAC700E0A0D6 /* ApiClientBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiClientBase.swift; sourceTree = "<group>"; };
 		24E3CDA91D1FE753001BCDB2 /* SomaKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SomaKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		24E3CDAC1D1FE753001BCDB2 /* SomaKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SomaKit.h; sourceTree = "<group>"; };
 		24E3CDAE1D1FE753001BCDB2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -246,7 +242,7 @@
 			isa = PBXGroup;
 			children = (
 				241B948A1D6932B00008D22F /* AlamoJsonRequestManager.swift */,
-				241B948C1D6932B00008D22F /* ApiRequestBase.swift */,
+				241AF7D21D6A14BA004A8114 /* ApiRequestBase.swift */,
 			);
 			path = Api;
 			sourceTree = "<group>";
@@ -443,8 +439,6 @@
 				241B94891D6932B00008D22F /* Api */,
 				24E3CDE51D1FE7B3001BCDB2 /* RequestType.swift */,
 				24E3CDE21D1FE7B3001BCDB2 /* RequestBase.swift */,
-				24E3BF4D1D69B6B400E0A0D6 /* RequestDataProvider.swift */,
-				24E3BF4F1D69BAC700E0A0D6 /* ApiClientBase.swift */,
 			);
 			path = Request;
 			sourceTree = "<group>";
@@ -759,7 +753,6 @@
 				24E3CE121D1FE7B3001BCDB2 /* UnsafeJSONMapper.swift in Sources */,
 				244179AE1D5651F3003B6089 /* Equivalentable.swift in Sources */,
 				24EB57E81D2C229C0062DDDB /* SomaViewController.swift in Sources */,
-				24E3BF4E1D69B6B400E0A0D6 /* RequestDataProvider.swift in Sources */,
 				24EB57EA1D2C25920062DDDB /* ModuleViewController.swift in Sources */,
 				24EB57ED1D2C2C0F0062DDDB /* UiBindable.swift in Sources */,
 				24E3CE211D1FE7B3001BCDB2 /* TransformStore.swift in Sources */,
@@ -797,7 +790,6 @@
 				24E3CDF21D1FE7B3001BCDB2 /* CacheableDataProvider.swift in Sources */,
 				24E3CDFB1D1FE7B3001BCDB2 /* SameTypeConverter.swift in Sources */,
 				242B40021D4BE0060010C3CB /* Debug.swift in Sources */,
-				24E3BF501D69BAC700E0A0D6 /* ApiClientBase.swift in Sources */,
 				24E3CDF71D1FE7B3001BCDB2 /* MemoryCache.swift in Sources */,
 				242B40001D4BD6400010C3CB /* TableSectionElementsAttributes.swift in Sources */,
 				24E3CE1E1D1FE7B3001BCDB2 /* StoreDataProvider.swift in Sources */,
@@ -848,7 +840,7 @@
 				24E3CE0E1D1FE7B3001BCDB2 /* Log.swift in Sources */,
 				24E3CE1D1D1FE7B3001BCDB2 /* StoreDataProvider+Async.swift in Sources */,
 				241B948D1D6932B00008D22F /* AlamoJsonRequestManager.swift in Sources */,
-				241B948F1D6932B00008D22F /* ApiRequestBase.swift in Sources */,
+				241AF7D31D6A14BA004A8114 /* ApiRequestBase.swift in Sources */,
 				242B40041D4BE5F30010C3CB /* DefaultTableElementAttributes.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

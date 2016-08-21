@@ -39,7 +39,7 @@ public class PagedListDataProvider<TItem, TPage: ItemsPageType where TPage.ItemT
         }
     }
     
-    public func dataObservable() -> Observable<[ItemType?]> {
+    public func data() -> Observable<[ItemType?]> {
         return itemsValueSubject
     }
     

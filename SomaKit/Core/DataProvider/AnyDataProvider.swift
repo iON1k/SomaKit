@@ -14,7 +14,7 @@ public class AnyDataProvider<TData>: DataProviderType {
     
     private let sourceDataHandler: DataHandlerType
     
-    public func dataObservable() -> Observable<DataType> {
+    public func data() -> Observable<DataType> {
         return sourceDataHandler()
     }
     

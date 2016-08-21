@@ -19,7 +19,7 @@ public class StoreDataProvider<TData, TKey>: DataProviderType {
     private let key: KeyType
     private let defaultValue: DataType
     
-    public func dataObservable() -> Observable<DataType> {
+    public func data() -> Observable<DataType> {
         return dataValue.asObservable()
     }
     

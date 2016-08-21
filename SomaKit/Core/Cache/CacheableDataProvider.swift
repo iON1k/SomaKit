@@ -57,7 +57,7 @@ public class CacheableDataProvider<TKey, TData>: DataProviderType {
     private let cacheKey: TKey
     private let disposeBag = DisposeBag()
     
-    public func dataObservable() -> Observable<DataType> {
+    public func data() -> Observable<DataType> {
         return Observable.deferred({ () -> Observable<DataType> in
             switch self.behavior {
             case .NoCache(let dataToCachePredicate):
@@ -100,7 +100,7 @@ public class CacheableDataProvider<TKey, TData>: DataProviderType {
     }
     
     private func sourceDataProviderObservable(dataToCachePredicate: SourceDataType -> Bool) -> Observable<DataType> {
-        return sourceProvider.dataObservable()
+        return sourceProvider.data()
             .doOnNext({ (data) in
                 if dataToCachePredicate(data) {
                     self.asyncSaveToCache(data)
