@@ -24,7 +24,7 @@ public class StoreDataProvider<TData, TKey>: DataProviderType {
     }
     
     public init<TStore: StoreConvertibleType where TStore.DataType == DataType, TStore.KeyType == KeyType>(store: TStore, key: KeyType, defaultValue: DataType) {
-        self.store = store.asAnyStore()
+        self.store = store.asStore()
         
         self.key = key
         self.defaultValue = defaultValue

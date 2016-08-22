@@ -11,7 +11,7 @@ import RxSwift
 extension Observable: DataProviderConvertibleType {
     public typealias DataType = E
     
-    public func asAnyDataProvider() -> AnyDataProvider<DataType> {
+    public func asDataProvider() -> AnyDataProvider<DataType> {
         return AnyDataProvider({ self })
     }
 }

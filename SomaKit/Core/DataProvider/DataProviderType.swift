@@ -24,7 +24,7 @@ extension DataProviderType {
 }
 
 extension DataProviderType {
-    public func asAnyDataProvider() -> AnyDataProvider<DataType> {
+    public func asDataProvider() -> AnyDataProvider<DataType> {
         return AnyDataProvider(data)
     }
 }

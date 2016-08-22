@@ -11,5 +11,5 @@ import Foundation
 public protocol DataProviderConvertibleType {
     associatedtype DataType
     
-    func asAnyDataProvider() -> AnyDataProvider<DataType>
+    func asDataProvider() -> AnyDataProvider<DataType>
 }

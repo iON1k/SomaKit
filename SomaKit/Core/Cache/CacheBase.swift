@@ -35,7 +35,7 @@ public class CacheBase<TKey, TData>: StoreType {
     }
     
     public init<TStore: StoreConvertibleType where TStore.KeyType == KeyType, TStore.DataType == CacheDataType>(sourceStore: TStore, lifeTimeType: CacheLifeTimeType = .Forever) {
-        self.sourceStore = sourceStore.asAnyStore()
+        self.sourceStore = sourceStore.asStore()
         self.lifeTimeType = lifeTimeType
     }
     

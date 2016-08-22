@@ -24,7 +24,7 @@ public class AnyDataProvider<TData>: DataProviderType {
 }
 
 public extension AnyDataProvider {
-    public func asAnyDataProvider() -> AnyDataProvider<DataType> {
+    public func asDataProvider() -> AnyDataProvider<DataType> {
         return self
     }
 }

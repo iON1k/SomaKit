@@ -1,5 +1,5 @@
 //
-//  RequestBase.swift
+//  AbstractApiRequest.swift
 //  SomaKit
 //
 //  Created by Anton on 16.06.16.
@@ -29,23 +29,20 @@ extension RequestManagerType {
     }
 }
 
-public class RequestBase<TResponse, TManager: RequestManagerType>: RequestType {
+public class AbstractApiRequest<TResponse, TManager: RequestManagerType>: RequestType {
     public typealias ResponseType = TResponse
     public typealias ManagerType = TManager
     
     public let _manager: ManagerType
     
     public func response() -> Observable<ResponseType> {
-        return _prepareExecuting()
-            .flatMap({ () -> Observable<ResponseType> in
-                self._manager.requestStarted(self)
-                
-                if let validationError = self._validateParams() {
-                    throw validationError
-                }
-                
-                return self.execute()
-            })
+        return Observable.deferred({ () -> Observable<ResponseType> in
+            self._manager.requestStarted(self)
+            
+            try self._validateParams()
+            
+            return self.execute()
+        })
             .doOnNext({ (response) in
                 self._manager.requestGetResponse(self, response: response)
             })
@@ -56,15 +53,10 @@ public class RequestBase<TResponse, TManager: RequestManagerType>: RequestType {
     }
     
     private func execute() -> Observable<ResponseType> {
-        return self._requestEngine()
+        return _requestEngine()
             .observeOn(_workingScheduler)
             .doOnNext({ (response) in
-                if let responseError = self._validateResponse(response) {
-                    throw responseError
-                }
-            })
-            .retryWhen({ (errors) -> Observable<Void> in
-                return self._retryOnErrors(errors)
+                try self._validateResponse(response)
             })
     }
     
@@ -76,23 +68,15 @@ public class RequestBase<TResponse, TManager: RequestManagerType>: RequestType {
         return ConcurrentDispatchQueueScheduler(globalConcurrentQueueQOS: .Default)
     }
     
-    public func _validateParams() -> ErrorType? {
-        return nil
+    public func _validateParams() throws -> Void {
+        //Nothing
     }
     
-    public func _validateResponse(response: ResponseType) -> ErrorType? {
-        return nil
+    public func _validateResponse(response: ResponseType) throws -> Void {
+        //Nothing
     }
     
     public func _requestEngine() -> Observable<ResponseType> {
         Utils.abstractMethod()
-    }
-    
-    public func _prepareExecuting() -> Observable<Void> {
-        return Observable.just()
-    }
-    
-    public func _retryOnErrors(errors: Observable<ErrorType>) -> Observable<Void> {
-        return Observable.empty()
     }
 }

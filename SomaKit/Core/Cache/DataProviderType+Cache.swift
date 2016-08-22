@@ -6,11 +6,11 @@
 //  Copyright © 2016 iON1k. All rights reserved.
 //
 
-public extension DataProviderConvertibleType where Self: CachingKeyProvider {
+public extension DataProviderConvertibleType where Self: StringCachingKeyProvider {
     public func asCacheableProvider<TCacheStore: StoreConvertibleType
         where TCacheStore.KeyType == String,
         TCacheStore.DataType == DataType>(cacheStore: TCacheStore, behavior: CacheableDataProviderBehavior<DataType>
         = CacheableDataProviderBehaviors.dataOrCache()) -> CacheableDataProvider<String, DataType> {
-        return CacheableDataProvider(sourceProvider: asAnyDataProvider(), cacheStore: cacheStore, cacheKey: cachingKey, behavior: behavior)
+        return CacheableDataProvider(sourceProvider: self, cacheStore: cacheStore, cacheKey: stringCachingKey, behavior: behavior)
     }
 }

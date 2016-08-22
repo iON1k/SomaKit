@@ -10,5 +10,5 @@ public protocol StoreConvertibleType {
     associatedtype KeyType
     associatedtype DataType
     
-    func asAnyStore() -> AnyStore<KeyType, DataType>
+    func asStore() -> AnyStore<KeyType, DataType>
 }

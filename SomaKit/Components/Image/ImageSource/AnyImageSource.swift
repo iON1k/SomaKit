@@ -23,7 +23,7 @@ public class AnyImageSource<TKey: StringKeyConvertiable>: ImageSourceType {
 }
 
 extension AnyImageSource {
-    public func asAnyImageSource() -> AnyImageSource<KeyType> {
+    public func asImageSource() -> AnyImageSource<KeyType> {
         return self
     }
 }

@@ -15,7 +15,7 @@ public protocol ImageSourceType: ImageSourceConvertiable {
 }
 
 extension ImageSourceType {
-    public func asAnyImageSource() -> AnyImageSource<KeyType> {
+    public func asImageSource() -> AnyImageSource<KeyType> {
         return AnyImageSource(source: self)
     }
 }

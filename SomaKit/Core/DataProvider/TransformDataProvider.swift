@@ -20,7 +20,7 @@ public class TransformDataProvider<TData, TSourceData>: DataProviderType {
     }
     
     public init<TDataProvider: DataProviderConvertibleType where TDataProvider.DataType == TSourceData>(dataProvider: TDataProvider, transformHandler: TransformHandler) {
-        sourceDataProvider = dataProvider.asAnyDataProvider()
+        sourceDataProvider = dataProvider.asDataProvider()
         self.transformHandler = transformHandler
     }
 }

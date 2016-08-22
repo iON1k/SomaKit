@@ -15,7 +15,7 @@ public protocol ConverterType: ConverterConvertibleType {
 }
 
 extension ConverterType {
-    public func asAnyConverter() -> AnyConverter<Type1, Type2> {
+    public func asConverter() -> AnyConverter<Type1, Type2> {
         return AnyConverter(convertValue, convertValue)
     }
     

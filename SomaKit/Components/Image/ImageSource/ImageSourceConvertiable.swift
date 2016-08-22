@@ -9,5 +9,5 @@
 public protocol ImageSourceConvertiable {
     associatedtype KeyType: StringKeyConvertiable
     
-    func asAnyImageSource() -> AnyImageSource<KeyType>
+    func asImageSource() -> AnyImageSource<KeyType>
 }

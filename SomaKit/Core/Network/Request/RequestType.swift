@@ -8,7 +8,7 @@
 
 import RxSwift
 
-public protocol RequestType: DataProviderConvertibleType, ObservableConvertibleType {
+public protocol RequestType: DataProviderConvertibleType, ObservableConvertibleType, RequestConvertibleType {
     associatedtype ResponseType
 
     func response() -> Observable<ResponseType>
@@ -17,7 +17,7 @@ public protocol RequestType: DataProviderConvertibleType, ObservableConvertibleT
 extension RequestType {
     public typealias DataType = ResponseType
     
-    public func asAnyDataProvider() -> AnyDataProvider<ResponseType> {
+    public func asDataProvider() -> AnyDataProvider<ResponseType> {
         return AnyDataProvider(response)
     }
 }
@@ -27,5 +27,11 @@ extension RequestType {
     
     public func asObservable() -> Observable<ResponseType> {
         return response()
+    }
+}
+
+extension RequestType {
+    public func asRequest() -> AnyRequest<ResponseType> {
+        return AnyRequest(response)
     }
 }

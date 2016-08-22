@@ -15,7 +15,7 @@ public protocol StoreType: StoreConvertibleType {
 }
 
 extension StoreType {
-    public func asAnyStore() -> AnyStore<KeyType, DataType> {
+    public func asStore() -> AnyStore<KeyType, DataType> {
         return AnyStore(loadData, saveData)
     }
 }

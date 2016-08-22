@@ -93,8 +93,8 @@ public class CacheableDataProvider<TKey, TData>: DataProviderType {
         where TDataProvider.DataType == SourceDataType, TCacheStore.KeyType == TKey,
         TCacheStore.DataType == SourceDataType>(sourceProvider: TDataProvider, cacheStore: TCacheStore, cacheKey: TKey, behavior: CacheableDataProviderBehavior<SourceDataType>
             = CacheableDataProviderBehaviors.dataOrCache()) {
-        self.sourceProvider = sourceProvider.asAnyDataProvider()
-        self.cacheStore = cacheStore.asAnyStore()
+        self.sourceProvider = sourceProvider.asDataProvider()
+        self.cacheStore = cacheStore.asStore()
         self.cacheKey = cacheKey
         self.behavior = behavior
     }
@@ -132,7 +132,7 @@ public class CacheableDataProvider<TKey, TData>: DataProviderType {
 }
 
 public extension CacheableDataProvider {
-    public func asOnlyDataProvider() -> TransformDataProvider<TData, DataType> {
+    public func dataOnly() -> TransformDataProvider<TData, DataType> {
         return self.transform({ (sourceObservable) -> Observable<TData> in
             return sourceObservable.map({ (cacheState) -> TData in
                 return cacheState.data

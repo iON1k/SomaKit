@@ -85,9 +85,9 @@ public class ImageLoader<TKey: StringKeyConvertiable> {
         where TSource.KeyType == TKey, TImageCache.KeyType == String, TImageCache.DataType == UIImage,
         TProcessedImageCache.KeyType == String, TProcessedImageCache.DataType == UIImage>
         (imageSource: TSource, imageCache: TImageCache, processedImageCache: TProcessedImageCache) {
-        self.imageSource = imageSource.asAnyImageSource()
-        self.imageCache = imageCache.asAnyStore()
-        self.processedImageCache = processedImageCache.asAnyStore()
+        self.imageSource = imageSource.asImageSource()
+        self.imageCache = imageCache.asStore()
+        self.processedImageCache = processedImageCache.asStore()
     }
 }
 

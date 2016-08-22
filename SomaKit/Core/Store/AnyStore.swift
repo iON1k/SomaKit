@@ -30,7 +30,7 @@ public class AnyStore<TKey, TData>: StoreType {
     }
 }
 extension AnyStore {
-    public func asAny() -> AnyStore<KeyType, DataType> {
+    public func asStore() -> AnyStore<KeyType, DataType> {
         return self
     }
 }

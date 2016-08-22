@@ -33,7 +33,7 @@ public class AnyConverter<TValue1, TValue2>: ConverterType {
 }
 
 extension AnyConverter {
-    public func asAnyConverter() -> AnyConverter<Type1, Type2> {
+    public func asConverter() -> AnyConverter<Type1, Type2> {
         return self
     }
 }

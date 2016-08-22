@@ -42,7 +42,7 @@ public class TransformStore<TKey, TSourceKey, TData, TSourceData>: StoreType {
     public init<TStore: StoreType where TStore.KeyType == TSourceKey, TStore.DataType == TSourceData>(sourceStore: TStore,
                 transformKeyHandler: TransformKeyHandlerType, revertTransformKeyHandler: RevertTransformKeyHandlerType,
                 transformDataHandler: TransformDataHandlerType, revertTransformDataHandler: RevertTransformDataHandlerType) {
-        self.sourceStore = sourceStore.asAnyStore()
+        self.sourceStore = sourceStore.asStore()
         
         self.transformDataHandler = transformDataHandler
         self.revertTransformDataHandler = revertTransformDataHandler
