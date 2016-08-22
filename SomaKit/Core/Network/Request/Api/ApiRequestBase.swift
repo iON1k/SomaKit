@@ -26,7 +26,7 @@ public protocol ApiRequestManagerType: RequestManagerType {
     func apiRequestEngine<TRequest: RequestType where TRequest: _ApiRequestBase>(request: TRequest) -> Observable<TRequest.ResponseType>
 }
 
-public class ApiRequestBase<TResponse, TManager: ApiRequestManagerType>: RequestBase<TResponse, TManager>, _ApiRequestBase {
+public class ApiRequestBase<TResponse, TManager: ApiRequestManagerType>: RequestBase<TResponse, TManager>, _ApiRequestBase, CachingKeyProvider {
     public var method: String {
         Utils.abstractMethod()
     }

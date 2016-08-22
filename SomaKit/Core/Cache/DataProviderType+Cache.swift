@@ -11,6 +11,6 @@ public extension DataProviderConvertibleType where Self: CachingKeyProvider {
         where TCacheStore.KeyType == String,
         TCacheStore.DataType == DataType>(cacheStore: TCacheStore, behavior: CacheableDataProviderBehavior<DataType>
         = CacheableDataProviderBehaviors.dataOrCache()) -> CacheableDataProvider<String, DataType> {
-        return CacheableDataProvider(sourceProvider: self.asAnyDataProvider(), cacheStore: cacheStore, cacheKey: self.cachingKey, behavior: behavior)
+        return CacheableDataProvider(sourceProvider: asAnyDataProvider(), cacheStore: cacheStore, cacheKey: cachingKey, behavior: behavior)
     }
 }
