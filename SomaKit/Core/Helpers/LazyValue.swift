@@ -22,20 +22,20 @@ public class LazyValue<TValue> {
             }
             
             guard let factory = self.factory else {
-                Debug.fatalError("LazyReadOnly not setted up initializeHandler")
+                Debug.fatalError("LazyValue not setted up factory")
             }
             
-            let initializedValue = factory()
-            self.innerValue = initializedValue
+            let value = factory()
+            self.innerValue = value
             
-            return initializedValue
+            return value
         }
     }
     
     public func factory(factory: FactoryType) {
         lock.sync {
             guard let factory = self.factory else {
-                Debug.fatalError("LazyReadOnly already seted up initializeHandler")
+                Debug.fatalError("LazyValue already seted up factory")
             }
             
             self.factory = factory

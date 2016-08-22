@@ -43,19 +43,12 @@ public class ApiRequestBase<TResponse, TManager: ApiRequestManagerType>: Request
         return nil
     }
     
-    private let cachingKeyValue = LazyValue<String>()
-    
     public var cachingKey: String {
-        return cachingKeyValue.value
+        return buildCachingKey()
     }
     
     public override func _requestEngine() -> Observable<TResponse> {
         return _manager.apiRequestEngine(self)
-    }
-    
-    public override init(manager: ManagerType) {
-        super.init(manager: manager)
-        cachingKeyValue.factory(buildCachingKey)
     }
     
     private func buildCachingKey() -> String {
