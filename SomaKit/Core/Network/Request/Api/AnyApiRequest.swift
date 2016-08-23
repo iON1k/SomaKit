@@ -29,9 +29,3 @@ public class AnyApiRequest<TResponse>: AnyRequest<TResponse>, StringCachingKeyPr
         }
     }
 }
-
-extension RequestType where Self: StringCachingKeyProvider {
-    public func asRequest() -> AnyApiRequest<ResponseType> {
-        return AnyApiRequest(self)
-    }
-}
