@@ -19,7 +19,7 @@ public class AnyApiRequest<TResponse>: AnyRequest<TResponse>, StringCachingKeyPr
     }
 
     public init<TSourceRequest: protocol<RequestType, StringCachingKeyProvider>
-        where TSourceRequest.ResponseType == ResponseType>(sourceRequest: TSourceRequest, transformHandler: TransformHandler = SomaFunc.sameTransform) {
+        where TSourceRequest.ResponseType == ResponseType>(_ sourceRequest: TSourceRequest, transformHandler: TransformHandler = SomaFunc.sameTransform) {
         stringCachingKeyHandler = {
             return sourceRequest.stringCachingKey
         }
@@ -27,5 +27,11 @@ public class AnyApiRequest<TResponse>: AnyRequest<TResponse>, StringCachingKeyPr
         super.init {
             transformHandler(sourceRequest.response())
         }
+    }
+}
+
+extension RequestType where Self: StringCachingKeyProvider {
+    public func asRequest() -> AnyApiRequest<ResponseType> {
+        return AnyApiRequest(self)
     }
 }
