@@ -26,9 +26,7 @@ public protocol ApiRequestManagerType: RequestManagerType {
     func apiRequestEngine<TRequest: RequestType where TRequest: _ApiRequestBase>(request: TRequest) -> Observable<TRequest.ResponseType>
 }
 
-public class ApiRequestBase<TResponse, TManager: ApiRequestManagerType>: AbstractApiRequest<TResponse, TManager>, _ApiRequestBase, CachingKeyProvider {
-    public typealias CachingKeyType = String
-    
+public class ApiRequestBase<TResponse, TManager: ApiRequestManagerType>: AbstractApiRequest<TResponse, TManager>, _ApiRequestBase, StringCachingKeyProvider {
     public var method: String {
         Utils.abstractMethod()
     }
@@ -45,7 +43,7 @@ public class ApiRequestBase<TResponse, TManager: ApiRequestManagerType>: Abstrac
         return nil
     }
     
-    public var cachingKey: CachingKeyType {
+    public var stringCachingKey: String {
         return buildCachingKey()
     }
     
@@ -53,7 +51,7 @@ public class ApiRequestBase<TResponse, TManager: ApiRequestManagerType>: Abstrac
         return _manager.apiRequestEngine(self)
     }
     
-    private func buildCachingKey() -> CachingKeyType {
+    private func buildCachingKey() -> String {
         var resultString = ""
         
         resultString += methodType.rawValue
