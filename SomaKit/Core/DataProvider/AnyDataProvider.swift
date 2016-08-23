@@ -28,3 +28,11 @@ public extension AnyDataProvider {
         return self
     }
 }
+
+public extension DataProviderType {
+    public func transform<TData>(transformHandler: Observable<DataType> -> Observable<TData>) -> AnyDataProvider<TData> {
+        return AnyDataProvider {
+            return transformHandler(self.data())
+        }
+    }
+}

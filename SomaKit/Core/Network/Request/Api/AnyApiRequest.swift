@@ -8,20 +8,21 @@
 
 import RxSwift
 
-public class AnyApiRequest<TResponse>: AnyRequest<TResponse>, StringCachingKeyProvider {
-    public typealias StringCachingKeyHandler = Void -> String
+public class AnyApiRequest<TResponse>: AnyRequest<TResponse>, CachingKeyProvider {
+    public typealias CachingKeyType = String
+    public typealias CachingKeyHandler = Void -> CachingKeyType
     public typealias TransformHandler = Observable<TResponse> -> Observable<TResponse>
     
-    private let stringCachingKeyHandler: StringCachingKeyHandler
+    private let cachingKeyHandler: CachingKeyHandler
     
-    public var stringCachingKey: String {
-        return stringCachingKeyHandler()
+    public var cachingKey: CachingKeyType {
+        return cachingKeyHandler()
     }
 
-    public init<TSourceRequest: protocol<RequestType, StringCachingKeyProvider>
-        where TSourceRequest.ResponseType == ResponseType>(sourceRequest: TSourceRequest, transformHandler: TransformHandler = SomaFunc.sameTransform) {
-        stringCachingKeyHandler = {
-            sourceRequest.stringCachingKey
+    public init<TSourceRequest: protocol<RequestType, CachingKeyProvider> where TSourceRequest.ResponseType == ResponseType,
+        TSourceRequest.CachingKeyType == CachingKeyType>(sourceRequest: TSourceRequest, transformHandler: TransformHandler = SomaFunc.sameTransform) {
+        cachingKeyHandler = {
+            return sourceRequest.cachingKey
         }
         
         super.init {

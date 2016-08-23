@@ -132,7 +132,7 @@ public class CacheableDataProvider<TKey, TData>: DataProviderType {
 }
 
 public extension CacheableDataProvider {
-    public func dataOnly() -> TransformDataProvider<TData, DataType> {
+    public func dataOnly() -> AnyDataProvider<TData> {
         return self.transform({ (sourceObservable) -> Observable<TData> in
             return sourceObservable.map({ (cacheState) -> TData in
                 return cacheState.data
