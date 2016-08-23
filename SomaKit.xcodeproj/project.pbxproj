@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		241AF7D31D6A14BA004A8114 /* ApiRequestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241AF7D21D6A14BA004A8114 /* ApiRequestBase.swift */; };
 		241B948D1D6932B00008D22F /* AlamoJsonRequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241B948A1D6932B00008D22F /* AlamoJsonRequestManager.swift */; };
+		24243F0B1D6C9D2400DB2584 /* SomaMappable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24243F0A1D6C9D2400DB2584 /* SomaMappable.swift */; };
+		24243F0D1D6CA63F00DB2584 /* UnsafeJsonMappingConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24243F0C1D6CA63F00DB2584 /* UnsafeJsonMappingConverter.swift */; };
 		2425A8F01D574B02009A45D1 /* Variable+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2425A8EF1D574B02009A45D1 /* Variable+Extension.swift */; };
 		24273D2B1D21F0E00071C283 /* DiskMemoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24273D2A1D21F0E00071C283 /* DiskMemoryStore.swift */; };
 		242B3FFE1D4BD1350010C3CB /* TableElementPresenterType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 242B3FFD1D4BD1350010C3CB /* TableElementPresenterType.swift */; };
@@ -77,8 +79,7 @@
 		24E3CE0E1D1FE7B3001BCDB2 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E3CDD81D1FE7B3001BCDB2 /* Log.swift */; };
 		24E3CE0F1D1FE7B3001BCDB2 /* NativeLogProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E3CDD91D1FE7B3001BCDB2 /* NativeLogProcessor.swift */; };
 		24E3CE101D1FE7B3001BCDB2 /* Observable+Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E3CDDA1D1FE7B3001BCDB2 /* Observable+Log.swift */; };
-		24E3CE111D1FE7B3001BCDB2 /* JSONMappingConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E3CDDC1D1FE7B3001BCDB2 /* JSONMappingConverter.swift */; };
-		24E3CE121D1FE7B3001BCDB2 /* UnsafeJSONMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E3CDDD1D1FE7B3001BCDB2 /* UnsafeJSONMapper.swift */; };
+		24E3CE111D1FE7B3001BCDB2 /* JsonMappingConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E3CDDC1D1FE7B3001BCDB2 /* JsonMappingConverter.swift */; };
 		24E3CE181D1FE7B3001BCDB2 /* RequestType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E3CDE51D1FE7B3001BCDB2 /* RequestType.swift */; };
 		24E3CE1A1D1FE7B3001BCDB2 /* AnyStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E3CDE91D1FE7B3001BCDB2 /* AnyStore.swift */; };
 		24E3CE1B1D1FE7B3001BCDB2 /* MemoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E3CDEA1D1FE7B3001BCDB2 /* MemoryStore.swift */; };
@@ -93,6 +94,7 @@
 		24E5C2D41D209E7F0098AB3A /* ImageSourceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E5C2D01D209E7F0098AB3A /* ImageSourceType.swift */; };
 		24E5C2DF1D20A2010098AB3A /* ImagePlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E5C2DE1D20A2010098AB3A /* ImagePlugin.swift */; };
 		24E5C2E41D20A28F0098AB3A /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E5C2E31D20A28F0098AB3A /* ImageLoader.swift */; };
+		24E67FBF1D6C977500C6913F /* JsonConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E67FBE1D6C977500C6913F /* JsonConvertible.swift */; };
 		24E714E41D57C7B100B66ABD /* TableViewManager+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E714E31D57C7B100B66ABD /* TableViewManager+Extension.swift */; };
 		24E94A2F1D5B705C0045C4A5 /* Array+ListDataProviderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E94A2E1D5B705C0045C4A5 /* Array+ListDataProviderType.swift */; };
 		24EA99721D481F3C00AEF2B1 /* ViewsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EA99711D481F3C00AEF2B1 /* ViewsProvider.swift */; };
@@ -121,6 +123,8 @@
 /* Begin PBXFileReference section */
 		241AF7D21D6A14BA004A8114 /* ApiRequestBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiRequestBase.swift; sourceTree = "<group>"; };
 		241B948A1D6932B00008D22F /* AlamoJsonRequestManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlamoJsonRequestManager.swift; sourceTree = "<group>"; };
+		24243F0A1D6C9D2400DB2584 /* SomaMappable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SomaMappable.swift; sourceTree = "<group>"; };
+		24243F0C1D6CA63F00DB2584 /* UnsafeJsonMappingConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnsafeJsonMappingConverter.swift; sourceTree = "<group>"; };
 		2425A8EF1D574B02009A45D1 /* Variable+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Variable+Extension.swift"; sourceTree = "<group>"; };
 		24273D2A1D21F0E00071C283 /* DiskMemoryStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiskMemoryStore.swift; sourceTree = "<group>"; };
 		242B3FFD1D4BD1350010C3CB /* TableElementPresenterType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableElementPresenterType.swift; sourceTree = "<group>"; };
@@ -191,8 +195,7 @@
 		24E3CDD81D1FE7B3001BCDB2 /* Log.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		24E3CDD91D1FE7B3001BCDB2 /* NativeLogProcessor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NativeLogProcessor.swift; sourceTree = "<group>"; };
 		24E3CDDA1D1FE7B3001BCDB2 /* Observable+Log.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Observable+Log.swift"; sourceTree = "<group>"; };
-		24E3CDDC1D1FE7B3001BCDB2 /* JSONMappingConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONMappingConverter.swift; sourceTree = "<group>"; };
-		24E3CDDD1D1FE7B3001BCDB2 /* UnsafeJSONMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnsafeJSONMapper.swift; sourceTree = "<group>"; };
+		24E3CDDC1D1FE7B3001BCDB2 /* JsonMappingConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JsonMappingConverter.swift; sourceTree = "<group>"; };
 		24E3CDE51D1FE7B3001BCDB2 /* RequestType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestType.swift; sourceTree = "<group>"; };
 		24E3CDE91D1FE7B3001BCDB2 /* AnyStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyStore.swift; sourceTree = "<group>"; };
 		24E3CDEA1D1FE7B3001BCDB2 /* MemoryStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemoryStore.swift; sourceTree = "<group>"; };
@@ -207,6 +210,7 @@
 		24E5C2D01D209E7F0098AB3A /* ImageSourceType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageSourceType.swift; sourceTree = "<group>"; };
 		24E5C2DE1D20A2010098AB3A /* ImagePlugin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePlugin.swift; sourceTree = "<group>"; };
 		24E5C2E31D20A28F0098AB3A /* ImageLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
+		24E67FBE1D6C977500C6913F /* JsonConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JsonConvertible.swift; sourceTree = "<group>"; };
 		24E714E31D57C7B100B66ABD /* TableViewManager+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "TableViewManager+Extension.swift"; sourceTree = "<group>"; };
 		24E94A2E1D5B705C0045C4A5 /* Array+ListDataProviderType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+ListDataProviderType.swift"; sourceTree = "<group>"; };
 		24EA99711D481F3C00AEF2B1 /* ViewsProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewsProvider.swift; sourceTree = "<group>"; };
@@ -430,8 +434,10 @@
 		24E3CDDB1D1FE7B3001BCDB2 /* Mapping */ = {
 			isa = PBXGroup;
 			children = (
-				24E3CDDC1D1FE7B3001BCDB2 /* JSONMappingConverter.swift */,
-				24E3CDDD1D1FE7B3001BCDB2 /* UnsafeJSONMapper.swift */,
+				24E67FBE1D6C977500C6913F /* JsonConvertible.swift */,
+				24243F0A1D6C9D2400DB2584 /* SomaMappable.swift */,
+				24E3CDDC1D1FE7B3001BCDB2 /* JsonMappingConverter.swift */,
+				24243F0C1D6CA63F00DB2584 /* UnsafeJsonMappingConverter.swift */,
 			);
 			path = Mapping;
 			sourceTree = "<group>";
@@ -764,7 +770,6 @@
 				24E3CDF61D1FE7B3001BCDB2 /* DataBaseCacheStore.swift in Sources */,
 				24E3CDFF1D1FE7B3001BCDB2 /* DataProviderConvertibleType.swift in Sources */,
 				24E2CFB11D211AE200967097 /* FileImageSource.swift in Sources */,
-				24E3CE121D1FE7B3001BCDB2 /* UnsafeJSONMapper.swift in Sources */,
 				244179AE1D5651F3003B6089 /* Equivalentable.swift in Sources */,
 				24EB57E81D2C229C0062DDDB /* SomaViewController.swift in Sources */,
 				24EB57EA1D2C25920062DDDB /* ModuleViewController.swift in Sources */,
@@ -795,12 +800,14 @@
 				24EB57DF1D2C0E8A0062DDDB /* ModuleViewModel.swift in Sources */,
 				24E2CFAF1D21163D00967097 /* BundleImageSource.swift in Sources */,
 				24468C0E1D455AE4003E1344 /* TableElementAttributes.swift in Sources */,
+				24243F0D1D6CA63F00DB2584 /* UnsafeJsonMappingConverter.swift in Sources */,
 				24E1C0D31D22EB5600533D4E /* ImageResizing.swift in Sources */,
 				24EA99721D481F3C00AEF2B1 /* ViewsProvider.swift in Sources */,
 				24E3480E1D5BDA4100A926B6 /* ItemsPageType.swift in Sources */,
 				246F72641D593B74004FF101 /* PagedListDataProvider.swift in Sources */,
 				24E2CFB51D21239500967097 /* FakeStore.swift in Sources */,
 				24E3CDF21D1FE7B3001BCDB2 /* CacheableDataProvider.swift in Sources */,
+				24E67FBF1D6C977500C6913F /* JsonConvertible.swift in Sources */,
 				24E3CDFB1D1FE7B3001BCDB2 /* SameTypeConverter.swift in Sources */,
 				242B40021D4BE0060010C3CB /* Debug.swift in Sources */,
 				24E3CDF71D1FE7B3001BCDB2 /* MemoryCache.swift in Sources */,
@@ -821,7 +828,7 @@
 				24E3CE081D1FE7B3001BCDB2 /* SomaError.swift in Sources */,
 				24F3CF541D6BA544004C0AAF /* AnyRequest.swift in Sources */,
 				242DAE471D57DCB800260816 /* TableElementsProvider+Extension.swift in Sources */,
-				24E3CE111D1FE7B3001BCDB2 /* JSONMappingConverter.swift in Sources */,
+				24E3CE111D1FE7B3001BCDB2 /* JsonMappingConverter.swift in Sources */,
 				24AF8AE91D20A71100E40CCB /* ImageSourceConvertiable.swift in Sources */,
 				24E3CE041D1FE7B3001BCDB2 /* Collection+Extension.swift in Sources */,
 				24E1C0D51D22ED3300533D4E /* ImageRounding.swift in Sources */,
@@ -842,6 +849,7 @@
 				24E5C2D41D209E7F0098AB3A /* ImageSourceType.swift in Sources */,
 				24E3CDFA1D1FE7B3001BCDB2 /* ConverterType.swift in Sources */,
 				24E3CE0F1D1FE7B3001BCDB2 /* NativeLogProcessor.swift in Sources */,
+				24243F0B1D6C9D2400DB2584 /* SomaMappable.swift in Sources */,
 				24E3CE1B1D1FE7B3001BCDB2 /* MemoryStore.swift in Sources */,
 				24EB57E01D2C0E8A0062DDDB /* ViewModel.swift in Sources */,
 				24E3CE001D1FE7B3001BCDB2 /* DataProviderType.swift in Sources */,

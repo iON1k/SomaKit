@@ -15,15 +15,9 @@ public class AlamoJsonRequestManager: ApiRequestManagerType {
     private let alamoManager: Manager
     private let baseUrl: URLConvertible
     
-    private let jsonMapper = UnsafeJSONMapper()
-    
     public init(baseUrl: URLConvertible, alamoManager: Manager = Manager.sharedInstance) {
         self.alamoManager = alamoManager
         self.baseUrl = baseUrl
-    }
-    
-    public func registerResponse<TResponse: Mappable>(responseType: TResponse.Type) {
-        jsonMapper.registerType(responseType)
     }
     
     public func apiRequestEngine<TRequest: RequestType where TRequest: _ApiRequestBase>(request: TRequest) -> Observable<TRequest.ResponseType> {
@@ -33,7 +27,7 @@ public class AlamoJsonRequestManager: ApiRequestManagerType {
             return self.alamoManager.rx_string(alamoMethodType, urlString,
                 parameters: request.params, encoding: self._parametersEncoding, headers: request.headers)
                 .map({ (responseString) -> TRequest.ResponseType in
-                    return try self.jsonMapper.map(responseString)
+                    return try UnsafeJsonMappingConverter().convertValue(responseString)
                 })
         })
     }

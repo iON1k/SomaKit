@@ -9,7 +9,7 @@
 import ObjectMapper
 import RxSwift
 
-public class AlamoApiPartBase<TManager: AlamoJsonRequestManager> {
+public class AlamoApiPartBase<TManager: ApiRequestManagerType> {
     private let requestManager: TManager
     
     public init(requestManager: TManager) {
@@ -19,12 +19,11 @@ public class AlamoApiPartBase<TManager: AlamoJsonRequestManager> {
     public final func _wrapRequest<TResponse: Mappable>(requestFactory: TManager -> ApiRequestBase<TResponse, TManager>,
         transformHandler: Observable<TResponse> -> Observable<TResponse> = SomaFunc.sameTransform) -> AnyApiRequest<TResponse> {
         return _request { manager in
-            return AnyApiRequest(sourceRequest: requestFactory(manager), transformHandler: transformHandler)
+            return AnyApiRequest(requestFactory(manager), transformHandler: transformHandler)
         }
     }
     
     public func _request<TRequest: RequestType where TRequest.ResponseType: Mappable>(requestFactory: TManager -> TRequest) -> TRequest {
-        requestManager.registerResponse(TRequest.ResponseType.self)
         return requestFactory(requestManager)
     }
 }
