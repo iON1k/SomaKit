@@ -1,5 +1,5 @@
 //
-//  AlamoJsonRequestManager.swift
+//  AlamoRequestManager.swift
 //  SomaKit
 //
 //  Created by Anton on 23.06.16.
@@ -11,7 +11,7 @@ import RxAlamofire
 import Alamofire
 import ObjectMapper
 
-public class AlamoJsonRequestManager: ApiRequestManagerType {
+public class AlamoRequestManager: ApiRequestManagerType {
     private let alamoManager: Manager
     private let baseUrl: URLConvertible
     

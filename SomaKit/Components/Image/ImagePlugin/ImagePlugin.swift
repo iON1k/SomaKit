@@ -27,13 +27,9 @@ extension UIImage {
     }
     
     public func performPluginsSafe(plugins: [ImagePluginType]) -> UIImage? {
-        do {
-            return try performPlugins(plugins)
-        } catch let error {
-            Log.log(error)
+        return Utils.safe {
+            return try self.performPlugins(plugins)
         }
-        
-        return nil
     }
     
     public func performPluginsSafe(plugins: ImagePluginType ...) -> UIImage? {

@@ -9,7 +9,7 @@
 import RxSwift
 
 public extension StoreType {
-    public func saveDataAsync(key: KeyType, data: DataType) -> Observable<Void> {
+    public func saveDataAsync(key: KeyType, data: DataType?) -> Observable<Void> {
         return Observable.deferred({ () -> Observable<Void> in
             return Observable.just(try self.saveData(key, data: data))
         })

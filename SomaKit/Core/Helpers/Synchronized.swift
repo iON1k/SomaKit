@@ -14,15 +14,15 @@ public func endSyncLock(lockObj: AnyObject) -> Void {
     objc_sync_exit(lockObj)
 }
 
-public func synchronized(lockObj: AnyObject, @noescape block: () -> Void) -> Void {
+public func synchronized(lockObj: AnyObject, @noescape block: () throws -> Void) rethrows -> Void {
     beginSyncLock(lockObj)
-    block()
+    try block()
     endSyncLock(lockObj)
 }
 
-public func synchronized<T>(lockObj: AnyObject, @noescape block: () -> T) -> T {
+public func synchronized<T>(lockObj: AnyObject, @noescape block: () throws -> T) rethrows -> T {
     beginSyncLock(lockObj)
-    let result: T = block()
+    let result: T = try block()
     endSyncLock(lockObj)
     
     return result
@@ -37,11 +37,11 @@ public class SyncLock {
         endSyncLock(self)
     }
     
-    public func sync(@noescape block: () -> Void) {
-        synchronized(self, block: block)
+    public func sync(@noescape block: () throws -> Void) rethrows {
+        try synchronized(self, block: block)
     }
     
-    public func sync<T>(@noescape block: () -> T) -> T {
-        return synchronized(self, block: block)
+    public func sync<T>(@noescape block: () throws -> T) rethrows -> T {
+        return try synchronized(self, block: block)
     }
 }

@@ -16,7 +16,7 @@ public class FakeStore<TKey, TData>: StoreType {
         return defaultValue
     }
     
-    public func saveData(key: KeyType, data: DataType) throws {
+    public func saveData(key: KeyType, data: DataType?) throws {
         //Nothing
     }
     

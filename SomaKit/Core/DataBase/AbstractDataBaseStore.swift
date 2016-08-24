@@ -32,20 +32,31 @@ public class AbstractDataBaseStore<TKey, TData, TDataBase: NSManagedObject>: Sto
         return resultData
     }
     
-    public func saveData(key: KeyType, data: DataType) throws {
+    public func saveData(key: KeyType, data: DataType?) throws {
         var error: ErrorType?
         
         MagicalRecord.saveWithBlockAndWait { (dbLocalContext) in
             do {
                 var dbRecord = DataBaseType.MR_findFirstWithPredicate(try self.keyPredicate(key), inContext: dbLocalContext)
                 
+                guard let data = data else {
+                    if let dbRecord = dbRecord {
+                        let removingResult = dbRecord.MR_deleteEntityInContext(dbLocalContext)
+                        
+                        if (!removingResult) {
+                            throw SomaError("DataBase \(Utils.typeName(TDataBase)) entity removing failed")
+                        }
+                    }
+                    
+                    return
+                }
+                
                 if dbRecord == nil {
                     dbRecord = DataBaseType.MR_createEntityInContext(dbLocalContext)
                 }
                 
                 guard let resultDBRecord = dbRecord else {
-                    let dataBaseName = Utils.typeName(TDataBase)
-                    error = SomaError("DataBase \(dataBaseName) entity creating failed")
+                    error = SomaError("DataBase \(Utils.typeName(TDataBase)) entity creating failed")
                     return
                 }
                 

@@ -29,7 +29,12 @@ public class CacheBase<TKey, TData>: StoreType {
         return isActualCache(cacheData) ? cacheData.data : nil
     }
     
-    public func saveData(key: KeyType, data: DataType) throws {
+    public func saveData(key: KeyType, data: DataType?) throws {
+        guard let data = data else {
+            try sourceStore.saveData(key, data: nil)
+            return
+        }
+        
         let cacheValue = CacheValue(data: data, creationTime:currentTime())
         try sourceStore.saveData(key, data: cacheValue)
     }

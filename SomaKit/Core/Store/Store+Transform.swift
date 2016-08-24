@@ -19,6 +19,11 @@ extension StoreType {
             return try revertTransformDataHandler(sourceData)
             }, { (key, data) in
                 let sourceKey = try transformKeyHandler(key)
+                guard let data = data else {
+                    try self.saveData(sourceKey, data: nil)
+                    return
+                }
+                
                 let sourceData = try transformDataHandler(data)
                 
                 try self.saveData(sourceKey, data: sourceData)

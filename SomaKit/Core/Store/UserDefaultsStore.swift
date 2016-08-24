@@ -29,12 +29,13 @@ public class UserDefaultsStore<TKey: StringKeyConvertiable, TData: AnyObject>: S
         return resultData
     }
     
-    public func saveData(key: KeyType, data: DataType) throws {
+    public func saveData(key: KeyType, data: DataType?) throws {
+        guard let data = data else {
+            userDefaults.removeObjectForKey(key.stringKey)
+            return
+        }
+        
         userDefaults.setObject(data, forKey: key.stringKey)
-    }
-    
-    public func removeData(key: KeyType) {
-        userDefaults.removeObjectForKey(key.stringKey)
     }
     
     public init(userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()) {

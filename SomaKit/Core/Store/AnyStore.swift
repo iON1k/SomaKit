@@ -11,7 +11,7 @@ public class AnyStore<TKey, TData>: StoreType {
     public typealias DataType = TData
     
     public typealias LoadDataHandler = KeyType throws -> DataType?
-    public typealias SaveDataHandler = (KeyType, DataType) throws -> Void
+    public typealias SaveDataHandler = (KeyType, DataType?) throws -> Void
     
     private let loadDataHandler: LoadDataHandler
     private let saveDataHandler: SaveDataHandler
@@ -20,7 +20,7 @@ public class AnyStore<TKey, TData>: StoreType {
         return try loadDataHandler(key)
     }
     
-    public func saveData(key: KeyType, data: DataType) throws {
+    public func saveData(key: KeyType, data: DataType?) throws {
         try saveDataHandler(key, data)
     }
     

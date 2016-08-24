@@ -32,9 +32,9 @@ public class StoreDataProvider<TData, TKey>: DataProviderType {
         dataValue = Variable(defaultValue)
     }
     
-    public func setData(data: DataType) throws {
+    public func setData(data: DataType?) throws {
         try store.saveData(key, data: data)
-        dataValue <= data
+        dataValue <= data ?? defaultValue
     }
     
     public func loadData() throws -> DataType {
@@ -43,22 +43,16 @@ public class StoreDataProvider<TData, TKey>: DataProviderType {
         return data
     }
     
-    public func setDataSafe(data: DataType) {
-        do {
-            try setData(data)
-        } catch let error {
-            Log.log(error)
+    public func setDataSafe(data: DataType?) {
+        Utils.safe {
+            try self.setData(data)
         }
     }
     
     public func loadDataSafe() -> DataType {
-        do {
-            return try loadData()
-        } catch let error {
-            Log.log(error)
+        return Utils.safe(defaultValue) {
+            return try self.loadData()
         }
-        
-        return defaultValue
     }
     
     private func normalizeData(data: DataType?) -> DataType {

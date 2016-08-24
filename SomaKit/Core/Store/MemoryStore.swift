@@ -19,8 +19,13 @@ public class MemoryStore<TKey: Hashable, TData>: StoreType {
         }
     }
     
-    public func saveData(key: KeyType, data: DataType) throws {
+    public func saveData(key: KeyType, data: DataType?) throws {
         return syncLock.sync {
+            guard let data = data else {
+                dictionaryStore.removeValueForKey(key)
+                return
+            }
+            
             return dictionaryStore[key] = data
         }
     }

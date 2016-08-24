@@ -62,4 +62,32 @@ extension Utils {
         
         return equivalentableValue1.isEquivalent(value2)
     }
+    
+    public static func safe(body: Void throws -> Void) {
+        do {
+            try body()
+        } catch let error {
+            Log.log(error)
+        }
+    }
+    
+    public static func safe<TResult>(body: Void throws -> TResult?) -> TResult? {
+        do {
+            return try body()
+        } catch let error {
+            Log.log(error)
+        }
+        
+        return nil
+    }
+    
+    public static func safe<TResult>(defaultResult: TResult, body: Void throws -> TResult) -> TResult {
+        do {
+            return try body()
+        } catch let error {
+            Log.log(error)
+        }
+        
+        return defaultResult
+    }
 }

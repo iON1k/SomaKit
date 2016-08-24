@@ -56,13 +56,9 @@ public class ImageLoader<TKey: StringKeyConvertiable> {
     }
     
     private func tryLoadImageFromCache(imageCache: AnyStore<String, UIImage>, cacheKey: String) -> UIImage? {
-        do {
+        return Utils.safe {
             return try imageCache.loadData(cacheKey)
-        } catch let error {
-            Log.log(error)
         }
-        
-        return nil
     }
     
     private func saveProcessedImageIfNeeded(processedImageCacheKey: String, processedImage: UIImage, sourceImage: UIImage) {
