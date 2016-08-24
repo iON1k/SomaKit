@@ -11,22 +11,34 @@ public class DiskMemoryStore: StoreType {
     public typealias DataType = NSData
     
     private let fileManager = NSFileManager()
+    private let baseDirectory: String?
     private let attributes: [String : AnyObject]?
     
-    public init(attributes: [String : AnyObject]? = nil) {
+    public init(baseDirectory: String? = nil, attributes: [String : AnyObject]? = nil) {
+        self.baseDirectory = baseDirectory
         self.attributes = attributes
     }
     
     public func loadData(key: KeyType) throws -> DataType? {
-        return fileManager.contentsAtPath(key)
+        let path = generatePath(key)
+        return fileManager.contentsAtPath(path)
     }
     
     public func saveData(key: KeyType, data: DataType?) throws {
+        let path = generatePath(key)
         guard let data = data else {
-            try fileManager.removeItemAtPath(key)
+            try fileManager.removeItemAtPath(path)
             return
         }
         
-        fileManager.createFileAtPath(key, contents: data, attributes: attributes)
+        fileManager.createFileAtPath(path, contents: data, attributes: attributes)
+    }
+    
+    private func generatePath(key: KeyType) -> String {
+        guard let baseDirectory = baseDirectory else {
+            return key
+        }
+        
+        return baseDirectory + key
     }
 }
