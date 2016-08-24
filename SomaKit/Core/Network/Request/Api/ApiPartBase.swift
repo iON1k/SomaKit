@@ -1,5 +1,5 @@
 //
-//  AlamoApiPartBase.swift
+//  ApiPartBase.swift
 //  SomaKit
 //
 //  Created by Anton on 21.08.16.
@@ -9,7 +9,7 @@
 import ObjectMapper
 import RxSwift
 
-public class AlamoApiPartBase<TManager: ApiRequestManagerType> {
+public class ApiPartBase<TManager: ApiRequestManagerType> {
     private let requestManager: TManager
     
     public init(requestManager: TManager) {

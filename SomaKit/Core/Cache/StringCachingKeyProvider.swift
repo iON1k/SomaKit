@@ -6,11 +6,15 @@
 //  Copyright © 2016 iON1k. All rights reserved.
 //
 
-public protocol StringCachingKeyProvider: CachingKeyProvider {
+public protocol _StringCachingKeyProvider {
     var stringCachingKey: String { get }
 }
 
-extension StringCachingKeyProvider {
+public protocol StringCachingKeyProvider: _StringCachingKeyProvider, CachingKeyProvider {
+    //Nothing
+}
+
+extension _StringCachingKeyProvider where Self: CachingKeyProvider {
     public typealias CachingKeyType = String
     
     public var cachingKey: String {

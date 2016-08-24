@@ -14,10 +14,12 @@ import ObjectMapper
 public class AlamoRequestManager: ApiRequestManagerType {
     private let alamoManager: Manager
     private let baseUrl: URLConvertible
+    private let responseMapper: _StringMapperType
     
-    public init(baseUrl: URLConvertible, alamoManager: Manager = Manager.sharedInstance) {
+    public init(baseUrl: URLConvertible, alamoManager: Manager = Manager.sharedInstance, responseMapper: _StringMapperType = JsonMapper()) {
         self.alamoManager = alamoManager
         self.baseUrl = baseUrl
+        self.responseMapper = responseMapper
     }
     
     public func apiRequestEngine<TRequest: RequestType where TRequest: _ApiRequestBase>(request: TRequest) -> Observable<TRequest.ResponseType> {
@@ -27,7 +29,7 @@ public class AlamoRequestManager: ApiRequestManagerType {
             return self.alamoManager.rx_string(alamoMethodType, urlString,
                 parameters: request.params, encoding: self._parametersEncoding, headers: request.headers)
                 .map({ (responseString) -> TRequest.ResponseType in
-                    return try UnsafeJsonMappingConverter().convertValue(responseString)
+                    return try self.responseMapper.mapToModel(responseString)
                 })
         })
     }
