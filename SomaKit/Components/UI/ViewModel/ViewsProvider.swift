@@ -13,6 +13,7 @@ public class ViewsProvider<TContext> {
     public let context: TContext
     
     private var registeredViewsData = [String : ViewData]()
+    private let syncLock = SyncLock()
     
     private let emptyViewData = ViewData(UIView.self) { (viewModel, context) -> UIView in
         return UIView()
@@ -42,6 +43,12 @@ public class ViewsProvider<TContext> {
     }
     
     private func viewDataForViewModel(viewModel: ViewModelType) -> ViewData {
+        return syncLock.sync {
+            return unsafeViewDataForViewModel(viewModel)
+        }
+    }
+    
+    private func unsafeViewDataForViewModel(viewModel: ViewModelType) -> ViewData {
         let generatorKey = viewGeneratorKey(viewModel.dynamicType)
         guard let viewData = registeredViewsData[generatorKey] else {
             Log.error("ViewsProvider: view data with key \(generatorKey) not registered")
@@ -52,8 +59,12 @@ public class ViewsProvider<TContext> {
     }
     
     private func registerViewGenerator(viewKey: String, viewType: UIView.Type, viewGenerator: ViewGenerator) {
-        Utils.ensureIsMainThread()
-        
+        syncLock.sync {
+            unsafeRegisterViewGenerator(viewKey, viewType: viewType, viewGenerator: viewGenerator)
+        }
+    }
+    
+    private func unsafeRegisterViewGenerator(viewKey: String, viewType: UIView.Type, viewGenerator: ViewGenerator) {
         guard registeredViewsData[viewKey] == nil else {
             Log.error("ViewsProvider: view generator with key \(viewKey) already registered")
             return

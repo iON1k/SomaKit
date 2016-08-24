@@ -20,7 +20,7 @@ public class SomaUIBindable: UiBindableType {
         self.scheduler = scheduler
     }
     
-    public func onBinded<T>(observable: Observable<T>) -> Observable<T> {
+    public func whileBinded<T>(observable: Observable<T>) -> Observable<T> {
         return isBindedSubject
             .flatMapLatest({ (isBinded) -> Observable<T> in
                 return isBinded ? self.applyScheduler(observable) : Observable.never()
@@ -28,12 +28,12 @@ public class SomaUIBindable: UiBindableType {
             .takeUntil(isBindedSubject.filter(SomaFunc.negativePredicate))
     }
     
-    public func onActive<T>(observable: Observable<T>) -> Observable<T> {
+    public func whileActive<T>(observable: Observable<T>) -> Observable<T> {
         return isActiveSubject
             .flatMapLatest({ (isActive) -> Observable<T> in
                 return isActive ? observable : Observable.never()
             })
-            .bindOn(self)
+            .whileBinded(self)
     }
     
     private func applyScheduler<T>(observable: Observable<T>) -> Observable<T> {

@@ -88,11 +88,11 @@ public class ModuleViewController<TViewModel: ModuleViewModel>: SomaViewControll
         //Nothing
     }
     
-    public func onBinded<T>(observable: Observable<T>) -> Observable<T> {
-        return uiBindable.onBinded(observable)
+    public func whileBinded<T>(observable: Observable<T>) -> Observable<T> {
+        return uiBindable.whileBinded(observable)
     }
     
-    public func onActive<T>(observable: Observable<T>) -> Observable<T> {
-        return uiBindable.onActive(observable)
+    public func whileActive<T>(observable: Observable<T>) -> Observable<T> {
+        return uiBindable.whileActive(observable)
     }
 }

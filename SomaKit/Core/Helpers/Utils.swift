@@ -18,29 +18,37 @@ extension Utils {
     @noreturn public static func abstractMethod(methodName: String = "Method") {
         Debug.fatalError("\(methodName) has not been implemented")
     }
-    
+}
+
+extension Utils {
     public static func typeName(classType: Any.Type) -> String {
         return String(classType)
-    }
-    
-    public static func ensureIsMainThread() {
-        guard NSThread.isMainThread() else {
-            Debug.fatalError("Is not main thread")
-        }
-    }
-    
-    public static func unsafeCast<T>(sourceValue: Any) -> T {
-        if let castedValue = sourceValue as? T {
-            return castedValue
-        }
-        
-        Debug.fatalError("Failing unsafe casting value with type \(T.self) to type \(sourceValue.dynamicType)")
     }
     
     public static func sameTypes(first: Any, second: Any) -> Bool {
         return first.dynamicType == second.dynamicType
     }
-    
+}
+
+extension Utils {
+    public static func unsafeCast<T>(sourceValue: Any) -> T {
+        guard let castedValue = sourceValue as? T else {
+            Debug.fatalError("Failing unsafe casting value with type \(T.self) to type \(sourceValue.dynamicType)")
+        }
+        
+        return castedValue
+    }
+}
+
+extension Utils {
+    public static func ensureIsMainThread() {
+        guard NSThread.isMainThread() else {
+            Debug.fatalError("Is not main thread")
+        }
+    }
+}
+
+extension Utils {
     public static func isEquivalentValues<TValue>(value1: TValue, value2: TValue) -> Bool {
         if let optionalValue1 = value1 as? _OptionalType, optionalValue2 = value2 as? _OptionalType {
             let hasValue1 = optionalValue1.hasValue
@@ -62,7 +70,9 @@ extension Utils {
         
         return equivalentableValue1.isEquivalent(value2)
     }
-    
+}
+
+extension Utils {
     public static func safe(body: Void throws -> Void) {
         do {
             try body()

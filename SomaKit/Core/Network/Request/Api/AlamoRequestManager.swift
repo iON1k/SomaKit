@@ -22,7 +22,7 @@ public class AlamoRequestManager: ApiRequestManagerType {
         self.responseMapper = responseMapper
     }
     
-    public func apiRequestEngine<TRequest: RequestType where TRequest: _ApiRequestBase>(request: TRequest) -> Observable<TRequest.ResponseType> {
+    public func apiRequestEngine<TRequest: RequestType where TRequest: ApiParamsProvider>(request: TRequest) -> Observable<TRequest.ResponseType> {
         return Observable.deferred({ () -> Observable<TRequest.ResponseType> in
             let urlString = try self.buildURLString(request.method)
             let alamoMethodType = try self.alamoMethodType(request.methodType)

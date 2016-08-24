@@ -1,5 +1,5 @@
 //
-//  ViewModel.swift
+//  ViewModelType.swift
 //  SomaKit
 //
 //  Created by Anton on 05.07.16.

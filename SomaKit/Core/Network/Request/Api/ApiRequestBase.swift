@@ -15,7 +15,7 @@ public enum ApiMethodType: String {
 public typealias ApiParamsType = [String : AnyObject]
 public typealias ApiHeadersType = [String : String]
 
-public protocol _ApiRequestBase {
+public protocol ApiParamsProvider {
     var method: String { get }
     var methodType: ApiMethodType { get }
     var params: ApiParamsType? { get }
@@ -23,10 +23,10 @@ public protocol _ApiRequestBase {
 }
 
 public protocol ApiRequestManagerType: RequestManagerType {
-    func apiRequestEngine<TRequest: RequestType where TRequest: _ApiRequestBase>(request: TRequest) -> Observable<TRequest.ResponseType>
+    func apiRequestEngine<TRequest: RequestType where TRequest: ApiParamsProvider>(request: TRequest) -> Observable<TRequest.ResponseType>
 }
 
-public class ApiRequestBase<TResponse, TManager: ApiRequestManagerType>: AbstractApiRequest<TResponse, TManager>, _ApiRequestBase, StringCachingKeyProvider {
+public class ApiRequestBase<TResponse, TManager: ApiRequestManagerType>: AbstractApiRequest<TResponse, TManager>, ApiParamsProvider, StringCachingKeyProvider {
     public var method: String {
         Utils.abstractMethod()
     }
