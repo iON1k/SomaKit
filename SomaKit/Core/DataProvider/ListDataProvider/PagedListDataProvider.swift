@@ -14,6 +14,7 @@ private let PagedListDataProviderDefaultPageSize = 20
 public class PagedListDataProvider<TItem, TPage: ItemsPageType where TPage.ItemType == TItem>: ListDataProviderType {
     public typealias ItemType = TItem
     public typealias ItemsMergeResult = (items: [TItem?], hasChanges: Bool)
+    public typealias MemoryCacheType = MemoryCache<Int, TPage>
     
     private var lastPageIndex: Int?
     
@@ -24,13 +25,13 @@ public class PagedListDataProvider<TItem, TPage: ItemsPageType where TPage.ItemT
     private let stateSyncLock = SyncLock()
     
     private var loadingPagesObservables = [Int : Observable<TPage>]()
-    private let loadedPagesMemoryCache: MemoryCache<Int, TPage>
+    private let loadedPagesMemoryCache: MemoryCacheType
     
     private let pageSize: Int
     
-    public init(pageSize: Int = PagedListDataProviderDefaultPageSize, cacheLifeTimeType: CacheLifeTimeType = .Forever) {
+    public init(pageSize: Int = PagedListDataProviderDefaultPageSize, memoryCache: MemoryCacheType = MemoryCache<Int, TPage>()) {
         self.pageSize = pageSize
-        loadedPagesMemoryCache = MemoryCache<Int, TPage>(lifeTimeType: cacheLifeTimeType)
+        loadedPagesMemoryCache = memoryCache
     }
     
     public var items: [TItem?] {

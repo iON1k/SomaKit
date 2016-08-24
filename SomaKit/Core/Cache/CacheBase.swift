@@ -9,6 +9,7 @@
 public enum CacheLifeTimeType {
     public typealias TimeGenerator = Void -> CacheTimeType
     
+    case Never
     case Forever
     case Value(lifeTime: CacheTimeType, timeGenerator: TimeGenerator)
 }
@@ -22,6 +23,10 @@ public class CacheBase<TKey, TData>: StoreType {
     private let lifeTimeType: CacheLifeTimeType
     
     public func loadData(key: KeyType) throws -> DataType? {
+        if case .Never = lifeTimeType {
+            return nil
+        }
+        
         guard let cacheData = try sourceStore.loadData(key) else {
             return nil
         }
@@ -30,6 +35,10 @@ public class CacheBase<TKey, TData>: StoreType {
     }
     
     public func saveData(key: KeyType, data: DataType?) throws {
+        if case .Never = lifeTimeType {
+            return
+        }
+        
         guard let data = data else {
             try sourceStore.saveData(key, data: nil)
             return
@@ -62,6 +71,8 @@ public class CacheBase<TKey, TData>: StoreType {
             } else {
                 return false
             }
+        case .Never:
+            return false
         }
     }
 }
