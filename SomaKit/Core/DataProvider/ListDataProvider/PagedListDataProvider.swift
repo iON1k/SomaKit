@@ -9,32 +9,32 @@
 import RxSwift
 
 private let PagedListDataProviderQueueName = "PagedListDataProvider_Queue"
-private let PagedListDataProviderDefaultPageSize = 20
 
-public class PagedListDataProvider<TItem, TPage: ItemsPageType where TPage.ItemType == TItem>: ListDataProviderType {
-    public typealias ItemType = TItem
-    public typealias ItemsMergeResult = (items: [TItem?], hasChanges: Bool)
-    public typealias MemoryCacheType = MemoryCache<Int, TPage>
+public class PagedListDataProvider<TPage: ItemsPageType>: ListDataProviderType {
+    public typealias PageType = TPage
+    public typealias ItemType = PageType.ItemType
+    public typealias ItemsMergeResult = (items: [ItemType?], hasChanges: Bool)
+    public typealias MemoryCacheType = MemoryCache<Int, PageType>
     
-    private var lastPageIndex: Int?
+    private var allItemsCount: Int?
     
-    private var itemsValue = [TItem?]()
-    private let itemsValueSubject = BehaviorSubject(value: [TItem?]())
+    private var itemsValue = [ItemType?]()
+    private let itemsValueSubject = BehaviorSubject(value: [ItemType?]())
     
     private let workingScheduler = SerialDispatchQueueScheduler(internalSerialQueueName: PagedListDataProviderQueueName)
     private let stateSyncLock = SyncLock()
     
-    private var loadingPagesObservables = [Int : Observable<TPage>]()
+    private var loadingPagesObservables = [Int : Observable<PageType>]()
     private let loadedPagesMemoryCache: MemoryCacheType
     
     private let pageSize: Int
     
-    public init(pageSize: Int = PagedListDataProviderDefaultPageSize, memoryCache: MemoryCacheType = MemoryCache<Int, TPage>()) {
+    public init(pageSize: Int, memoryCache: MemoryCacheType) {
         self.pageSize = pageSize
         loadedPagesMemoryCache = memoryCache
     }
     
-    public var items: [TItem?] {
+    public var items: [ItemType?] {
         return stateSyncLock.sync {
             return itemsValue
         }
@@ -46,15 +46,13 @@ public class PagedListDataProvider<TItem, TPage: ItemsPageType where TPage.ItemT
     
     public var isAllItemsLoaded: Bool {
         return stateSyncLock.sync {
-            return lastPageIndex != nil
+            return allItemsCount != nil
         }
     }
     
     public func loadItem(index: Int) -> Observable<ItemType?> {
         return Observable.deferred { () -> Observable<ItemType?> in
-            let pageIndex = self.pageForIndex(index)
-            
-            if self.validatePageIndex(pageIndex) {
+            if self.validateItemIndex(index) {
                 return self.unsafeLoadItem(index)
             } else {
                 return Observable.just(nil)
@@ -64,11 +62,11 @@ public class PagedListDataProvider<TItem, TPage: ItemsPageType where TPage.ItemT
     }
     
     public func unsafeLoadItem(index: Int) -> Observable<ItemType?> {
-        return Observable.deferred({ () -> Observable<TPage> in
+        return Observable.deferred({ () -> Observable<PageType> in
             let pageIndex = self.pageForIndex(index)
             return self.createLoadingPageObservable(pageIndex)
         })
-            .map({ (page) -> TItem? in
+            .map({ (page) -> ItemType? in
                 let pageIems = page.items
                 let indexOnPage = self.indexOnPage(index)
                 
@@ -81,7 +79,7 @@ public class PagedListDataProvider<TItem, TPage: ItemsPageType where TPage.ItemT
             })
     }
     
-    private func createLoadingPageObservable(pageIndex: Int) -> Observable<TPage> {
+    private func createLoadingPageObservable(pageIndex: Int) -> Observable<PageType> {
         if let loadedPage = loadedPagesMemoryCache.loadDataSafe(pageIndex) {
             return Observable.just(loadedPage)
         }
@@ -101,25 +99,26 @@ public class PagedListDataProvider<TItem, TPage: ItemsPageType where TPage.ItemT
         return newPageLoadingObservable
     }
     
-    private func onPageDidLoaded(page: TPage, pageIndex: Int) {
+    private func onPageDidLoaded(page: PageType, pageIndex: Int) {
         loadingPagesObservables.removeValueForKey(pageIndex)
         loadedPagesMemoryCache.saveDataSafe(pageIndex, data: page)
         
-        if !validatePageIndex(pageIndex) {
+        guard validatePageIndex(pageIndex) else {
             return
         }
         
         let mergeResult = mergePage(page, pageIndex: pageIndex)
         let hasChanges = mergeResult.hasChanges
-        let isLastPage = page.isLastPage
+        let isLasPageType = _isLasPageType(page)
+        let newItems = mergeResult.items
         
         stateSyncLock.sync {
             if hasChanges  {
-                itemsValue = mergeResult.items
+                itemsValue = newItems
             }
             
-            if isLastPage {
-                lastPageIndex = pageIndex
+            if isLasPageType {
+                allItemsCount = newItems.count
             }
         }
         
@@ -128,18 +127,18 @@ public class PagedListDataProvider<TItem, TPage: ItemsPageType where TPage.ItemT
         }
     }
     
-    private func mergePage(page: TPage, pageIndex: Int) -> ItemsMergeResult {
-        let itemsOffset = pageIndex * pageSize
+    private func mergePage(page: PageType, pageIndex: Int) -> ItemsMergeResult {
+        let itemsOffset = pageFirstItemIndex(pageIndex)
         let pageItems = page.items
-        let isLastPage = page.isLastPage
-        let newItemsCount = isLastPage ? pageItems.count : pageSize
+        let isLasPageType = _isLasPageType(page)
+        let newItemsCount = isLasPageType ? pageItems.count : pageSize
         
         let mergeResult = mergePageItems(pageItems, offset: itemsOffset, count: newItemsCount)
         
         var newItemsValue = mergeResult.items
         var hasChanges = mergeResult.hasChanges
         
-        if isLastPage {
+        if isLasPageType {
             let newItemsCount = itemsOffset + newItemsCount
             if newItemsValue.count > newItemsCount {
                 newItemsValue = Array(newItemsValue[0..<newItemsCount])
@@ -150,7 +149,7 @@ public class PagedListDataProvider<TItem, TPage: ItemsPageType where TPage.ItemT
         return ItemsMergeResult(newItemsValue, hasChanges)
     }
     
-    private func mergePageItems(newItems: [TItem], offset: Int, count: Int) -> ItemsMergeResult {
+    private func mergePageItems(newItems: [ItemType], offset: Int, count: Int) -> ItemsMergeResult {
         let maxIndex = offset + count
         
         if maxIndex < itemsValue.count {
@@ -168,7 +167,7 @@ public class PagedListDataProvider<TItem, TPage: ItemsPageType where TPage.ItemT
         
         var newItemIndex = 0
         for index in offset..<maxIndex {
-            let newItem: TItem? = newItemIndex < newItems.count ? newItems[newItemIndex] : nil
+            let newItem: ItemType? = newItemIndex < newItems.count ? newItems[newItemIndex] : nil
             
             if index < allItems.count {
                 allItems[index] = newItem
@@ -190,15 +189,28 @@ public class PagedListDataProvider<TItem, TPage: ItemsPageType where TPage.ItemT
         return index % pageSize
     }
     
-    private func validatePageIndex(pageIndex: Int) -> Bool {
-        guard let lastPageIndex = lastPageIndex else {
+    private func pageFirstItemIndex(pageIndex: Int) -> Int {
+        return pageIndex * pageSize
+    }
+    
+    private func validateItemIndex(itemIndex: Int) -> Bool {
+        guard let allItemsCount = allItemsCount else {
             return true
         }
         
-        return pageIndex <= lastPageIndex
+        return itemIndex < allItemsCount
     }
     
-    public func _createLoadingPageObservable(offset: Int, count: Int) -> Observable<TPage> {
+    private func validatePageIndex(pageIndex: Int) -> Bool {
+        let pageFirstItemIndex = pageSize * pageIndex
+        return validateItemIndex(pageFirstItemIndex)
+    }
+    
+    public func _isLasPageType(page: PageType) -> Bool {
+        return page.items.count < pageSize
+    }
+    
+    public func _createLoadingPageObservable(offset: Int, count: Int) -> Observable<PageType> {
         Utils.abstractMethod()
     }
 }
