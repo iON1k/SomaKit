@@ -16,9 +16,9 @@ public class TableViewManager: SomaProxy, UITableViewDataSource, UITableViewDele
     public typealias SectionsAttributes = [TableSectionElementsAttributes]
     public typealias UpdatingHandler = (tableView: UITableView, updatingData: UpdatingData) -> Void
     
-    private let elementsAttributesCache = TableElementAttributesCache()
-    private let elementsProvider: TableElementsProvider
+    public let elementsProvider: TableElementsProvider
     
+    private let elementsAttributesCache = TableElementAttributesCache()
     private let defaultElementsAttributes = DefaultTableElementAttributes(prefferedHeight: 10)
     
     private static let defautSectionsData = SectionsModels()
@@ -34,13 +34,11 @@ public class TableViewManager: SomaProxy, UITableViewDataSource, UITableViewDele
     private weak var forwardDelegate: UITableViewDelegate?
     private weak var forwardDataSource: UITableViewDataSource?
     
-    public init(tableView: UITableView, elementsProviderHandler: TableElementsProvider -> Void) {
+    public init(tableView: UITableView) {
         self.tableView = tableView
         elementsProvider = TableElementsProvider(tableView: tableView)
         
         super.init()
-        
-        elementsProviderHandler(elementsProvider)
         
         elementsAttributesCache.source = self
         

@@ -35,8 +35,11 @@ public final class SomaModuleBuidler<TModulePresenter: UIViewController where TM
         
         if let viewModel = viewModel {
             let router = routerBuilder?()
-            router?.bindTransitionHandler(modulePresenter)
-            viewModel.bindRouter(router)
+            
+            if let router = router {
+                router.bindTransitionHandler(modulePresenter)
+                viewModel.bindRouter(router)
+            }
             
             modulePresenter.bindViewModel(viewModel)
         }
