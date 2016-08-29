@@ -1,5 +1,5 @@
 //
-//  PagedListDataProvider.swift
+//  AbstractPagedDataProvider.swift
 //  SomaKit
 //
 //  Created by Anton on 13.06.16.
@@ -8,9 +8,10 @@
 
 import RxSwift
 
-private let PagedListDataProviderQueueName = "PagedListDataProvider_Queue"
+public let PagedDataProviderDefaultPageSize = 100
+private let AbstractPagedDataProviderQueueName = "AbstractPagedDataProvider_Queue"
 
-public class PagedListDataProvider<TPage: ItemsPageType>: ListDataProviderType {
+public class AbstractPagedDataProvider<TPage: ItemsPageType>: ListDataProviderType {
     public typealias PageType = TPage
     public typealias ItemType = PageType.ItemType
     public typealias ItemsMergeResult = (items: [ItemType?], hasChanges: Bool)
@@ -21,7 +22,7 @@ public class PagedListDataProvider<TPage: ItemsPageType>: ListDataProviderType {
     private var itemsValue = [ItemType?]()
     private let itemsValueSubject = BehaviorSubject(value: [ItemType?]())
     
-    private let workingScheduler = SerialDispatchQueueScheduler(internalSerialQueueName: PagedListDataProviderQueueName)
+    private let workingScheduler = SerialDispatchQueueScheduler(internalSerialQueueName: AbstractPagedDataProviderQueueName)
     private let stateSyncLock = SyncLock()
     
     private var loadingPagesObservables = [Int : Observable<PageType>]()

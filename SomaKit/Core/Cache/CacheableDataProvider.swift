@@ -15,7 +15,7 @@ public enum CacheableDataProviderBehavior<TData> {
     case CacheAndData(dataToCachePredicate: DataToCachePredicate)
     case DataOrCache(cacheOnErrorPredicate: CacheOnErrorPredicate, dataToCachePredicate: DataToCachePredicate)
     case OnlyCache
-    case NoCache(dataToCachePredicate: DataToCachePredicate)
+    case OnlyData(dataToCachePredicate: DataToCachePredicate)
 }
 
 public class CacheableDataProviderBehaviors {
@@ -24,7 +24,7 @@ public class CacheableDataProviderBehaviors {
     }
     
     public static func noCache<TData>(dataToCachePredicate: TData -> Bool = SomaFunc.truePredicate) -> CacheableDataProviderBehavior<TData> {
-        return .NoCache(dataToCachePredicate: dataToCachePredicate)
+        return .OnlyData(dataToCachePredicate: dataToCachePredicate)
     }
     
     public static func dataOrCache<TData>(cacheOnErrorPredicate: ErrorType -> Bool = SomaFunc.truePredicate,
@@ -60,7 +60,7 @@ public class CacheableDataProvider<TKey, TData>: DataProviderType {
     public func data() -> Observable<DataType> {
         return Observable.deferred({ () -> Observable<DataType> in
             switch self.behavior {
-            case .NoCache(let dataToCachePredicate):
+            case .OnlyData(let dataToCachePredicate):
                 return self.sourceDataProviderObservable(dataToCachePredicate)
             case .OnlyCache:
                 return self.cacheStoreLoadDataObservable(false)

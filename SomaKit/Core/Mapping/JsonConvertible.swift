@@ -31,7 +31,7 @@ public extension _JsnonCovertible where Self: JsnonCovertible {
     }
 }
 
-public protocol JsnonCovertible {
+public protocol JsnonCovertible: _JsnonCovertible {
     static func convertToJson(object: Self) throws -> String
     static func convertToObject(json: String) throws -> Self
 }

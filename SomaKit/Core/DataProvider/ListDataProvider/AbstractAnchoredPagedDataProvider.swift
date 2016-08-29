@@ -1,5 +1,5 @@
 //
-//  AnchoredPageDataProvider.swift
+//  AbstractAnchoredPagedDataProvider.swift
 //  SomaKit
 //
 //  Created by Anton on 25.08.16.
@@ -8,7 +8,7 @@
 
 import RxSwift
 
-public class AnchoredPageDataProvider<TPage: AnchoredPageType>: PagedListDataProvider<TPage> {
+public class AbstractAnchoredPagedDataProvider<TPage: AnchoredPageType>: AbstractPagedDataProvider<TPage> {  
     private var anchoredPage: PageType?
     private var isAnchoredPageLoading = Variable<Bool>(false)
     private let syncLock = SyncLock()
@@ -49,7 +49,7 @@ public class AnchoredPageDataProvider<TPage: AnchoredPageType>: PagedListDataPro
     
     private func wrapAnchorLoadingPageObservable(sourceObservable: Observable<PageType>) -> Observable<PageType> {
         return Observable.create({ (observer) -> Disposable in
-            let lastLoadedPage = AtomicValue<TPage?>(value: nil)
+            let lastLoadedPage = AtomicValue<PageType?>(value: nil)
             
             let sourceDisposable = sourceObservable.subscribe({ (event) in
                 switch event {
