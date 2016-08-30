@@ -67,17 +67,16 @@ public class AbstractPagedDataProvider<TPage: ItemsPageType>: ListDataProviderTy
             let pageIndex = self.pageForIndex(index)
             return self.createLoadingPageObservable(pageIndex)
         })
-            .map({ (page) -> ItemType? in
-                let pageIems = page.items
-                let indexOnPage = self.indexOnPage(index)
-                
-                if indexOnPage < pageIems.count {
-                    return pageIems[indexOnPage]
-                }
-                
-                return nil
-                
-            })
+        .map({ (page) -> ItemType? in
+            let pageIems = page.items
+            let indexOnPage = self.indexOnPage(index)
+            
+            if indexOnPage < pageIems.count {
+                return pageIems[indexOnPage]
+            }
+            
+            return nil
+        })
     }
     
     private func createLoadingPageObservable(pageIndex: Int) -> Observable<PageType> {
@@ -94,6 +93,7 @@ public class AbstractPagedDataProvider<TPage: ItemsPageType>: ListDataProviderTy
             .doOnNext({ [weak self] (page) in
                 self?.onPageDidLoaded(page, pageIndex: pageIndex)
             })
+            .shareReplay(1)
         
         loadingPagesObservables[pageIndex] = newPageLoadingObservable
         
