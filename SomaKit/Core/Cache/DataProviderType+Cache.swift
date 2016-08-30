@@ -6,11 +6,13 @@
 //  Copyright © 2016 iON1k. All rights reserved.
 //
 
-public extension DataProviderConvertibleType where Self: CachingKeyProvider {
+import RxSwift
+
+public extension ObservableConvertibleType where Self: CachingKeyProvider {
     public func asCacheableProvider<TCacheStore: StoreConvertibleType
         where TCacheStore.KeyType == CachingKeyType,
-        TCacheStore.DataType == DataType>(cacheStore: TCacheStore, behavior: CacheableDataProviderBehavior<DataType>
-        = CacheableDataProviderBehaviors.dataOrCache()) -> CacheableDataProvider<CachingKeyType, DataType> {
-        return CacheableDataProvider(sourceProvider: self, cacheStore: cacheStore, cacheKey: cachingKey, behavior: behavior)
+        TCacheStore.DataType == E>(cacheStore: TCacheStore, behavior: CacheableDataProviderBehavior<E>
+        = CacheableDataProviderBehaviors.dataOrCache()) -> CacheableDataProvider<CachingKeyType, E> {
+        return CacheableDataProvider(dataSource: self, cacheStore: cacheStore, cacheKey: cachingKey, behavior: behavior)
     }
 }

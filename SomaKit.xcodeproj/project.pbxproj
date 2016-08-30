@@ -69,10 +69,7 @@
 		24E3CDFA1D1FE7B3001BCDB2 /* ConverterType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E3CDBF1D1FE7B3001BCDB2 /* ConverterType.swift */; };
 		24E3CDFB1D1FE7B3001BCDB2 /* SameTypeConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E3CDC01D1FE7B3001BCDB2 /* SameTypeConverter.swift */; };
 		24E3CDFC1D1FE7B3001BCDB2 /* AbstractDataBaseStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E3CDC21D1FE7B3001BCDB2 /* AbstractDataBaseStore.swift */; };
-		24E3CDFD1D1FE7B3001BCDB2 /* AnyDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E3CDC51D1FE7B3001BCDB2 /* AnyDataProvider.swift */; };
-		24E3CDFF1D1FE7B3001BCDB2 /* DataProviderConvertibleType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E3CDC71D1FE7B3001BCDB2 /* DataProviderConvertibleType.swift */; };
 		24E3CE001D1FE7B3001BCDB2 /* DataProviderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E3CDC81D1FE7B3001BCDB2 /* DataProviderType.swift */; };
-		24E3CE011D1FE7B3001BCDB2 /* Observable+DataProviderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E3CDC91D1FE7B3001BCDB2 /* Observable+DataProviderType.swift */; };
 		24E3CE041D1FE7B3001BCDB2 /* Collection+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E3CDCD1D1FE7B3001BCDB2 /* Collection+Extension.swift */; };
 		24E3CE051D1FE7B3001BCDB2 /* DefaultValueType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E3CDCE1D1FE7B3001BCDB2 /* DefaultValueType.swift */; };
 		24E3CE061D1FE7B3001BCDB2 /* Observable+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E3CDCF1D1FE7B3001BCDB2 /* Observable+Extensions.swift */; };
@@ -120,8 +117,6 @@
 		24EB57EA1D2C25920062DDDB /* ModuleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB57E91D2C25920062DDDB /* ModuleViewController.swift */; };
 		24EB57ED1D2C2C0F0062DDDB /* UiBindable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB57EC1D2C2C0F0062DDDB /* UiBindable.swift */; };
 		24EB57EF1D2C2DC40062DDDB /* SomaUIBindable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB57EE1D2C2DC40062DDDB /* SomaUIBindable.swift */; };
-		24F3CF521D6BA51F004C0AAF /* RequestConvertibleType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F3CF511D6BA51F004C0AAF /* RequestConvertibleType.swift */; };
-		24F3CF541D6BA544004C0AAF /* AnyRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F3CF531D6BA544004C0AAF /* AnyRequest.swift */; };
 		24F3CF561D6BA5D8004C0AAF /* AbstractApiRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F3CF551D6BA5D8004C0AAF /* AbstractApiRequest.swift */; };
 		24F3CF581D6BAB28004C0AAF /* AnyApiRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F3CF571D6BAB28004C0AAF /* AnyApiRequest.swift */; };
 		6AF3BA1EDD5E1C849FA7035A /* Pods_SomaKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42956B8F15DB5942D9E3CAB4 /* Pods_SomaKit.framework */; };
@@ -192,10 +187,7 @@
 		24E3CDBF1D1FE7B3001BCDB2 /* ConverterType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConverterType.swift; sourceTree = "<group>"; };
 		24E3CDC01D1FE7B3001BCDB2 /* SameTypeConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SameTypeConverter.swift; sourceTree = "<group>"; };
 		24E3CDC21D1FE7B3001BCDB2 /* AbstractDataBaseStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AbstractDataBaseStore.swift; sourceTree = "<group>"; };
-		24E3CDC51D1FE7B3001BCDB2 /* AnyDataProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyDataProvider.swift; sourceTree = "<group>"; };
-		24E3CDC71D1FE7B3001BCDB2 /* DataProviderConvertibleType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataProviderConvertibleType.swift; sourceTree = "<group>"; };
 		24E3CDC81D1FE7B3001BCDB2 /* DataProviderType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataProviderType.swift; sourceTree = "<group>"; };
-		24E3CDC91D1FE7B3001BCDB2 /* Observable+DataProviderType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Observable+DataProviderType.swift"; sourceTree = "<group>"; };
 		24E3CDCD1D1FE7B3001BCDB2 /* Collection+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Collection+Extension.swift"; sourceTree = "<group>"; };
 		24E3CDCE1D1FE7B3001BCDB2 /* DefaultValueType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultValueType.swift; sourceTree = "<group>"; };
 		24E3CDCF1D1FE7B3001BCDB2 /* Observable+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Observable+Extensions.swift"; sourceTree = "<group>"; };
@@ -243,8 +235,6 @@
 		24EB57E91D2C25920062DDDB /* ModuleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModuleViewController.swift; sourceTree = "<group>"; };
 		24EB57EC1D2C2C0F0062DDDB /* UiBindable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UiBindable.swift; sourceTree = "<group>"; };
 		24EB57EE1D2C2DC40062DDDB /* SomaUIBindable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SomaUIBindable.swift; sourceTree = "<group>"; };
-		24F3CF511D6BA51F004C0AAF /* RequestConvertibleType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestConvertibleType.swift; sourceTree = "<group>"; };
-		24F3CF531D6BA544004C0AAF /* AnyRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyRequest.swift; sourceTree = "<group>"; };
 		24F3CF551D6BA5D8004C0AAF /* AbstractApiRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AbstractApiRequest.swift; sourceTree = "<group>"; };
 		24F3CF571D6BAB28004C0AAF /* AnyApiRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyApiRequest.swift; sourceTree = "<group>"; };
 		42956B8F15DB5942D9E3CAB4 /* Pods_SomaKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SomaKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -404,10 +394,7 @@
 			isa = PBXGroup;
 			children = (
 				246F72621D593B74004FF101 /* ListDataProvider */,
-				24E3CDC51D1FE7B3001BCDB2 /* AnyDataProvider.swift */,
-				24E3CDC71D1FE7B3001BCDB2 /* DataProviderConvertibleType.swift */,
 				24E3CDC81D1FE7B3001BCDB2 /* DataProviderType.swift */,
-				24E3CDC91D1FE7B3001BCDB2 /* Observable+DataProviderType.swift */,
 			);
 			path = DataProvider;
 			sourceTree = "<group>";
@@ -475,9 +462,7 @@
 			isa = PBXGroup;
 			children = (
 				241B94891D6932B00008D22F /* Api */,
-				24F3CF511D6BA51F004C0AAF /* RequestConvertibleType.swift */,
 				24E3CDE51D1FE7B3001BCDB2 /* RequestType.swift */,
-				24F3CF531D6BA544004C0AAF /* AnyRequest.swift */,
 			);
 			path = Request;
 			sourceTree = "<group>";
@@ -789,9 +774,7 @@
 				24E3CE181D1FE7B3001BCDB2 /* RequestType.swift in Sources */,
 				24E3CE0C1D1FE7B3001BCDB2 /* Utils.swift in Sources */,
 				24E3CE071D1FE7B3001BCDB2 /* OptionalType.swift in Sources */,
-				24F3CF521D6BA51F004C0AAF /* RequestConvertibleType.swift in Sources */,
 				24E3CDF61D1FE7B3001BCDB2 /* DataBaseCacheStore.swift in Sources */,
-				24E3CDFF1D1FE7B3001BCDB2 /* DataProviderConvertibleType.swift in Sources */,
 				24E2CFB11D211AE200967097 /* FileImageSource.swift in Sources */,
 				244179AE1D5651F3003B6089 /* Equivalentable.swift in Sources */,
 				24EB57E81D2C229C0062DDDB /* SomaViewController.swift in Sources */,
@@ -844,7 +827,6 @@
 				24E3CDF41D1FE7B3001BCDB2 /* CacheBase.swift in Sources */,
 				244179B41D565A5A003B6089 /* ArrayChanges.swift in Sources */,
 				24468C101D455B42003E1344 /* TableElementAttributesCache.swift in Sources */,
-				24E3CE011D1FE7B3001BCDB2 /* Observable+DataProviderType.swift in Sources */,
 				24E1C0D71D22F14200533D4E /* ImageFiltering.swift in Sources */,
 				24B329BC1D330BA7002F817E /* ObjectGenerator.swift in Sources */,
 				24EB57E11D2C0E8A0062DDDB /* ViewPresenterType.swift in Sources */,
@@ -852,7 +834,6 @@
 				24E94A2F1D5B705C0045C4A5 /* Array+ListDataProviderType.swift in Sources */,
 				242B584E1D4CAC80008B7F7C /* SomaProxy.m in Sources */,
 				24E3CE081D1FE7B3001BCDB2 /* SomaError.swift in Sources */,
-				24F3CF541D6BA544004C0AAF /* AnyRequest.swift in Sources */,
 				242DAE471D57DCB800260816 /* TableElementsProvider+Extension.swift in Sources */,
 				24E3CE111D1FE7B3001BCDB2 /* JsonMappingConverter.swift in Sources */,
 				24AF8AE91D20A71100E40CCB /* ImageSourceConvertiable.swift in Sources */,
@@ -863,7 +844,6 @@
 				242B3FFE1D4BD1350010C3CB /* TableElementPresenterType.swift in Sources */,
 				24E3CDF81D1FE7B3001BCDB2 /* AnyConverter.swift in Sources */,
 				24E3CE101D1FE7B3001BCDB2 /* Observable+Log.swift in Sources */,
-				24E3CDFD1D1FE7B3001BCDB2 /* AnyDataProvider.swift in Sources */,
 				24EB57DE1D2C0E8A0062DDDB /* UIViewController+ModuleTransitionHandler.swift in Sources */,
 				24E3CE221D1FE7B3001BCDB2 /* UserDefaultsStore.swift in Sources */,
 				24E3CE201D1FE7B3001BCDB2 /* StoreType.swift in Sources */,

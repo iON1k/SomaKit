@@ -28,16 +28,16 @@ public class PagedDataProvider<TPage: ItemsPageType>: AbstractPagedDataProvider<
 }
 
 extension PagedDataProvider {
-    public convenience init<TDataProvider: DataProviderConvertibleType, TCacheStore: StoreConvertibleType
-        where TDataProvider: CachingKeyProvider, TCacheStore.KeyType == TDataProvider.CachingKeyType,
-        TCacheStore.DataType == TDataProvider.DataType, TDataProvider.DataType == PageType>(pageSize: Int = PagedDataProviderDefaultPageSize,
+    public convenience init<TDataSource: ObservableConvertibleType, TCacheStore: StoreConvertibleType
+        where TDataSource: CachingKeyProvider, TCacheStore.KeyType == TDataSource.CachingKeyType,
+        TCacheStore.DataType == TDataSource.E, TDataSource.E == PageType>(pageSize: Int = PagedDataProviderDefaultPageSize,
                                     cacheStore: TCacheStore, cacheBehavior: CacheableDataProviderBehavior<PageType> = CacheableDataProviderBehaviors.cacheAndData(),
-                                    pageObservableFactory: (offset: Int, count: Int) -> TDataProvider) {
+                                    dataSourceFactory: (offset: Int, count: Int) -> TDataSource) {
         self.init(pageSize: pageSize, memoryCache: MemoryCacheType()) { (offset, count) -> Observable<PageType> in
-            return pageObservableFactory(offset: offset, count: count)
+            return dataSourceFactory(offset: offset, count: count)
                 .asCacheableProvider(cacheStore, behavior: cacheBehavior)
-                .dataOnly()
-                .asObservable()
+                .data()
+                .onlyData()
         }
     }
 }

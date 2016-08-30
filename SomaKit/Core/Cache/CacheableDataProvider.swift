@@ -37,11 +37,19 @@ public class CacheableDataProviderBehaviors {
     }
 }
 
-public class CacheState<TData> {
-    public let data: TData
+public protocol CacheStateType {
+    associatedtype DataType
+    var data: DataType { get }
+    var fromCache: Bool { get }
+}
+
+public class CacheState<TData>: CacheStateType {
+    public typealias DataType = TData
+    
+    public let data: DataType
     public let fromCache: Bool
     
-    public init(data: TData, fromCache: Bool) {
+    public init(data: DataType, fromCache: Bool) {
         self.data = data
         self.fromCache = fromCache
     }
@@ -52,7 +60,7 @@ public class CacheableDataProvider<TKey, TData>: DataProviderType {
     public typealias DataType = CacheState<TData>
     
     private let behavior: CacheableDataProviderBehavior<SourceDataType>
-    private let sourceProvider: AnyDataProvider<SourceDataType>
+    private let dataSource: Observable<SourceDataType>
     private let cacheStore: AnyStore<TKey, SourceDataType>
     private let cacheKey: TKey
     private let disposeBag = DisposeBag()
@@ -89,18 +97,18 @@ public class CacheableDataProvider<TKey, TData>: DataProviderType {
         })
     }
     
-    public init<TDataProvider: DataProviderConvertibleType, TCacheStore: StoreConvertibleType
-        where TDataProvider.DataType == SourceDataType, TCacheStore.KeyType == TKey,
-        TCacheStore.DataType == SourceDataType>(sourceProvider: TDataProvider, cacheStore: TCacheStore, cacheKey: TKey, behavior: CacheableDataProviderBehavior<SourceDataType>
+    public init<TDataSource: ObservableConvertibleType, TCacheStore: StoreConvertibleType
+        where TDataSource.E == SourceDataType, TCacheStore.KeyType == TKey,
+        TCacheStore.DataType == SourceDataType>(dataSource: TDataSource, cacheStore: TCacheStore, cacheKey: TKey, behavior: CacheableDataProviderBehavior<SourceDataType>
             = CacheableDataProviderBehaviors.dataOrCache()) {
-        self.sourceProvider = sourceProvider.asDataProvider()
+        self.dataSource = dataSource.asObservable()
         self.cacheStore = cacheStore.asStore()
         self.cacheKey = cacheKey
         self.behavior = behavior
     }
     
     private func sourceDataProviderObservable(dataToCachePredicate: SourceDataType -> Bool) -> Observable<DataType> {
-        return sourceProvider.data()
+        return dataSource
             .doOnNext({ (data) in
                 if dataToCachePredicate(data) {
                     self.asyncSaveToCache(data)
@@ -131,12 +139,10 @@ public class CacheableDataProvider<TKey, TData>: DataProviderType {
     }
 }
 
-public extension CacheableDataProvider {
-    public func dataOnly() -> AnyDataProvider<TData> {
-        return self.transform({ (sourceObservable) -> Observable<TData> in
-            return sourceObservable.map({ (cacheState) -> TData in
-                return cacheState.data
-            })
+extension Observable where Element: CacheStateType {
+    public func onlyData() -> Observable<E.DataType> {
+        return map({ (cacheState) in
+            return cacheState.data
         })
     }
 }

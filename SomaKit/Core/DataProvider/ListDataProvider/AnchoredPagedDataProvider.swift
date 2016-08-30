@@ -29,16 +29,16 @@ public class AnchoredPagedDataProvider<TPage: AnchoredPageType>: AbstractAnchore
 }
 
 extension AnchoredPagedDataProvider {
-    public convenience init<TDataProvider: DataProviderConvertibleType, TCacheStore: StoreConvertibleType
-        where TDataProvider: CachingKeyProvider, TCacheStore.KeyType == TDataProvider.CachingKeyType,
-        TCacheStore.DataType == TDataProvider.DataType, TDataProvider.DataType == PageType>(pageSize: Int = PagedDataProviderDefaultPageSize,
+    public convenience init<TDataSource: ObservableConvertibleType, TCacheStore: StoreConvertibleType
+        where TDataSource: CachingKeyProvider, TCacheStore.KeyType == TDataSource.CachingKeyType,
+        TCacheStore.DataType == TDataSource.E, TDataSource.E == PageType>(pageSize: Int = PagedDataProviderDefaultPageSize,
                                                                                             cacheStore: TCacheStore, cacheBehavior: CacheableDataProviderBehavior<PageType> = CacheableDataProviderBehaviors.cacheAndData(),
-                                                                                            pageObservableFactory: (offset: Int, count: Int, anchor: AnchorType?) -> TDataProvider) {
+                                                                                            dataSourceFactory: (offset: Int, count: Int, anchor: AnchorType?) -> TDataSource) {
         self.init(pageSize: pageSize, memoryCache: MemoryCacheType()) { (offset, count, anchor) -> Observable<PageType> in
-            return pageObservableFactory(offset: offset, count: count, anchor: anchor)
+            return dataSourceFactory(offset: offset, count: count, anchor: anchor)
                 .asCacheableProvider(cacheStore, behavior: cacheBehavior)
-                .dataOnly()
-                .asObservable()
+                .data()
+                .onlyData()
         }
     }
 }
