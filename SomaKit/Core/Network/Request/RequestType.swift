@@ -18,8 +18,6 @@ extension RequestType {
     public typealias E = ResponseType
     
     public func asObservable() -> Observable<ResponseType> {
-        return Observable.deferred({ () -> Observable<ResponseType> in
-            return self.response()
-        })
+        return response()
     }
 }

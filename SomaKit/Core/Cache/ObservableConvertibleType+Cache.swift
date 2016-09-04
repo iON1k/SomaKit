@@ -1,5 +1,5 @@
 //
-//  DataProviderType+Cache.swift
+//  ObservableConvertibleType+Cache.swift
 //  SomaKit
 //
 //  Created by Anton on 27.06.16.

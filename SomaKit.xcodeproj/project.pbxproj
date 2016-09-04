@@ -54,7 +54,7 @@
 		24E2CFB51D21239500967097 /* FakeStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E2CFB41D21239500967097 /* FakeStore.swift */; };
 		24E2CFB71D21291500967097 /* NetworkImageSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E2CFB61D21291500967097 /* NetworkImageSource.swift */; };
 		24E2CFB91D2132C700967097 /* CachingKeyProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E2CFB81D2132C700967097 /* CachingKeyProvider.swift */; };
-		24E2CFBB1D2134F700967097 /* DataProviderType+Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E2CFBA1D2134F700967097 /* DataProviderType+Cache.swift */; };
+		24E2CFBB1D2134F700967097 /* ObservableConvertibleType+Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E2CFBA1D2134F700967097 /* ObservableConvertibleType+Cache.swift */; };
 		24E2CFBD1D21459500967097 /* LazyValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E2CFBC1D21459500967097 /* LazyValue.swift */; };
 		24E3480E1D5BDA4100A926B6 /* ItemsPageType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E3480D1D5BDA4100A926B6 /* ItemsPageType.swift */; };
 		24E3CDAD1D1FE753001BCDB2 /* SomaKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 24E3CDAC1D1FE753001BCDB2 /* SomaKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -118,7 +118,6 @@
 		24EB57ED1D2C2C0F0062DDDB /* UiBindable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB57EC1D2C2C0F0062DDDB /* UiBindable.swift */; };
 		24EB57EF1D2C2DC40062DDDB /* SomaUIBindable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB57EE1D2C2DC40062DDDB /* SomaUIBindable.swift */; };
 		24F3CF561D6BA5D8004C0AAF /* AbstractApiRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F3CF551D6BA5D8004C0AAF /* AbstractApiRequest.swift */; };
-		24F3CF581D6BAB28004C0AAF /* AnyApiRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F3CF571D6BAB28004C0AAF /* AnyApiRequest.swift */; };
 		6AF3BA1EDD5E1C849FA7035A /* Pods_SomaKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42956B8F15DB5942D9E3CAB4 /* Pods_SomaKit.framework */; };
 /* End PBXBuildFile section */
 
@@ -170,7 +169,7 @@
 		24E2CFB41D21239500967097 /* FakeStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakeStore.swift; sourceTree = "<group>"; };
 		24E2CFB61D21291500967097 /* NetworkImageSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkImageSource.swift; sourceTree = "<group>"; };
 		24E2CFB81D2132C700967097 /* CachingKeyProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachingKeyProvider.swift; sourceTree = "<group>"; };
-		24E2CFBA1D2134F700967097 /* DataProviderType+Cache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DataProviderType+Cache.swift"; sourceTree = "<group>"; };
+		24E2CFBA1D2134F700967097 /* ObservableConvertibleType+Cache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ObservableConvertibleType+Cache.swift"; sourceTree = "<group>"; };
 		24E2CFBC1D21459500967097 /* LazyValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LazyValue.swift; sourceTree = "<group>"; };
 		24E3480D1D5BDA4100A926B6 /* ItemsPageType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemsPageType.swift; sourceTree = "<group>"; };
 		24E3CDA91D1FE753001BCDB2 /* SomaKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SomaKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -236,7 +235,6 @@
 		24EB57EC1D2C2C0F0062DDDB /* UiBindable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UiBindable.swift; sourceTree = "<group>"; };
 		24EB57EE1D2C2DC40062DDDB /* SomaUIBindable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SomaUIBindable.swift; sourceTree = "<group>"; };
 		24F3CF551D6BA5D8004C0AAF /* AbstractApiRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AbstractApiRequest.swift; sourceTree = "<group>"; };
-		24F3CF571D6BAB28004C0AAF /* AnyApiRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyApiRequest.swift; sourceTree = "<group>"; };
 		42956B8F15DB5942D9E3CAB4 /* Pods_SomaKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SomaKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		52251226EA2BC454904777B7 /* Pods-SomaKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SomaKit.release.xcconfig"; path = "Pods/Target Support Files/Pods-SomaKit/Pods-SomaKit.release.xcconfig"; sourceTree = "<group>"; };
 		7A0120809CF5D00DCB32AAA7 /* Pods-SomaKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SomaKit.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SomaKit/Pods-SomaKit.debug.xcconfig"; sourceTree = "<group>"; };
@@ -261,7 +259,6 @@
 				24F3CF551D6BA5D8004C0AAF /* AbstractApiRequest.swift */,
 				241AF7D21D6A14BA004A8114 /* ApiRequestBase.swift */,
 				24E2C0831D6A406A001025CA /* ApiPartBase.swift */,
-				24F3CF571D6BAB28004C0AAF /* AnyApiRequest.swift */,
 			);
 			path = Api;
 			sourceTree = "<group>";
@@ -366,7 +363,7 @@
 				24E3CDB91D1FE7B3001BCDB2 /* CacheValue.swift */,
 				24E3CDBA1D1FE7B3001BCDB2 /* DataBaseCacheStore.swift */,
 				24E3CDBB1D1FE7B3001BCDB2 /* MemoryCache.swift */,
-				24E2CFBA1D2134F700967097 /* DataProviderType+Cache.swift */,
+				24E2CFBA1D2134F700967097 /* ObservableConvertibleType+Cache.swift */,
 			);
 			path = Cache;
 			sourceTree = "<group>";
@@ -770,7 +767,6 @@
 				24E3CE0A1D1FE7B3001BCDB2 /* Synchronized.swift in Sources */,
 				2455A0061D6D8AE800BD1D86 /* JsonMapper.swift in Sources */,
 				2456EF3A1D6D856400C53015 /* MapperType.swift in Sources */,
-				24F3CF581D6BAB28004C0AAF /* AnyApiRequest.swift in Sources */,
 				24E3CE181D1FE7B3001BCDB2 /* RequestType.swift in Sources */,
 				24E3CE0C1D1FE7B3001BCDB2 /* Utils.swift in Sources */,
 				24E3CE071D1FE7B3001BCDB2 /* OptionalType.swift in Sources */,
@@ -851,7 +847,7 @@
 				24EA99751D482A0600AEF2B1 /* NibProvider.swift in Sources */,
 				24E3CE1A1D1FE7B3001BCDB2 /* AnyStore.swift in Sources */,
 				24E3CE1F1D1FE7B3001BCDB2 /* StoreType+Async.swift in Sources */,
-				24E2CFBB1D2134F700967097 /* DataProviderType+Cache.swift in Sources */,
+				24E2CFBB1D2134F700967097 /* ObservableConvertibleType+Cache.swift in Sources */,
 				24E5C2D41D209E7F0098AB3A /* ImageSourceType.swift in Sources */,
 				24E3CDFA1D1FE7B3001BCDB2 /* ConverterType.swift in Sources */,
 				24E3CE0F1D1FE7B3001BCDB2 /* NativeLogProcessor.swift in Sources */,

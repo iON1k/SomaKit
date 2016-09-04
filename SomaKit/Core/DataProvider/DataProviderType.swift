@@ -17,8 +17,6 @@ extension DataProviderType {
     public typealias E = DataType
     
     public func asObservable() -> Observable<DataType> {
-        return Observable.deferred({ () -> Observable<DataType> in
-            return self.data()
-        })
+        return data()
     }
 }

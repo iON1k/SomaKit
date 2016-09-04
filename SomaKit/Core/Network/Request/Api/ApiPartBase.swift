@@ -16,13 +16,6 @@ public class ApiPartBase<TManager: ApiRequestManagerType> {
         self.requestManager = requestManager
     }
     
-    public final func _wrapRequest<TResponse: Mappable>(requestFactory: TManager -> ApiRequestBase<TResponse, TManager>,
-        transformHandler: Observable<TResponse> -> Observable<TResponse> = SomaFunc.sameTransform) -> AnyApiRequest<TResponse> {
-        return _request { manager in
-            return AnyApiRequest(requestFactory(manager), transformHandler: transformHandler)
-        }
-    }
-    
     public func _request<TRequest: RequestType where TRequest.ResponseType: Mappable>(requestFactory: TManager -> TRequest) -> TRequest {
         return requestFactory(requestManager)
     }
