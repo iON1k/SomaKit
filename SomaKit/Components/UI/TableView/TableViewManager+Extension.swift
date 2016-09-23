@@ -24,13 +24,11 @@ extension TableViewManager {
                 observer.onCompleted()
             }
             
-            let updatingEvent = UpdatingEvent(sectionsData: sectionsData, needPrepareData: false, updatingHandler: eventUpdatingHandler) {
-                observer.onCompleted()
-            }
+            let updatingEvent = UpdatingEvent(sectionsData: sectionsData, needPrepareData: false, updatingHandler: eventUpdatingHandler)
             
             self.updateData(updatingEvent)
             
-            return NopDisposable.instance
+            return updatingEvent.disposable
         })
     }
     
