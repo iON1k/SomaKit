@@ -76,20 +76,15 @@ public protocol LogProcessor {
 
 public final class Log {
     public static func initialize(logProcessor: LogProcessor, logPriority: LogPriority) {
-        guard logInstance != nil else {
-            log(.Error, message: "Log already initialized")
-            return
-        }
-        
         logInstance = Log(logProcessor: logProcessor, logPriority: logPriority)
         log(.Info, message: "Log initialized with processor: \(logProcessor.dynamicType) and log priority: \(logPriority)")
     }
     
+    public static func initialize(logPriority: LogPriority) {
+        initialize(NativeLogProcessor(), logPriority: logPriority)
+    }
+    
     public static func log(logLevel: LogLevel, message: String, args: Any...) {
-        guard let logInstance = logInstance else {
-            Debug.fatalError("Log not initialized")
-        }
-        
         logInstance.log(logLevel, message: message, args: args)
     }
     
@@ -107,7 +102,7 @@ public final class Log {
         self.logPriority = logPriority
     }
     
-    private static var logInstance: Log?
+    private static var logInstance: Log = Log(logProcessor: NativeLogProcessor(), logPriority: .Info)
     
     private let logProcessor: LogProcessor
     

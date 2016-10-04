@@ -9,14 +9,6 @@
 import Foundation
 
 extension Log {
-    public static func initialize(logPriority: LogPriority) {
-        initialize(NativeLogProcessor(), logPriority: logPriority)
-    }
-    
-    public static func initialize() {
-        initialize(.Info)
-    }
-    
     public static func error(message: String, args: Any...) {
         log(.Error, message: message, args: args)
     }

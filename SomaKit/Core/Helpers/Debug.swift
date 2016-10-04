@@ -8,7 +8,7 @@
 
 public final class Debug {
     @noreturn public static func fatalError(message: String? = nil) {
-        fatalError(message)
+        Swift.fatalError(message ?? "Unknown fatal error")
     }
     
     public static func error(message: String) {
