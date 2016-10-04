@@ -42,8 +42,8 @@ public class TableViewManager: SomaProxy, UITableViewDataSource, UITableViewDele
         
         elementsAttributesCache.source = self
         
-        tableView.rx_delegate.setForwardToDelegate(self, retainDelegate: false)
-        tableView.rx_dataSource.setForwardToDelegate(self, retainDelegate: false)
+        tableView.rx_setDataSource(self)
+        tableView.rx_setDataSource(self)
         
         startObserveUpdatingEvents()
     }
