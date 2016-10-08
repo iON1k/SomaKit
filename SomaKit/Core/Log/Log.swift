@@ -81,7 +81,7 @@ public final class Log {
     }
     
     public static func initialize(logPriority: LogPriority) {
-        initialize(NativeLogProcessor(), logPriority: logPriority)
+        initialize(logInstance.logProcessor, logPriority: logPriority)
     }
     
     public static func log(logLevel: LogLevel, message: String, args: Any...) {
