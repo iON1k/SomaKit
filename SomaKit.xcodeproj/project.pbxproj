@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		241AF7D31D6A14BA004A8114 /* ApiRequestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241AF7D21D6A14BA004A8114 /* ApiRequestBase.swift */; };
 		241B948D1D6932B00008D22F /* AlamoRequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241B948A1D6932B00008D22F /* AlamoRequestManager.swift */; };
+		24231EAF1D7C53BD00309D5B /* TableViewBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24231EAE1D7C53BD00309D5B /* TableViewBehavior.swift */; };
+		24231EB11D7C54D800309D5B /* AbstractTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24231EB01D7C54D800309D5B /* AbstractTableViewController.swift */; };
 		24243F0B1D6C9D2400DB2584 /* SomaMappable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24243F0A1D6C9D2400DB2584 /* SomaMappable.swift */; };
 		24243F0D1D6CA63F00DB2584 /* UnsafeJsonMappingConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24243F0C1D6CA63F00DB2584 /* UnsafeJsonMappingConverter.swift */; };
 		2425A8F01D574B02009A45D1 /* Variable+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2425A8EF1D574B02009A45D1 /* Variable+Extension.swift */; };
@@ -124,6 +126,8 @@
 /* Begin PBXFileReference section */
 		241AF7D21D6A14BA004A8114 /* ApiRequestBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiRequestBase.swift; sourceTree = "<group>"; };
 		241B948A1D6932B00008D22F /* AlamoRequestManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlamoRequestManager.swift; sourceTree = "<group>"; };
+		24231EAE1D7C53BD00309D5B /* TableViewBehavior.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewBehavior.swift; sourceTree = "<group>"; };
+		24231EB01D7C54D800309D5B /* AbstractTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AbstractTableViewController.swift; sourceTree = "<group>"; };
 		24243F0A1D6C9D2400DB2584 /* SomaMappable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SomaMappable.swift; sourceTree = "<group>"; };
 		24243F0C1D6CA63F00DB2584 /* UnsafeJsonMappingConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnsafeJsonMappingConverter.swift; sourceTree = "<group>"; };
 		2425A8EF1D574B02009A45D1 /* Variable+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Variable+Extension.swift"; sourceTree = "<group>"; };
@@ -617,6 +621,8 @@
 				24EB57E31D2C1A220062DDDB /* StoryboardProvider.swift */,
 				24EB57E71D2C229C0062DDDB /* SomaViewController.swift */,
 				24EB57E91D2C25920062DDDB /* ModuleViewController.swift */,
+				24231EAE1D7C53BD00309D5B /* TableViewBehavior.swift */,
+				24231EB01D7C54D800309D5B /* AbstractTableViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -826,6 +832,7 @@
 				24E1C0D71D22F14200533D4E /* ImageFiltering.swift in Sources */,
 				24B329BC1D330BA7002F817E /* ObjectGenerator.swift in Sources */,
 				24EB57E11D2C0E8A0062DDDB /* ViewPresenterType.swift in Sources */,
+				24231EAF1D7C53BD00309D5B /* TableViewBehavior.swift in Sources */,
 				24E5C2E41D20A28F0098AB3A /* ImageLoader.swift in Sources */,
 				24E94A2F1D5B705C0045C4A5 /* Array+ListDataProviderType.swift in Sources */,
 				242B584E1D4CAC80008B7F7C /* SomaProxy.m in Sources */,
@@ -854,6 +861,7 @@
 				24243F0B1D6C9D2400DB2584 /* SomaMappable.swift in Sources */,
 				24E3CE1B1D1FE7B3001BCDB2 /* MemoryStore.swift in Sources */,
 				24EB57E01D2C0E8A0062DDDB /* ViewModelType.swift in Sources */,
+				24231EB11D7C54D800309D5B /* AbstractTableViewController.swift in Sources */,
 				24E3CE001D1FE7B3001BCDB2 /* DataProviderType.swift in Sources */,
 				246F72661D593B8C004FF101 /* ListDataProviderType.swift in Sources */,
 				2425A8F01D574B02009A45D1 /* Variable+Extension.swift in Sources */,
