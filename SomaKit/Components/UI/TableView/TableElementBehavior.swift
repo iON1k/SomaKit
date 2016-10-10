@@ -11,3 +11,9 @@ public protocol TableElementBehavior {
     func bindTableElementAttributes(attributes: TableElementAttributes)
     func tableElementReset()
 }
+
+public extension TableElementBehavior {
+    public func bindTableElementAttributes(attributes: TableElementAttributes) {
+        //Nothing
+    }
+}
