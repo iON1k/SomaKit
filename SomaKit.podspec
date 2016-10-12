@@ -28,7 +28,7 @@ TODO: Add long description of the pod here.
   #   'SomaKit' => ['SomaKit/Assets/*.png']
   # }
 
-  # s.public_header_files = 'Pod/Classes/**/*.h'
+  s.public_header_files = 'SomaKit/**/*.h'
   s.frameworks = 'UIKit'
   s.dependency 'RxSwift', '~> 2.6'
   s.dependency 'RxCocoa', '~> 2.6'
