@@ -22,7 +22,7 @@ TODO: Add long description of the pod here.
 
   s.ios.deployment_target = '8.0'
 
-  s.source_files = ['SomaKit/Core/**/*', 'SomaKit/Components/**/*']
+  s.source_files = ['SomaKit/Core/**/*', 'SomaKit/Components/**/*'', 'SomaKit/SomaKit.h']
 
   # s.resource_bundles = {
   #   'SomaKit' => ['SomaKit/Assets/*.png']
