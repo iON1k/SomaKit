@@ -9,16 +9,16 @@
 import RxSwift
 
 public protocol UiBindableType {
-    func whileBinded<T>(observable: Observable<T>) -> Observable<T>
-    func whileActive<T>(observable: Observable<T>) -> Observable<T>
+    func whileBinded<T>(_ observable: Observable<T>) -> Observable<T>
+    func whileActive<T>(_ observable: Observable<T>) -> Observable<T>
 }
 
 extension Observable {
-    public func whileBinded(uiBindable: UiBindableType) -> Observable<E> {
+    public func whileBinded(_ uiBindable: UiBindableType) -> Observable<E> {
         return uiBindable.whileBinded(self)
     }
     
-    public func whileActive(uiBindable: UiBindableType) -> Observable<E> {
+    public func whileActive(_ uiBindable: UiBindableType) -> Observable<E> {
         return uiBindable.whileActive(self)
     }
 }

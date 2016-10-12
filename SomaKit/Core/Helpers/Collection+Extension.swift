@@ -9,7 +9,7 @@
 import Foundation
 
 extension Dictionary {
-    public func mapValues<TNewValue>(transform: Value throws -> TNewValue) rethrows -> Dictionary<Key, TNewValue> {
+    public func mapValues<TNewValue>(transform: (Value) throws -> TNewValue) rethrows -> Dictionary<Key, TNewValue> {
         var newDictionary = Dictionary<Key, TNewValue>(minimumCapacity: count)
         
         for (key, value) in self {
@@ -21,8 +21,8 @@ extension Dictionary {
 }
 
 extension Array {
-    public func indexOfEquivalent(object: Element) -> Int? {
-        return indexOf({ (element) -> Bool in
+    public func indexOfEquivalent(_ object: Element) -> Int? {
+        return index(where: { (element) -> Bool in
             return Utils.isEquivalentValues(element, value2: object)
         })
     }
@@ -33,7 +33,7 @@ extension Array {
 }
 
 extension Array: Equivalentable {
-    public func isEquivalent(other: Array) -> Bool {
+    public func isEquivalent(_ other: Array) -> Bool {
         guard count == other.count else {
             return false
         }

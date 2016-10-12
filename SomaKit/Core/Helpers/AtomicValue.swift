@@ -8,11 +8,11 @@
 
 import Foundation
 
-public class AtomicValue<TValue> {
-    private var innerValue: TValue
-    private let syncLock = SyncLock()
+open class AtomicValue<TValue> {
+    fileprivate var innerValue: TValue
+    fileprivate let syncLock = SyncLock()
     
-    public var value: TValue {
+    open var value: TValue {
         get {
             return syncLock.sync {
                 return innerValue

@@ -6,7 +6,7 @@
 //  Copyright © 2016 iON1k. All rights reserved.
 //
 
-public class TableElementsProvider: ViewsProvider<UITableView> {
+open class TableElementsProvider: ViewsProvider<UITableView> {
     public init(tableView: UITableView) {
         super.init(context: tableView)
     }
@@ -14,7 +14,7 @@ public class TableElementsProvider: ViewsProvider<UITableView> {
 
 extension TableElementsProvider {
     public func registerTableElementGenerator<TViewModel: ViewModelType,
-                                              TView: UIView where TView: TableElementPresenterType>(elementGenerator: (TViewModel, UITableView) -> TView) {
+                                              TView: UIView>(_ elementGenerator: @escaping (TViewModel, UITableView) -> TView) where TView: TableElementPresenterType {
         _internalRegisterViewGenerator(elementGenerator)
     }
 }

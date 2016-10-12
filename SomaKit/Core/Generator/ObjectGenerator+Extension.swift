@@ -9,11 +9,11 @@
 import RxSwift
 
 extension ObjectGenerator {
-    public func fillPoolAsync(count: UInt) -> Observable<Void> {
+    public func fillPoolAsync(_ count: UInt) -> Observable<Void> {
         return Observable.deferred { () -> Observable<Void> in
-            return Observable.just()
+            return Observable.just(())
         }
-        .doOnNext { () in
+        .do { () in
             self.fillPool(count)
         }
         .subcribeOnBackgroundScheduler()

@@ -7,21 +7,21 @@
 //
 
 public enum LogLevel: UInt32, CustomStringConvertible {
-    case Debug = 0x1
-    case Info = 0x10
-    case Warning = 0x100
-    case Error = 0x1000
+    case debug = 0x1
+    case info = 0x10
+    case warning = 0x100
+    case error = 0x1000
     
     public var description: String {
         get {
             switch self {
-            case .Debug:
+            case .debug:
                 return "Debug"
-            case .Info:
+            case .info:
                 return "Info"
-            case .Warning:
+            case .warning:
                 return "Warning"
-            case .Error:
+            case .error:
                 return "Error"
             }
         }
@@ -29,13 +29,13 @@ public enum LogLevel: UInt32, CustomStringConvertible {
 }
 
 public struct LogPriority: Equatable, CustomStringConvertible {
-    private let logLevels: UInt32
+    fileprivate let logLevels: UInt32
     
-    private init(logLevels: UInt32) {
+    fileprivate init(logLevels: UInt32) {
         self.logLevels = logLevels
     }
     
-    public func contain(logLevel: LogLevel) -> Bool {
+    public func contain(_ logLevel: LogLevel) -> Bool {
         return logLevels & logLevel.rawValue == 1
     }
     
@@ -58,12 +58,12 @@ public struct LogPriority: Equatable, CustomStringConvertible {
     
     public static let None = LogPriority(logLevels: 0)
     
-    public static let Error = LogPriority(logLevels: LogLevel.Error.rawValue)
+    public static let Error = LogPriority(logLevels: LogLevel.error.rawValue)
     
-    public static let Info = LogPriority(logLevels: LogLevel.Info.rawValue | LogLevel.Warning.rawValue | LogLevel.Error.rawValue)
+    public static let Info = LogPriority(logLevels: LogLevel.info.rawValue | LogLevel.warning.rawValue | LogLevel.error.rawValue)
     
-    public static let All = LogPriority(logLevels: LogLevel.Debug.rawValue | LogLevel.Info.rawValue
-        | LogLevel.Warning.rawValue | LogLevel.Error.rawValue)
+    public static let All = LogPriority(logLevels: LogLevel.debug.rawValue | LogLevel.info.rawValue
+        | LogLevel.warning.rawValue | LogLevel.error.rawValue)
 }
 
 public func ==(lhs: LogPriority, rhs: LogPriority) -> Bool {
@@ -71,24 +71,24 @@ public func ==(lhs: LogPriority, rhs: LogPriority) -> Bool {
 }
 
 public protocol LogProcessor {
-    func log(message: String, args: Any...)
+    func log(_ message: String, args: Any...)
 }
 
 public final class Log {
-    public static func initialize(logProcessor: LogProcessor, logPriority: LogPriority) {
+    public static func initialize(_ logProcessor: LogProcessor, logPriority: LogPriority) {
         logInstance = Log(logProcessor: logProcessor, logPriority: logPriority)
-        log(.Info, message: "Log initialized with processor: \(logProcessor.dynamicType) and log priority: \(logPriority)")
+        log(.info, message: "Log initialized with processor: \(type(of: logProcessor)) and log priority: \(logPriority)")
     }
     
-    public static func initialize(logPriority: LogPriority) {
+    public static func initialize(_ logPriority: LogPriority) {
         initialize(logInstance.logProcessor, logPriority: logPriority)
     }
     
-    public static func log(logLevel: LogLevel, message: String, args: Any...) {
+    public static func log(_ logLevel: LogLevel, message: String, args: Any...) {
         logInstance.log(logLevel, message: message, args: args)
     }
     
-    private func log(logLevel: LogLevel, message: String, args: Any...) {
+    fileprivate func log(_ logLevel: LogLevel, message: String, args: Any...) {
         guard logPriority.contain(logLevel) else {
             return
         }
@@ -97,14 +97,14 @@ public final class Log {
         logProcessor.log(messageWithType, args: args)
     }
     
-    private init(logProcessor: LogProcessor, logPriority: LogPriority) {
+    fileprivate init(logProcessor: LogProcessor, logPriority: LogPriority) {
         self.logProcessor = logProcessor
         self.logPriority = logPriority
     }
     
-    private static var logInstance: Log = Log(logProcessor: NativeLogProcessor(), logPriority: .Info)
+    fileprivate static var logInstance: Log = Log(logProcessor: NativeLogProcessor(), logPriority: .Info)
     
-    private let logProcessor: LogProcessor
+    fileprivate let logProcessor: LogProcessor
     
-    private let logPriority: LogPriority
+    fileprivate let logPriority: LogPriority
 }

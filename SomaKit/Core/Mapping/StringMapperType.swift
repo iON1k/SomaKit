@@ -9,8 +9,8 @@
 import Foundation
 
 public protocol _StringMapperType {
-    func mapToString<TModel>(model: TModel) throws -> String
-    func mapToModel<TModel>(string: String) throws -> TModel
+    func mapToString<TModel>(_ model: TModel) throws -> String
+    func mapToModel<TModel>(_ string: String) throws -> TModel
 }
 
 public protocol StringMapperType: _StringMapperType, MapperType {
@@ -20,11 +20,11 @@ public protocol StringMapperType: _StringMapperType, MapperType {
 extension _StringMapperType where Self: MapperType {
     public typealias SourceType = String
     
-    public func mapToSource<TModel>(model: TModel) throws -> String {
+    public func mapToSource<TModel>(_ model: TModel) throws -> String {
         return try mapToString(model)
     }
     
-    public func mapToModel<TModel>(source: String) throws -> TModel {
+    public func mapToModel<TModel>(_ source: String) throws -> TModel {
         return try mapToModel(source)
     }
 }

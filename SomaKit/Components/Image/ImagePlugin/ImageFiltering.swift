@@ -8,13 +8,13 @@
 
 import AlamofireImage
 
-public class ImageFiltering: ImagePluginType {
+open class ImageFiltering: ImagePluginType {
     public typealias FitlerParamsType = [String : StringKeyConvertiable]
 
-    private let filterName: String
-    private let filterParams: FitlerParamsType?
+    fileprivate let filterName: String
+    fileprivate let filterParams: FitlerParamsType?
     
-    public var imagePluginKey: String {
+    open var imagePluginKey: String {
         var resultKey = filterName
         if let filterParams = filterParams {
             resultKey += filterParams.stringKey
@@ -23,16 +23,8 @@ public class ImageFiltering: ImagePluginType {
         return resultKey
     }
     
-    public func transform(image: UIImage) throws -> UIImage {
-        let params = try filterParams?.mapValues { (value) throws -> AnyObject in
-            guard let newValue = value as? AnyObject else {
-                throw SomaError("ImageFilterPlugin parameter \(value) wrong type.")
-            }
-            
-            return newValue
-        }
-        
-        guard let reusltImage = image.af_imageWithAppliedCoreImageFilter(filterName, filterParameters: params) else {
+    open func transform(image: UIImage) throws -> UIImage {
+        guard let reusltImage = image.af_imageFiltered(withCoreImageFilter: filterName, parameters: filterParams) else {
             throw SomaError("ImageFilterPlugin failed with filter named \(filterName)")
         }
         

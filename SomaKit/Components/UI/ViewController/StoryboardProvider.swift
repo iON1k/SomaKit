@@ -12,20 +12,20 @@ public protocol StoryboardFactoryType {
     func loadStoryboard() -> UIStoryboard
 }
 
-public class StoryboardFactory: StoryboardFactoryType {
-    public typealias StoryboardFactoryHandler = Void -> UIStoryboard
+open class StoryboardFactory: StoryboardFactoryType {
+    public typealias StoryboardFactoryHandler = (Void) -> UIStoryboard
     
-    private let storyboardFactoryHandler: StoryboardFactoryHandler
+    fileprivate let storyboardFactoryHandler: StoryboardFactoryHandler
     
-    public func loadStoryboard() -> UIStoryboard {
+    open func loadStoryboard() -> UIStoryboard {
         return storyboardFactoryHandler()
     }
     
-    public init(storyboardFactoryHandler: StoryboardFactoryHandler) {
+    public init(storyboardFactoryHandler: @escaping StoryboardFactoryHandler) {
         self.storyboardFactoryHandler = storyboardFactoryHandler
     }
     
-    public convenience init(storyboardName: String, storyboardBundle: NSBundle? = nil) {
+    public convenience init(storyboardName: String, storyboardBundle: Bundle? = nil) {
         self.init() {
             return UIStoryboard(name: storyboardName, bundle: storyboardBundle)
         }
@@ -43,10 +43,10 @@ public protocol StoryboardViewControllerProviderType {
 }
 
 extension StoryboardViewControllerProviderType where Self: UIViewController {
-    public static func loadFromStoryboard(owner: AnyObject? = nil, options: [NSObject : AnyObject]? = nil) -> Self {
+    public static func loadFromStoryboard() -> Self {
         let storyboardData = self.storyboardViewControllerData
         let storyboard = storyboardData.storyboardFactory.loadStoryboard()
-        let viewController = storyboard.instantiateViewControllerWithIdentifier(storyboardData.storyboardId)
+        let viewController = storyboard.instantiateViewController(withIdentifier: storyboardData.storyboardId)
         
         return Utils.unsafeCast(viewController)
     }

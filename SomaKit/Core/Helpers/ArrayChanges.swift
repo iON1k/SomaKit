@@ -7,9 +7,9 @@
 //
 
 public enum ArrayChangeType {
-    case Replace
-    case Insert
-    case Delete
+    case replace
+    case insert
+    case delete
 }
 
 public struct ArrayChange<TElement> {
@@ -24,15 +24,15 @@ public struct ArrayChange<TElement> {
     }
 }
 
-public class ArrayChangesCalculator {
-    private typealias EquivalentIndexesPair = (oldIndex: Int, newIndex: Int)
+open class ArrayChangesCalculator {
+    fileprivate typealias EquivalentIndexesPair = (oldIndex: Int, newIndex: Int)
     
-    public static func calculateChanges<TElement>(oldSource: [TElement], newSource: [TElement]) -> [ArrayChange<TElement>] {
+    open static func calculateChanges<TElement>(_ oldSource: [TElement], newSource: [TElement]) -> [ArrayChange<TElement>] {
         var resultChanges = [ArrayChange<TElement>]()
         
         var equivalentElementsIndexes = [EquivalentIndexesPair]()
         
-        for (newIndex, newElement) in newSource.enumerate() {
+        for (newIndex, newElement) in newSource.enumerated() {
             if let oldIndex = oldSource.indexOfEquivalent(newElement) {
                 equivalentElementsIndexes.append((oldIndex, newIndex))
             }
@@ -41,15 +41,15 @@ public class ArrayChangesCalculator {
         let prevIndexesPair: EquivalentIndexesPair? = nil
         
         for nextIndexesPair in equivalentElementsIndexes {
-            resultChanges.appendContentsOf(getChanges(oldSource, newSource: newSource, leftIndexesPair: prevIndexesPair, rightIndexesPair: nextIndexesPair))
+            resultChanges.append(contentsOf: getChanges(oldSource, newSource: newSource, leftIndexesPair: prevIndexesPair, rightIndexesPair: nextIndexesPair))
         }
         
-        resultChanges.appendContentsOf(getChanges(oldSource, newSource: newSource, leftIndexesPair: prevIndexesPair, rightIndexesPair: nil))
+        resultChanges.append(contentsOf: getChanges(oldSource, newSource: newSource, leftIndexesPair: prevIndexesPair, rightIndexesPair: nil))
         
         return resultChanges
     }
     
-    private static func getChanges<TElement>(oldSource: [TElement], newSource: [TElement],
+    fileprivate static func getChanges<TElement>(_ oldSource: [TElement], newSource: [TElement],
                          leftIndexesPair: EquivalentIndexesPair?, rightIndexesPair: EquivalentIndexesPair?) -> [ArrayChange<TElement>] {
         let newSourceLeftIndex = leftIndexesPair?.newIndex ?? -1
         let oldSourceLeftIndex = leftIndexesPair?.oldIndex ?? -1
@@ -62,7 +62,7 @@ public class ArrayChangesCalculator {
         var resultChanges = [ArrayChange<TElement>]()
         
         while newIndex < newSourceRightIndex && oldIndex < oldSourceRightIndex {
-            resultChanges.append(ArrayChange(type: .Replace, index: oldIndex, element: newSource[newIndex]))
+            resultChanges.append(ArrayChange(type: .replace, index: oldIndex, element: newSource[newIndex]))
             newIndex += 1
             oldIndex += 1
         }
@@ -71,13 +71,13 @@ public class ArrayChangesCalculator {
         
         let deletingIndex = lastOldIndex
         while oldIndex < oldSourceRightIndex {
-            resultChanges.append(ArrayChange(type: .Delete, index: deletingIndex, element: newSource[deletingIndex]))
+            resultChanges.append(ArrayChange(type: .delete, index: deletingIndex, element: newSource[deletingIndex]))
             oldIndex += 1
         }
         
         var insertingIndex = lastOldIndex
         while newIndex < newSourceRightIndex {
-            resultChanges.append(ArrayChange(type: .Insert, index: insertingIndex, element: newSource[newIndex]))
+            resultChanges.append(ArrayChange(type: .insert, index: insertingIndex, element: newSource[newIndex]))
             newIndex += 1
             insertingIndex += 1
         }

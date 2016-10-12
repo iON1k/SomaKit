@@ -13,7 +13,7 @@ public protocol SomaMappable: Mappable, JsnonCovertible {
 }
 
 extension SomaMappable {
-    public static func convertToJson(object: Self) throws -> String {
+    public static func convertToJson(_ object: Self) throws -> String {
         let mappingResult = Mapper().toJSONString(object)
         
         guard let result = mappingResult else {
@@ -23,8 +23,8 @@ extension SomaMappable {
         return result
     }
     
-    public static func convertToObject(json: String) throws -> Self {
-        let mappingResult: Self? = Mapper().map(json)
+    public static func convertToObject(_ json: String) throws -> Self {
+        let mappingResult: Self? = Mapper().map(JSONString: json)
         
         guard let result = mappingResult else {
             throw SomaError("JSON mapping to model error\n\(json)")

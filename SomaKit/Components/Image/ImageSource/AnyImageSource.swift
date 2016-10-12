@@ -8,16 +8,16 @@
 
 import RxSwift
 
-public class AnyImageSource<TKey: StringKeyConvertiable>: ImageSourceType {
+open class AnyImageSource<TKey: StringKeyConvertiable>: ImageSourceType {
     public typealias KeyType = TKey
     
-    private let sourceLoadImageHandler: KeyType -> Observable<UIImage>
+    fileprivate let sourceLoadImageHandler: (KeyType) -> Observable<UIImage>
     
-    public func loadImage(key: KeyType) -> Observable<UIImage> {
+    open func loadImage(_ key: KeyType) -> Observable<UIImage> {
         return sourceLoadImageHandler(key)
     }
     
-    public init<TSource: ImageSourceType where TSource.KeyType == KeyType>(source: TSource) {
+    public init<TSource: ImageSourceType>(source: TSource) where TSource.KeyType == KeyType {
         sourceLoadImageHandler = source.loadImage
     }
 }

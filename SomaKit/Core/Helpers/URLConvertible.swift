@@ -7,17 +7,17 @@
 //
 
 public protocol URLConvertible {
-    var url: NSURL? { get }
+    var url: URL? { get }
 }
 
 extension String: URLConvertible {
-    public var url: NSURL? {
-        return NSURL(string: self)
+    public var url: URL? {
+        return URL(string: self)
     }
 }
 
-extension NSURL: URLConvertible {
-    public var url: NSURL? {
+extension URL: URLConvertible {
+    public var url: URL? {
         return self
     }
 }

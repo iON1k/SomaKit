@@ -31,6 +31,7 @@
 		244179B41D565A5A003B6089 /* ArrayChanges.swift in Sources */ = {isa = PBXBuildFile; fileRef = 244179B31D565A5A003B6089 /* ArrayChanges.swift */; };
 		24468C0E1D455AE4003E1344 /* TableElementAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24468C0D1D455AE4003E1344 /* TableElementAttributes.swift */; };
 		24468C101D455B42003E1344 /* TableElementAttributesCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24468C0F1D455B42003E1344 /* TableElementAttributesCache.swift */; };
+		244DCC491DAD22E00051F832 /* Disposable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 244DCC481DAD22E00051F832 /* Disposable.swift */; };
 		2455A0041D6D8A4000BD1D86 /* StringMapperType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2455A0031D6D8A4000BD1D86 /* StringMapperType.swift */; };
 		2455A0061D6D8AE800BD1D86 /* JsonMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2455A0051D6D8AE800BD1D86 /* JsonMapper.swift */; };
 		2456EF3A1D6D856400C53015 /* MapperType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2456EF391D6D856400C53015 /* MapperType.swift */; };
@@ -148,6 +149,7 @@
 		244179B31D565A5A003B6089 /* ArrayChanges.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArrayChanges.swift; sourceTree = "<group>"; };
 		24468C0D1D455AE4003E1344 /* TableElementAttributes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableElementAttributes.swift; sourceTree = "<group>"; };
 		24468C0F1D455B42003E1344 /* TableElementAttributesCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableElementAttributesCache.swift; sourceTree = "<group>"; };
+		244DCC481DAD22E00051F832 /* Disposable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Disposable.swift; sourceTree = "<group>"; };
 		2455A0031D6D8A4000BD1D86 /* StringMapperType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringMapperType.swift; sourceTree = "<group>"; };
 		2455A0051D6D8AE800BD1D86 /* JsonMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JsonMapper.swift; sourceTree = "<group>"; };
 		2456EF391D6D856400C53015 /* MapperType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapperType.swift; sourceTree = "<group>"; };
@@ -422,6 +424,7 @@
 				2425A8EF1D574B02009A45D1 /* Variable+Extension.swift */,
 				246F72671D593EB3004FF101 /* AtomicValue.swift */,
 				247C0DF91D64B4AD00EF8808 /* TimeHelper.swift */,
+				244DCC481DAD22E00051F832 /* Disposable.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -694,11 +697,12 @@
 		24E3CDA01D1FE753001BCDB2 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0730;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = iON1k;
 				TargetAttributes = {
 					24E3CDA81D1FE753001BCDB2 = {
 						CreatedOnToolsVersion = 7.3.1;
+						LastSwiftMigration = 0800;
 					};
 				};
 			};
@@ -800,6 +804,7 @@
 				2457267F1D4A2B7600D9FC63 /* TableElementBehavior.swift in Sources */,
 				242EE3251D47BB990024F9AE /* TableElementsProvider.swift in Sources */,
 				245726831D4A625100D9FC63 /* TableViewSection.swift in Sources */,
+				244DCC491DAD22E00051F832 /* Disposable.swift in Sources */,
 				24E714E41D57C7B100B66ABD /* TableViewManager+Extension.swift in Sources */,
 				24EB57E41D2C1A220062DDDB /* StoryboardProvider.swift in Sources */,
 				24AF8AEB1D20A71B00E40CCB /* AnyImageSource.swift in Sources */,
@@ -898,8 +903,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -947,8 +954,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -968,6 +977,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -979,7 +989,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7A0120809CF5D00DCB32AAA7 /* Pods-SomaKit.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -991,6 +1003,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -998,7 +1011,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 52251226EA2BC454904777B7 /* Pods-SomaKit.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -1009,6 +1024,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.iON1k.SomaKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};

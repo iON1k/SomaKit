@@ -9,36 +9,36 @@
 import AlamofireImage
 
 public enum ImageRoundingMode {
-    case Cicrular
-    case Corners(radius: CGFloat)
+    case cicrular
+    case corners(radius: CGFloat)
     
     public var imagePluginKey: String {
         switch self {
-        case .Cicrular:
+        case .cicrular:
             return "Circular"
-        case .Corners(let radius):
-            return "Corners" + String(radius)
+        case .corners(let radius):
+            return "Corners" + String(describing: radius)
         }
     }
 }
 
-public class ImageRounding: ImagePluginType {
-    private let mode: ImageRoundingMode
+open class ImageRounding: ImagePluginType {
+    fileprivate let mode: ImageRoundingMode
     
-    public var imagePluginKey: String {
+    open var imagePluginKey: String {
         return mode.imagePluginKey
     }
     
-    public func transform(image: UIImage) throws -> UIImage {
+    open func transform(image: UIImage) throws -> UIImage {
         switch mode {
-        case .Cicrular:
+        case .cicrular:
             return image.af_imageRoundedIntoCircle()
-        case .Corners(let radius):
-            return image.af_imageWithRoundedCornerRadius(radius)
+        case .corners(let radius):
+            return image.af_imageRounded(withCornerRadius: radius)
         }
     }
     
-    public init(mode: ImageRoundingMode = .Cicrular) {
+    public init(mode: ImageRoundingMode = .cicrular) {
         self.mode = mode;
     }
 }

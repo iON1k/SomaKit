@@ -7,23 +7,23 @@
 //
 
 public enum CacheLifeTimeType {
-    public typealias TimeGenerator = Void -> CacheTimeType
+    public typealias TimeGenerator = (Void) -> CacheTimeType
     
-    case Never
-    case Forever
-    case Value(lifeTime: CacheTimeType, timeGenerator: TimeGenerator)
+    case never
+    case forever
+    case value(lifeTime: CacheTimeType, timeGenerator: TimeGenerator)
 }
 
-public class CacheBase<TKey, TData>: StoreType {
+open class CacheBase<TKey, TData>: StoreType {
     public typealias KeyType = TKey
     public typealias DataType = TData
     public typealias CacheDataType = CacheValue<DataType>
 
-    private let sourceStore: AnyStore<TKey, CacheDataType>
-    private let lifeTimeType: CacheLifeTimeType
+    fileprivate let sourceStore: AnyStore<TKey, CacheDataType>
+    fileprivate let lifeTimeType: CacheLifeTimeType
     
-    public func loadData(key: KeyType) throws -> DataType? {
-        if case .Never = lifeTimeType {
+    open func loadData(_ key: KeyType) throws -> DataType? {
+        if case .never = lifeTimeType {
             return nil
         }
         
@@ -34,8 +34,8 @@ public class CacheBase<TKey, TData>: StoreType {
         return isActualCache(cacheData) ? cacheData.data : nil
     }
     
-    public func saveData(key: KeyType, data: DataType?) throws {
-        if case .Never = lifeTimeType {
+    open func saveData(_ key: KeyType, data: DataType?) throws {
+        if case .never = lifeTimeType {
             return
         }
         
@@ -48,30 +48,30 @@ public class CacheBase<TKey, TData>: StoreType {
         try sourceStore.saveData(key, data: cacheValue)
     }
     
-    public init<TStore: StoreConvertibleType where TStore.KeyType == KeyType, TStore.DataType == CacheDataType>(sourceStore: TStore, lifeTimeType: CacheLifeTimeType = .Forever) {
+    public init<TStore: StoreConvertibleType>(sourceStore: TStore, lifeTimeType: CacheLifeTimeType = .forever) where TStore.KeyType == KeyType, TStore.DataType == CacheDataType {
         self.sourceStore = sourceStore.asStore()
         self.lifeTimeType = lifeTimeType
     }
     
-    private func currentTime() -> Double {
-        if case .Value(_, let timeGenerator) = lifeTimeType {
+    fileprivate func currentTime() -> Double {
+        if case .value(_, let timeGenerator) = lifeTimeType {
             return timeGenerator()
         }
         
         return 0
     }
     
-    private func isActualCache(cacheData: CacheDataType) -> Bool {
+    fileprivate func isActualCache(_ cacheData: CacheDataType) -> Bool {
         switch lifeTimeType {
-        case .Forever:
+        case .forever:
             return true
-        case .Value(let lifeTime, let timeGenerator):
+        case .value(let lifeTime, let timeGenerator):
             if cacheData.creationTime + lifeTime < timeGenerator() {
                 return true
             } else {
                 return false
             }
-        case .Never:
+        case .never:
             return false
         }
     }

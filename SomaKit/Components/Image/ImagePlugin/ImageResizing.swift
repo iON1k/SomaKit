@@ -14,22 +14,22 @@ public enum ImageResizingMode: String {
     case AspectFill
 }
 
-public class ImageResizing: ImagePluginType {
-    private let mode: ImageResizingMode
-    private let size: CGSize
+open class ImageResizing: ImagePluginType {
+    fileprivate let mode: ImageResizingMode
+    fileprivate let size: CGSize
     
-    public var imagePluginKey: String {
-        return mode.rawValue + String(size.width) + String(size.height)
+    open var imagePluginKey: String {
+        return mode.rawValue + String(describing: size.width) + String(describing: size.height)
     }
     
-    public func transform(image: UIImage) throws -> UIImage {
+    open func transform(image: UIImage) throws -> UIImage {
         switch mode {
         case .Scale:
-            return image.af_imageScaledToSize(size)
+            return image.af_imageScaled(to: size)
         case .AspectFit:
-            return image.af_imageAspectScaledToFitSize(size)
+            return image.af_imageAspectScaled(toFit: size)
         case .AspectFill:
-            return image.af_imageAspectScaledToFillSize(size)
+            return image.af_imageAspectScaled(toFill: size)
         }
     }
     

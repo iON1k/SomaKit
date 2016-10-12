@@ -6,26 +6,26 @@
 //  Copyright © 2016 iON1k. All rights reserved.
 //
 
-public class SomaViewController: UIViewController {
+open class SomaViewController: UIViewController {
     public enum InitContext {
-        case NibName(nibNameOrNil: String?, nibBundleOrNil: NSBundle?)
-        case Coder(aDecoder: NSCoder)
+        case nibName(nibNameOrNil: String?, nibBundleOrNil: Bundle?)
+        case coder(aDecoder: NSCoder)
     }
     
-    public convenience override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
-        self.init(context: .NibName(nibNameOrNil: nibNameOrNil, nibBundleOrNil: nibBundleOrNil))
+    public convenience override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        self.init(context: .nibName(nibNameOrNil: nibNameOrNil, nibBundleOrNil: nibBundleOrNil))
     }
     
     public convenience required init?(coder aDecoder: NSCoder) {
-        self.init(context: .Coder(aDecoder: aDecoder))
+        self.init(context: .coder(aDecoder: aDecoder))
     }
     
     //https://theswiftdev.com/2015/08/05/swift-init-patterns
     public required init(context: InitContext) {
         switch context {
-        case .NibName(let nibNameOrNil, let nibBundleOrNil):
+        case .nibName(let nibNameOrNil, let nibBundleOrNil):
             super.init(nibName: nibNameOrNil, bundle:nibBundleOrNil)
-        case .Coder(let aDecoder):
+        case .coder(let aDecoder):
             super.init(coder: aDecoder)!
         }
     }

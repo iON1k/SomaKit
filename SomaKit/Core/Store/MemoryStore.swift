@@ -6,23 +6,23 @@
 //  Copyright © 2016 iON1k. All rights reserved.
 //
 
-public class MemoryStore<TKey: Hashable, TData>: StoreType {
+open class MemoryStore<TKey: Hashable, TData>: StoreType {
     public typealias KeyType = TKey
     public typealias DataType = TData
     
-    private var syncLock = SyncLock()
-    private var dictionaryStore: [TKey : TData] = [:]
+    fileprivate var syncLock = SyncLock()
+    fileprivate var dictionaryStore: [TKey : TData] = [:]
     
-    public func loadData(key: KeyType) throws -> DataType? {
+    open func loadData(_ key: KeyType) throws -> DataType? {
         return syncLock.sync {
             return dictionaryStore[key]
         }
     }
     
-    public func saveData(key: KeyType, data: DataType?) throws {
+    open func saveData(_ key: KeyType, data: DataType?) throws {
         return syncLock.sync {
             guard let data = data else {
-                dictionaryStore.removeValueForKey(key)
+                dictionaryStore.removeValue(forKey: key)
                 return
             }
             
@@ -30,13 +30,13 @@ public class MemoryStore<TKey: Hashable, TData>: StoreType {
         }
     }
     
-    public func removeData(key: KeyType) {
+    open func removeData(_ key: KeyType) {
         return syncLock.sync {
-            return dictionaryStore.removeValueForKey(key)
+            return dictionaryStore.removeValue(forKey: key)
         }
     }
     
-    public func removeAllData() {
+    open func removeAllData() {
         return syncLock.sync {
             return dictionaryStore.removeAll()
         }

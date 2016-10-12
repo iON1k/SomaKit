@@ -7,7 +7,7 @@
 //
 
 public struct DefaultTableElementAttributes: TableElementAttributes {
-    private let prefferedHeight: CGFloat
+    fileprivate let prefferedHeight: CGFloat
     
     public var estimatedHeight: CGFloat {
         return prefferedHeight

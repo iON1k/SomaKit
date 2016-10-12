@@ -9,5 +9,5 @@
 public protocol ViewPresenterType {
     associatedtype ViewModel: ViewModelType
     
-    func bindViewModel(viewModel: ViewModel?)
+    func bindViewModel(_ viewModel: ViewModel?)
 }

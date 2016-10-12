@@ -8,15 +8,15 @@
 
 import RxSwift
 
-public class BundleImageSource: ImageSourceType {
+open class BundleImageSource: ImageSourceType {
     public typealias KeyType = String
     
-    private let bundle: NSBundle
+    fileprivate let bundle: Bundle
     
-    public func loadImage(key: KeyType) -> Observable<UIImage> {
+    open func loadImage(_ key: KeyType) -> Observable<UIImage> {
         return Observable.deferred({ () -> Observable<UIImage> in
             let bundle = self.bundle
-            let image = UIImage(named: key, inBundle: bundle, compatibleWithTraitCollection: nil)
+            let image = UIImage(named: key, in: bundle, compatibleWith: nil)
             guard let resultImage = image else {
                 throw SomaError("Image with name \(key) in bundle \(bundle) not found")
             }
@@ -25,7 +25,7 @@ public class BundleImageSource: ImageSourceType {
         })
     }
     
-    public init(bundle: NSBundle = NSBundle.mainBundle()) {
+    public init(bundle: Bundle = Bundle.main) {
         self.bundle = bundle
     }
 }

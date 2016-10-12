@@ -12,13 +12,19 @@ public protocol StringKeyConvertiable {
 
 extension StringKeyConvertiable {
     public var stringKey: String {
-        return String(self)
+        return String(describing: self)
     }
 }
 
 extension String: StringKeyConvertiable {
     public var stringKey: String {
         return self
+    }
+}
+
+extension URL: StringKeyConvertiable {
+    public var stringKey: String {
+        return absoluteString
     }
 }
 
@@ -88,7 +94,7 @@ extension Array: StringKeyConvertiable {
         
         for element in self {
             guard let cachingKeyElement = element as? StringKeyConvertiable else {
-                Debug.fatalError("Array has not implemented StringKeyConvertiable element \(element.dynamicType)")
+                Debug.fatalError("Array has not implemented StringKeyConvertiable element \(type(of: element))")
             }
             
             resultString += cachingKeyElement.stringKey
@@ -104,11 +110,11 @@ extension Dictionary: StringKeyConvertiable {
         
         for (key, value) in self {
             guard let cachingKeyKey = key as? StringKeyConvertiable else {
-                Debug.fatalError("Dictionary has not implemented StringKeyConvertiable key \(key.dynamicType)")
+                Debug.fatalError("Dictionary has not implemented StringKeyConvertiable key \(type(of: key))")
             }
             
             guard let cachingKeyValue = value as? StringKeyConvertiable else {
-                Debug.fatalError("Dictionary has not implemented StringKeyConvertiable element \(value.dynamicType)")
+                Debug.fatalError("Dictionary has not implemented StringKeyConvertiable element \(type(of: value))")
             }
             
             resultString += cachingKeyKey.stringKey + cachingKeyValue.stringKey
@@ -126,7 +132,7 @@ extension NSString: StringKeyConvertiable {
 
 extension CGFloat: StringKeyConvertiable {
     public var stringKey: String {
-        return String(self)
+        return String(describing: self)
     }
 }
 

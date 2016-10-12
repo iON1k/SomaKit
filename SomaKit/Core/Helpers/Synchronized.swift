@@ -6,21 +6,21 @@
 //  Copyright © 2016 iON1k. All rights reserved.
 //
 
-public func beginSyncLock(lockObj: AnyObject) -> Void {
+public func beginSyncLock(_ lockObj: Any) -> Void {
     objc_sync_enter(lockObj)
 }
 
-public func endSyncLock(lockObj: AnyObject) -> Void {
+public func endSyncLock(_ lockObj: Any) -> Void {
     objc_sync_exit(lockObj)
 }
 
-public func synchronized(lockObj: AnyObject, @noescape block: () throws -> Void) rethrows -> Void {
+public func synchronized(lockObj: Any, block: () throws -> Void) rethrows -> Void {
     beginSyncLock(lockObj)
     try block()
     endSyncLock(lockObj)
 }
 
-public func synchronized<T>(lockObj: AnyObject, @noescape block: () throws -> T) rethrows -> T {
+public func synchronized<T>(lockObj: Any, block: () throws -> T) rethrows -> T {
     beginSyncLock(lockObj)
     let result: T = try block()
     endSyncLock(lockObj)
@@ -28,20 +28,20 @@ public func synchronized<T>(lockObj: AnyObject, @noescape block: () throws -> T)
     return result
 }
 
-public class SyncLock {
-    public func lock() {
+open class SyncLock {
+    open func lock() {
         beginSyncLock(self)
     }
     
-    public func unlock() {
+    open func unlock() {
         endSyncLock(self)
     }
     
-    public func sync(@noescape block: () throws -> Void) rethrows {
-        try synchronized(self, block: block)
+    open func sync(block: () throws -> Void) rethrows {
+        try synchronized(lockObj: self, block: block)
     }
     
-    public func sync<T>(@noescape block: () throws -> T) rethrows -> T {
-        return try synchronized(self, block: block)
+    open func sync<T>(block: () throws -> T) rethrows -> T {
+        return try synchronized(lockObj: self, block: block)
     }
 }

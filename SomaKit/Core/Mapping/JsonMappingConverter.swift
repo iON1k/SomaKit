@@ -8,15 +8,15 @@
 
 import ObjectMapper
 
-public class JsonMappingConverter<TValue: JsnonCovertible>: ConverterType {
+open class JsonMappingConverter<TValue: JsnonCovertible>: ConverterType {
     public typealias Type1 = TValue
     public typealias Type2 = String
     
-    public func convertValue(value: Type1) throws -> Type2 {
+    open func convertValue(_ value: Type1) throws -> Type2 {
         return try TValue.convertToJson(value)
     }
     
-    public func convertValue(value: Type2) throws -> Type1 {
+    open func convertValue(_ value: Type2) throws -> Type1 {
         return try TValue.convertToObject(value)
     }
 }

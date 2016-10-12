@@ -10,8 +10,8 @@ public protocol ConverterType: ConverterConvertibleType {
     associatedtype Type1
     associatedtype Type2
     
-    func convertValue(value: Type1) throws -> Type2
-    func convertValue(value: Type2) throws -> Type1
+    func convertValue(_ value: Type1) throws -> Type2
+    func convertValue(_ value: Type2) throws -> Type1
 }
 
 extension ConverterType {

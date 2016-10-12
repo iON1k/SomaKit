@@ -8,10 +8,10 @@
 
 import Foundation
 
-public class LazyValue<TValue> {
-    public typealias FactoryType = Void -> TValue
+open class LazyValue<TValue> {
+    public typealias FactoryType = (Void) -> TValue
     
-    public var value: TValue {
+    open var value: TValue {
         if let innerValue = innerValue {
             return innerValue
         }
@@ -32,7 +32,7 @@ public class LazyValue<TValue> {
         }
     }
     
-    public func factory(factory: FactoryType) {
+    open func factory(_ factory: FactoryType) {
         lock.sync {
             guard let factory = self.factory else {
                 Debug.fatalError("LazyValue already seted up factory")
@@ -42,7 +42,7 @@ public class LazyValue<TValue> {
         }
     }
     
-    private var innerValue: TValue?
-    private var factory: FactoryType?
-    private let lock = SyncLock()
+    fileprivate var innerValue: TValue?
+    fileprivate var factory: FactoryType?
+    fileprivate let lock = SyncLock()
 }

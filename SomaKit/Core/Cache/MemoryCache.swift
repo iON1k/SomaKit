@@ -6,32 +6,32 @@
 //  Copyright © 2016 iON1k. All rights reserved.
 //
 
-public class MemoryCache<TKey: Hashable, TData>: CacheBase<TKey, TData> {
-    private let memoryStore = MemoryStore<TKey, CacheDataType>()
-    private let clearOnMemoryWarning: Bool
+open class MemoryCache<TKey: Hashable, TData>: CacheBase<TKey, TData> {
+    fileprivate let memoryStore = MemoryStore<TKey, CacheDataType>()
+    fileprivate let clearOnMemoryWarning: Bool
     
-    public init(lifeTimeType: CacheLifeTimeType = .Forever, clearOnMemoryWarning: Bool = false) {
+    public init(lifeTimeType: CacheLifeTimeType = .forever, clearOnMemoryWarning: Bool = false) {
         self.clearOnMemoryWarning = clearOnMemoryWarning
         
         super.init(sourceStore: memoryStore, lifeTimeType: lifeTimeType)
         
         if clearOnMemoryWarning {
-            NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(onMemoryWarning),
-                                                             name: UIApplicationDidReceiveMemoryWarningNotification, object: UIApplication.sharedApplication())
+            NotificationCenter.default.addObserver(self, selector: #selector(onMemoryWarning),
+                                                             name: NSNotification.Name.UIApplicationDidReceiveMemoryWarning, object: UIApplication.shared)
         }
     }
     
     public convenience init(lifeTime: CacheTimeType) {
-        self.init(lifeTimeType: .Value(lifeTime: lifeTime, timeGenerator: TimeHelper.absoluteTime))
+        self.init(lifeTimeType: .value(lifeTime: lifeTime, timeGenerator: TimeHelper.absoluteTime))
     }
     
     deinit {
         if clearOnMemoryWarning {
-            NSNotificationCenter.defaultCenter().removeObserver(self, name: UIApplicationDidReceiveMemoryWarningNotification, object: UIApplication.sharedApplication())
+            NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIApplicationDidReceiveMemoryWarning, object: UIApplication.shared)
         }
     }
     
-    @objc private func onMemoryWarning() {
+    @objc fileprivate func onMemoryWarning() {
         memoryStore.removeAllData()
     }
 }

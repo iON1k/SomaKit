@@ -13,27 +13,27 @@ public final class SomaFunc {
         //Nothing
     }
     
-    public static func emptyFunc(value: Any) {
+    public static func emptyFunc(_ value: Any) {
         //Nothing
     }
     
-    public static func sameTransform<TValue>(value: TValue) -> TValue {
+    public static func sameTransform<TValue>(_ value: TValue) -> TValue {
         return value
     }
     
-    public static func truePredicate(value: Any) -> Bool {
+    public static func truePredicate(_ value: Any) -> Bool {
         return true
     }
     
-    public static func falsePredicate(value: Any) -> Bool {
+    public static func falsePredicate(_ value: Any) -> Bool {
         return false
     }
     
-    public static func valuePredicate(value: Bool) -> Bool {
+    public static func valuePredicate(_ value: Bool) -> Bool {
         return value
     }
     
-    public static func negativePredicate(value: Bool) -> Bool {
+    public static func negativePredicate(_ value: Bool) -> Bool {
         return !value
     }
     
@@ -41,7 +41,7 @@ public final class SomaFunc {
         return nil
     }
     
-    private init() {
+    fileprivate init() {
         //Nothing
     }
 }

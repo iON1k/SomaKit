@@ -6,16 +6,16 @@
 //  Copyright © 2016 iON1k. All rights reserved.
 //
 
-public class ViewsProvider<TContext> {
+open class ViewsProvider<TContext> {
     public typealias ViewGenerator = (ViewModelType, TContext) -> UIView
     public typealias ViewData = (viewType: UIView.Type, viewGenerator: ViewGenerator)
     
-    public let context: TContext
+    open let context: TContext
     
-    private var registeredViewsData = [String : ViewData]()
-    private let syncLock = SyncLock()
+    fileprivate var registeredViewsData = [String : ViewData]()
+    fileprivate let syncLock = SyncLock()
     
-    private let emptyViewData = ViewData(UIView.self) { (viewModel, context) -> UIView in
+    fileprivate let emptyViewData = ViewData(UIView.self) { (viewModel, context) -> UIView in
         return UIView()
     }
     
@@ -23,10 +23,10 @@ public class ViewsProvider<TContext> {
         self.context = context
     }
     
-    public func _internalRegisterViewGenerator<TViewModel: ViewModelType, TView: UIView>(viewGenerator: (TViewModel, TContext) -> TView) {
-        registerViewGenerator(viewGeneratorKey(TViewModel), viewType: TView.self) { (viewModel, context) -> UIView in
+    open func _internalRegisterViewGenerator<TViewModel: ViewModelType, TView: UIView>(_ viewGenerator: @escaping (TViewModel, TContext) -> TView) {
+        registerViewGenerator(viewGeneratorKey(TViewModel.self), viewType: TView.self) { (viewModel, context) -> UIView in
             guard let castedViewModel = viewModel as? TViewModel else {
-                Log.error("ViewsProvider: view model wrong type \(viewModel.dynamicType). Expected type \(TViewModel.self)")
+                Log.error("ViewsProvider: view model wrong type \(type(of: viewModel)). Expected type \(TViewModel.self)")
                 return UIView()
             }
             
@@ -34,22 +34,22 @@ public class ViewsProvider<TContext> {
         }
     }
     
-    public func viewForViewModel(viewModel: ViewModelType) -> UIView {
+    open func viewForViewModel(_ viewModel: ViewModelType) -> UIView {
         return viewDataForViewModel(viewModel).viewGenerator(viewModel, context)
     }
     
-    public func viewTypeForViewModel(viewModel: ViewModelType) -> UIView.Type {
+    open func viewTypeForViewModel(_ viewModel: ViewModelType) -> UIView.Type {
         return viewDataForViewModel(viewModel).viewType
     }
     
-    private func viewDataForViewModel(viewModel: ViewModelType) -> ViewData {
+    fileprivate func viewDataForViewModel(_ viewModel: ViewModelType) -> ViewData {
         return syncLock.sync {
             return unsafeViewDataForViewModel(viewModel)
         }
     }
     
-    private func unsafeViewDataForViewModel(viewModel: ViewModelType) -> ViewData {
-        let generatorKey = viewGeneratorKey(viewModel.dynamicType)
+    fileprivate func unsafeViewDataForViewModel(_ viewModel: ViewModelType) -> ViewData {
+        let generatorKey = viewGeneratorKey(type(of: viewModel))
         guard let viewData = registeredViewsData[generatorKey] else {
             Log.error("ViewsProvider: view data with key \(generatorKey) not registered")
             return emptyViewData
@@ -58,13 +58,13 @@ public class ViewsProvider<TContext> {
         return viewData
     }
     
-    private func registerViewGenerator(viewKey: String, viewType: UIView.Type, viewGenerator: ViewGenerator) {
+    fileprivate func registerViewGenerator(_ viewKey: String, viewType: UIView.Type, viewGenerator: @escaping ViewGenerator) {
         syncLock.sync {
             unsafeRegisterViewGenerator(viewKey, viewType: viewType, viewGenerator: viewGenerator)
         }
     }
     
-    private func unsafeRegisterViewGenerator(viewKey: String, viewType: UIView.Type, viewGenerator: ViewGenerator) {
+    fileprivate func unsafeRegisterViewGenerator(_ viewKey: String, viewType: UIView.Type, viewGenerator: @escaping ViewGenerator) {
         guard registeredViewsData[viewKey] == nil else {
             Log.error("ViewsProvider: view generator with key \(viewKey) already registered")
             return
@@ -73,7 +73,7 @@ public class ViewsProvider<TContext> {
         registeredViewsData[viewKey] = ViewData(viewType, viewGenerator)
     }
     
-    private func viewGeneratorKey(viewModelType: ViewModelType.Type) -> String {
+    fileprivate func viewGeneratorKey(_ viewModelType: ViewModelType.Type) -> String {
         return Utils.typeName(viewModelType)
     }
 }

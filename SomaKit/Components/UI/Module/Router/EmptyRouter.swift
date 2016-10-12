@@ -7,7 +7,7 @@
 //
 
 public final class EmptyRouter: RouterType {
-    public func bindTransitionHandler(transitionHandler: ModuleTransitionHandler?) {
+    public func bindTransitionHandler(_ transitionHandler: ModuleTransitionHandler?) {
         //Nothing
     }
 }

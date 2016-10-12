@@ -6,25 +6,25 @@
 //  Copyright © 2016 iON1k. All rights reserved.
 //
 
-public class AnyStore<TKey, TData>: StoreType {
+open class AnyStore<TKey, TData>: StoreType {
     public typealias KeyType = TKey
     public typealias DataType = TData
     
-    public typealias LoadDataHandler = KeyType throws -> DataType?
+    public typealias LoadDataHandler = (KeyType) throws -> DataType?
     public typealias SaveDataHandler = (KeyType, DataType?) throws -> Void
     
-    private let loadDataHandler: LoadDataHandler
-    private let saveDataHandler: SaveDataHandler
+    fileprivate let loadDataHandler: LoadDataHandler
+    fileprivate let saveDataHandler: SaveDataHandler
     
-    public func loadData(key: KeyType) throws -> DataType? {
+    open func loadData(_ key: KeyType) throws -> DataType? {
         return try loadDataHandler(key)
     }
     
-    public func saveData(key: KeyType, data: DataType?) throws {
+    open func saveData(_ key: KeyType, data: DataType?) throws {
         try saveDataHandler(key, data)
     }
     
-    public init(_ loadDataHandler: LoadDataHandler, _ saveDataHandler: SaveDataHandler) {
+    public init(_ loadDataHandler: @escaping LoadDataHandler, _ saveDataHandler: @escaping SaveDataHandler) {
         self.loadDataHandler = loadDataHandler
         self.saveDataHandler = saveDataHandler
     }

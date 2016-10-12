@@ -6,25 +6,25 @@
 //  Copyright © 2016 iON1k. All rights reserved.
 //
 
-public final class SomaModuleBuidler<TModulePresenter: UIViewController where TModulePresenter: ViewPresenterType,
-    TModulePresenter.ViewModel: ModuleViewModel>: ModuleBuidler {
-    public typealias ModulPresenterBuilder = Void -> TModulePresenter
-    public typealias ViewModelBuilder = Void -> TModulePresenter.ViewModel
-    public typealias RouterBuilder = Void -> TModulePresenter.ViewModel.Router
+public final class SomaModuleBuidler<TModulePresenter: UIViewController>: ModuleBuidler where TModulePresenter: ViewPresenterType,
+    TModulePresenter.ViewModel: ModuleViewModel {
+    public typealias ModulPresenterBuilder = (Void) -> TModulePresenter
+    public typealias ViewModelBuilder = (Void) -> TModulePresenter.ViewModel
+    public typealias RouterBuilder = (Void) -> TModulePresenter.ViewModel.Router
     
-    private var modulePresenterBuilder: ModulPresenterBuilder
-    private var viewModelBuilder: ViewModelBuilder?
-    private var routerBuilder: RouterBuilder?
+    fileprivate var modulePresenterBuilder: ModulPresenterBuilder
+    fileprivate var viewModelBuilder: ViewModelBuilder?
+    fileprivate var routerBuilder: RouterBuilder?
     
-    public init(modulePresenterBuilder: ModulPresenterBuilder) {
+    public init(modulePresenterBuilder: @escaping ModulPresenterBuilder) {
         self.modulePresenterBuilder = modulePresenterBuilder
     }
     
-    public func bindViewModel(viewModelBuilder: ViewModelBuilder?) {
+    public func bindViewModel(_ viewModelBuilder: ViewModelBuilder?) {
         self.viewModelBuilder = viewModelBuilder
     }
     
-    public func bindRouter(routerBuilder: RouterBuilder?) {
+    public func bindRouter(_ routerBuilder: RouterBuilder?) {
         self.routerBuilder = routerBuilder
     }
     

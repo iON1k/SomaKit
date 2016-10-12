@@ -8,8 +8,8 @@
 
 import CoreData
 
-public class CacheManagedObject: NSManagedObject {
-    public static let DefaultCacheKey = "cacheKey"
+open class CacheManagedObject: NSManagedObject {
+    open static let DefaultCacheKey = "cacheKey"
     
     @NSManaged var cacheKey: String?
     @NSManaged var creationTime: Double

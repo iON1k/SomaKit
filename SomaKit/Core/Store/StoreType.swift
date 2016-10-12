@@ -10,8 +10,8 @@ public protocol StoreType: StoreConvertibleType {
     associatedtype KeyType
     associatedtype DataType
     
-    func loadData(key: KeyType) throws -> DataType?
-    func saveData(key: KeyType, data: DataType?) throws
+    func loadData(_ key: KeyType) throws -> DataType?
+    func saveData(_ key: KeyType, data: DataType?) throws
 }
 
 extension StoreType {
@@ -21,23 +21,23 @@ extension StoreType {
 }
 
 extension StoreType {
-    public func loadDataSafe(key: KeyType) -> DataType? {
+    public func loadDataSafe(_ key: KeyType) -> DataType? {
         return Utils.safe {
             return try self.loadData(key)
         }
     }
     
-    public func saveDataSafe(key: KeyType, data: DataType?) {
+    public func saveDataSafe(_ key: KeyType, data: DataType?) {
         Utils.safe {
             try self.saveData(key, data: data)
         }
     }
     
-    public func removeData(key: KeyType) throws {
+    public func removeData(_ key: KeyType) throws {
         try saveData(key, data: nil)
     }
     
-    public func removeDataSafe(key: KeyType) throws {
+    public func removeDataSafe(_ key: KeyType) throws {
         Utils.safe {
             try self.saveData(key, data: nil)
         }

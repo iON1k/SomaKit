@@ -8,37 +8,37 @@
 
 import Foundation
 
-public class UserDefaultsStore<TKey: StringKeyConvertiable, TData: AnyObject>: StoreType {
+open class UserDefaultsStore<TKey: StringKeyConvertiable, TData: Any>: StoreType {
     public typealias KeyType = TKey
     public typealias DataType = TData
     
-    private let userDefaults: NSUserDefaults
+    fileprivate let userDefaults: UserDefaults
     
-    public func loadData(key: KeyType) throws -> DataType? {
+    open func loadData(_ key: KeyType) throws -> DataType? {
         let stringKey = key.stringKey
-        let optionalSomeObject = userDefaults.objectForKey(stringKey)
+        let optionalSomeObject = userDefaults.object(forKey: stringKey)
         
         guard let someObject = optionalSomeObject else {
             return nil
         }
         
         guard let resultData = someObject as? DataType else {
-            throw SomaError("User defaults has no valid data \(someObject.dynamicType) for key \(stringKey)")
+            throw SomaError("User defaults has no valid data \(type(of: (someObject))) for key \(stringKey)")
         }
         
         return resultData
     }
     
-    public func saveData(key: KeyType, data: DataType?) throws {
+    open func saveData(_ key: KeyType, data: DataType?) throws {
         guard let data = data else {
-            userDefaults.removeObjectForKey(key.stringKey)
+            userDefaults.removeObject(forKey: key.stringKey)
             return
         }
         
-        userDefaults.setObject(data, forKey: key.stringKey)
+        userDefaults.set(data, forKey: key.stringKey)
     }
     
-    public init(userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()) {
+    public init(userDefaults: UserDefaults = UserDefaults.standard) {
         self.userDefaults = userDefaults
     }
 }

@@ -8,33 +8,33 @@
 
 import RxSwift
 
-public class PagedDataProvider<TPage: ItemsPageType>: AbstractPagedDataProvider<TPage> {
-    public typealias PageObservableFactory = (offset: Int, count: Int) -> Observable<PageType>
+open class PagedDataProvider<TPage: ItemsPageType>: AbstractPagedDataProvider<TPage> {
+    public typealias PageObservableFactory = (_ offset: Int, _ count: Int) -> Observable<PageType>
     
-    private let pageObservableFactory: PageObservableFactory
+    fileprivate let pageObservableFactory: PageObservableFactory
     
-    public init(pageSize: Int, memoryCache: MemoryCacheType, pageObservableFactory: PageObservableFactory) {
+    public init(pageSize: Int, memoryCache: MemoryCacheType, pageObservableFactory: @escaping PageObservableFactory) {
         self.pageObservableFactory = pageObservableFactory
         super.init(pageSize: pageSize, memoryCache: memoryCache)
     }
     
-    public convenience init(pageSize: Int = PagedDataProviderDefaultPageSize, pageObservableFactory: PageObservableFactory) {
+    public convenience init(pageSize: Int = PagedDataProviderDefaultPageSize, pageObservableFactory: @escaping PageObservableFactory) {
         self.init(pageSize: pageSize, memoryCache: MemoryCacheType(), pageObservableFactory: pageObservableFactory)
     }
     
-    public override func _createLoadingPageObservable(offset: Int, count: Int) -> Observable<PageType> {
-        return pageObservableFactory(offset: offset, count: count)
+    open override func _createLoadingPageObservable(_ offset: Int, count: Int) -> Observable<PageType> {
+        return pageObservableFactory(offset, count)
     }
 }
 
 extension PagedDataProvider {
-    public convenience init<TDataSource: ObservableConvertibleType, TCacheStore: StoreConvertibleType
-        where TDataSource: CachingKeyProvider, TCacheStore.KeyType == TDataSource.CachingKeyType,
-        TCacheStore.DataType == TDataSource.E, TDataSource.E == PageType>(pageSize: Int = PagedDataProviderDefaultPageSize,
+    public convenience init<TDataSource: ObservableConvertibleType, TCacheStore: StoreConvertibleType>(pageSize: Int = PagedDataProviderDefaultPageSize,
                                     cacheStore: TCacheStore, cacheBehavior: CacheableDataProviderBehavior<PageType> = CacheableDataProviderBehaviors.cacheAndData(),
-                                    dataSourceFactory: (offset: Int, count: Int) -> TDataSource) {
+                                    dataSourceFactory: @escaping (_ offset: Int, _ count: Int) -> TDataSource)
+        where TDataSource: CachingKeyProvider, TCacheStore.KeyType == TDataSource.CachingKeyType,
+        TCacheStore.DataType == TDataSource.E, TDataSource.E == PageType {
         self.init(pageSize: pageSize, memoryCache: MemoryCacheType()) { (offset, count) -> Observable<PageType> in
-            return dataSourceFactory(offset: offset, count: count)
+            return dataSourceFactory(offset, count)
                 .asCacheableProvider(cacheStore, behavior: cacheBehavior)
                 .data()
                 .onlyData()

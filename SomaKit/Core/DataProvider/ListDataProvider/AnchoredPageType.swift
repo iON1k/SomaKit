@@ -12,10 +12,10 @@ public protocol AnchoredPageType: ItemsPageType {
     var anchor: AnchorType { get }
 }
 
-public class SimpleAnchoredPage<TItem, TAnchor: Equatable>: SimpleItemsPage<TItem>, AnchoredPageType {
+open class SimpleAnchoredPage<TItem, TAnchor: Equatable>: SimpleItemsPage<TItem>, AnchoredPageType {
     public typealias AnchorType = TAnchor
     
-    public let anchor: AnchorType
+    open let anchor: AnchorType
     
     public init(items: [ItemType], anchor: AnchorType) {
         self.anchor = anchor

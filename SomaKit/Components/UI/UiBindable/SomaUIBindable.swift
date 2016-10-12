@@ -8,11 +8,11 @@
 
 import RxSwift
 
-public class SomaUIBindable: UiBindableType {
-    private let isBindedSubject: BehaviorSubject<Bool>
-    private let isActiveSubject: BehaviorSubject<Bool>
+open class SomaUIBindable: UiBindableType {
+    fileprivate let isBindedSubject: BehaviorSubject<Bool>
+    fileprivate let isActiveSubject: BehaviorSubject<Bool>
     
-    private let scheduler: ImmediateSchedulerType?
+    fileprivate let scheduler: ImmediateSchedulerType?
     
     public init(isBindedSubject: BehaviorSubject<Bool>, isActiveSubject: BehaviorSubject<Bool>, scheduler: ImmediateSchedulerType? = nil) {
         self.isBindedSubject = isBindedSubject
@@ -20,7 +20,7 @@ public class SomaUIBindable: UiBindableType {
         self.scheduler = scheduler
     }
     
-    public func whileBinded<T>(observable: Observable<T>) -> Observable<T> {
+    open func whileBinded<T>(_ observable: Observable<T>) -> Observable<T> {
         return isBindedSubject
             .flatMapLatest({ (isBinded) -> Observable<T> in
                 return isBinded ? self.applyScheduler(observable) : Observable.never()
@@ -28,7 +28,7 @@ public class SomaUIBindable: UiBindableType {
             .takeUntil(isBindedSubject.filter(SomaFunc.negativePredicate))
     }
     
-    public func whileActive<T>(observable: Observable<T>) -> Observable<T> {
+    open func whileActive<T>(_ observable: Observable<T>) -> Observable<T> {
         return isActiveSubject
             .flatMapLatest({ (isActive) -> Observable<T> in
                 return isActive ? observable : Observable.never()
@@ -36,7 +36,7 @@ public class SomaUIBindable: UiBindableType {
             .whileBinded(self)
     }
     
-    private func applyScheduler<T>(observable: Observable<T>) -> Observable<T> {
+    fileprivate func applyScheduler<T>(_ observable: Observable<T>) -> Observable<T> {
         if let scheduler = scheduler {
             return observable.observeOn(scheduler)
         }

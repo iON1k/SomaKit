@@ -12,7 +12,7 @@ public enum ApiMethodType: String {
     case OPTIONS, GET, HEAD, POST, PUT, PATCH, DELETE, TRACE, CONNECT
 }
 
-public typealias ApiParamsType = [String : AnyObject]
+public typealias ApiParamsType = [String : Any]
 public typealias ApiHeadersType = [String : String]
 
 public protocol ApiParamsProvider {
@@ -23,35 +23,35 @@ public protocol ApiParamsProvider {
 }
 
 public protocol ApiRequestManagerType: RequestManagerType {
-    func apiRequestEngine<TRequest: RequestType where TRequest: ApiParamsProvider>(request: TRequest) -> Observable<TRequest.ResponseType>
+    func apiRequestEngine<TRequest: RequestType>(_ request: TRequest) -> Observable<TRequest.ResponseType> where TRequest: ApiParamsProvider
 }
 
-public class ApiRequestBase<TResponse, TManager: ApiRequestManagerType>: AbstractApiRequest<TResponse, TManager>, ApiParamsProvider, StringCachingKeyProvider {
-    public var method: String {
+open class ApiRequestBase<TResponse, TManager: ApiRequestManagerType>: AbstractApiRequest<TResponse, TManager>, ApiParamsProvider, StringCachingKeyProvider {
+    open var method: String {
         Utils.abstractMethod()
     }
     
-    public var methodType: ApiMethodType {
+    open var methodType: ApiMethodType {
         Utils.abstractMethod()
     }
     
-    public var params: ApiParamsType? {
+    open var params: ApiParamsType? {
         return nil
     }
     
-    public var headers: ApiHeadersType? {
+    open var headers: ApiHeadersType? {
         return nil
     }
     
-    public var stringCachingKey: String {
+    open var stringCachingKey: String {
         return buildCachingKey()
     }
     
-    public override func _requestEngine() -> Observable<TResponse> {
+    open override func _requestEngine() -> Observable<TResponse> {
         return _manager.apiRequestEngine(self)
     }
     
-    private func buildCachingKey() -> String {
+    fileprivate func buildCachingKey() -> String {
         var resultString = ""
         
         resultString += methodType.rawValue
@@ -75,11 +75,11 @@ public class ApiRequestBase<TResponse, TManager: ApiRequestManagerType>: Abstrac
         return resultString
     }
     
-    public func _shouldUseParamInCachingKey(paramName: String, paramValue: AnyObject) -> Bool {
+    open func _shouldUseParamInCachingKey(_ paramName: String, paramValue: Any) -> Bool {
         return true
     }
     
-    public func _shouldUseHeaderParamInCachingKey(paramName: String, paramValue: String) -> Bool {
+    open func _shouldUseHeaderParamInCachingKey(_ paramName: String, paramValue: String) -> Bool {
         return true
     }
 }

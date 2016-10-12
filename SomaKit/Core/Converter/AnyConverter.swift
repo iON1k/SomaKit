@@ -8,25 +8,25 @@
 
 import Foundation
 
-public class AnyConverter<TValue1, TValue2>: ConverterType {
+open class AnyConverter<TValue1, TValue2>: ConverterType {
     public typealias Type1 = TValue1
     public typealias Type2 = TValue2
     
-    public typealias ConverterHandler1Type = Type1 throws -> Type2
-    public typealias ConverterHandler2Type = Type2 throws -> Type1
+    public typealias ConverterHandler1Type = (Type1) throws -> Type2
+    public typealias ConverterHandler2Type = (Type2) throws -> Type1
     
-    private let converterHandler1: ConverterHandler1Type
-    private let converterHandler2: ConverterHandler2Type
+    fileprivate let converterHandler1: ConverterHandler1Type
+    fileprivate let converterHandler2: ConverterHandler2Type
     
-    public func convertValue(value: Type1) throws -> Type2 {
+    open func convertValue(_ value: Type1) throws -> Type2 {
         return try converterHandler1(value)
     }
     
-    public func convertValue(value: Type2) throws -> Type1 {
+    open func convertValue(_ value: Type2) throws -> Type1 {
         return try converterHandler2(value)
     }
     
-    public init(_ converterHandler1: ConverterHandler1Type, _ converterHandler2: ConverterHandler2Type) {
+    public init(_ converterHandler1: @escaping ConverterHandler1Type, _ converterHandler2: @escaping ConverterHandler2Type) {
         self.converterHandler1 = converterHandler1
         self.converterHandler2 = converterHandler2
     }

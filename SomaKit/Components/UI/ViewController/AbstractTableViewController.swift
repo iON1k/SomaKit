@@ -8,35 +8,35 @@
 
 import RxSwift
 
-public typealias TableBehaviorModuleViewModel = protocol<ModuleViewModel, TableViewBehaviorProvider>
+public typealias TableBehaviorModuleViewModel = ModuleViewModel & TableViewBehaviorProvider
 
-public class AbstractTableViewController<TViewModel: TableBehaviorModuleViewModel>: ModuleViewController<TViewModel> {
-    public var _tableManager: TableViewManager!
-    private var refreshControl: UIRefreshControl!
+open class AbstractTableViewController<TViewModel: TableBehaviorModuleViewModel>: ModuleViewController<TViewModel> {
+    open var _tableManager: TableViewManager!
+    fileprivate var refreshControl: UIRefreshControl!
     
-    public var _tableView: UITableView {
+    open var _tableView: UITableView {
         Utils.abstractMethod()
     }
     
-    public override func _onViewModelBind(viewModel: ViewModel) {
+    open override func _onViewModelBind(_ viewModel: ViewModel) {
         super._onViewModelBind(viewModel)
         
         let tableManager = TableViewManager(tableView: _tableView)
         let tableBehavior = viewModel.tableBehavior
         
-        tableManager.bindDataSource(
+        _ = tableManager.bindDataSource(
             tableBehavior.sectionModels
             .whileBinded(self)
         )
         
         _ = tableBehavior.isDataLoading
             .whileBinded(self)
-            .doOnNext(_showActivityIndicator)
+            .do(onNext: _showActivityIndicator)
             .subscribe()
         
         if _supportPullToRefresh() {
             let refreshControl = UIRefreshControl()
-            refreshControl.addTarget(self, action: #selector(beginRefreshing), forControlEvents: .ValueChanged)
+            refreshControl.addTarget(self, action: #selector(beginRefreshing), for: .valueChanged)
             _tableView.addSubview(refreshControl)
             self.refreshControl = refreshControl
         }
@@ -44,19 +44,19 @@ public class AbstractTableViewController<TViewModel: TableBehaviorModuleViewMode
         _tableManager = tableManager
     }
     
-    public func _showActivityIndicator(show: Bool) {
+    open func _showActivityIndicator(_ show: Bool) {
         Utils.abstractMethod()
     }
     
-    public func _supportPullToRefresh() -> Bool {
+    open func _supportPullToRefresh() -> Bool {
         return false
     }
     
-    @objc private func beginRefreshing() {
+    @objc fileprivate func beginRefreshing() {
         _ = viewModel?.tableBehavior
             .beginRefreshData()
             .whileBinded(self)
-            .doOnNext(refreshControl.endRefreshing)
+            .do(onNext: refreshControl.endRefreshing)
             .subscribe()
     }
 }

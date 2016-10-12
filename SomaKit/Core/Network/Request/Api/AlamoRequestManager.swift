@@ -11,22 +11,22 @@ import RxAlamofire
 import Alamofire
 import ObjectMapper
 
-public class AlamoRequestManager: ApiRequestManagerType {
-    private let alamoManager: Manager
-    private let baseUrl: URLConvertible
-    private let responseMapper: _StringMapperType
+open class AlamoRequestManager: ApiRequestManagerType {
+    fileprivate let sessionManager: SessionManager
+    fileprivate let baseUrl: URLConvertible
+    fileprivate let responseMapper: _StringMapperType
     
-    public init(baseUrl: URLConvertible, alamoManager: Manager = Manager.sharedInstance, responseMapper: _StringMapperType = JsonMapper()) {
-        self.alamoManager = alamoManager
+    public init(baseUrl: URLConvertible, sessionManager: SessionManager = SessionManager.default, responseMapper: _StringMapperType = JsonMapper()) {
+        self.sessionManager = sessionManager
         self.baseUrl = baseUrl
         self.responseMapper = responseMapper
     }
     
-    public func apiRequestEngine<TRequest: RequestType where TRequest: ApiParamsProvider>(request: TRequest) -> Observable<TRequest.ResponseType> {
+    open func apiRequestEngine<TRequest: RequestType>(_ request: TRequest) -> Observable<TRequest.ResponseType> where TRequest: ApiParamsProvider {
         return Observable.deferred({ () -> Observable<TRequest.ResponseType> in
             let urlString = try self.buildURLString(request.method)
             let alamoMethodType = try self.alamoMethodType(request.methodType)
-            return self.alamoManager.rx_string(alamoMethodType, urlString,
+            return self.sessionManager.rx.string(alamoMethodType, urlString,
                 parameters: request.params, encoding: self._parametersEncoding, headers: request.headers)
                 .map({ (responseString) -> TRequest.ResponseType in
                     return try self.responseMapper.mapToModel(responseString)
@@ -34,12 +34,12 @@ public class AlamoRequestManager: ApiRequestManagerType {
         })
     }
     
-    public var _parametersEncoding: ParameterEncoding {
-        return .URL
+    open var _parametersEncoding: ParameterEncoding {
+        return URLEncoding.default
     }
     
-    private func buildURLString(endPoint: String) throws -> String {
-        let url = NSURL(string: endPoint, relativeToURL: baseUrl.url)
+    fileprivate func buildURLString(_ endPoint: String) throws -> String {
+        let url = URL(string: endPoint, relativeTo: baseUrl.url as URL?)
         
         if let url = url {
             return url.absoluteString
@@ -48,8 +48,8 @@ public class AlamoRequestManager: ApiRequestManagerType {
         throw SomaError("URL building with endpoint \(endPoint) failed")
     }
     
-    private func alamoMethodType(somaMethodType: ApiMethodType) throws -> Alamofire.Method {
-        guard let alamoMethod = Alamofire.Method.init(rawValue: somaMethodType.rawValue) else {
+    fileprivate func alamoMethodType(_ somaMethodType: ApiMethodType) throws -> HTTPMethod {
+        guard let alamoMethod = HTTPMethod.init(rawValue: somaMethodType.rawValue) else {
             throw SomaError("Alamofire doesn't have api method type \(somaMethodType)")
         }
         

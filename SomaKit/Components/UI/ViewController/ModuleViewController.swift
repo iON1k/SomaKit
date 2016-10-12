@@ -8,15 +8,15 @@
 
 import RxSwift
 
-public class ModuleViewController<TViewModel: ModuleViewModel>: SomaViewController, ViewPresenterType, UiBindableType {
+open class ModuleViewController<TViewModel: ModuleViewModel>: SomaViewController, ViewPresenterType, UiBindableType {
     public typealias ViewModel = TViewModel
     
-    public private(set) var viewModel: ViewModel?
+    open fileprivate(set) var viewModel: ViewModel?
     
-    private let isBindedSubject = BehaviorSubject(value: false)
-    private let isActiveSubject = BehaviorSubject(value: false)
+    fileprivate let isBindedSubject = BehaviorSubject(value: false)
+    fileprivate let isActiveSubject = BehaviorSubject(value: false)
     
-    private let uiBindable: SomaUIBindable
+    fileprivate let uiBindable: SomaUIBindable
     
     public required init(context: InitContext) {
         uiBindable = SomaUIBindable(isBindedSubject: isBindedSubject, isActiveSubject: isActiveSubject, scheduler: MainScheduler.instance)
@@ -24,7 +24,7 @@ public class ModuleViewController<TViewModel: ModuleViewModel>: SomaViewControll
         super.init(context: context)
     }
     
-    public func bindViewModel(viewModel: ViewModel?) {
+    open func bindViewModel(_ viewModel: ViewModel?) {
         let prevViewModel = self.viewModel
         guard prevViewModel != nil || viewModel != nil else {
             return
@@ -43,18 +43,18 @@ public class ModuleViewController<TViewModel: ModuleViewModel>: SomaViewControll
         }
     }
     
-    public override func viewDidLoad() {
+    open override func viewDidLoad() {
         super.viewDidLoad()
         
         tryToBindViewModel()
     }
     
-    public override func viewWillAppear(animated: Bool) {
+    open override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         isActiveSubject.onNext(true)
     }
     
-    public override func viewDidDisappear(animated: Bool) {
+    open override func viewDidDisappear(_ animated: Bool) {
         super.viewWillAppear(animated)
         isActiveSubject.onNext(false)
     }
@@ -63,8 +63,8 @@ public class ModuleViewController<TViewModel: ModuleViewModel>: SomaViewControll
         bindViewModel(nil)
     }
     
-    private func tryToBindViewModel() {
-        guard isViewLoaded() else {
+    fileprivate func tryToBindViewModel() {
+        guard isViewLoaded else {
             return
         }
         
@@ -76,23 +76,23 @@ public class ModuleViewController<TViewModel: ModuleViewModel>: SomaViewControll
         isBindedSubject.onNext(true)
     }
     
-    public func _onViewModelDidUpdated(viewModel: ViewModel) {
+    open func _onViewModelDidUpdated(_ viewModel: ViewModel) {
         //Nothing
     }
     
-    public func _onViewModelWillReseted() {
+    open func _onViewModelWillReseted() {
         //Nothing
     }
     
-    public func _onViewModelBind(viewModel: ViewModel) {
+    open func _onViewModelBind(_ viewModel: ViewModel) {
         //Nothing
     }
     
-    public func whileBinded<T>(observable: Observable<T>) -> Observable<T> {
+    open func whileBinded<T>(_ observable: Observable<T>) -> Observable<T> {
         return uiBindable.whileBinded(observable)
     }
     
-    public func whileActive<T>(observable: Observable<T>) -> Observable<T> {
+    open func whileActive<T>(_ observable: Observable<T>) -> Observable<T> {
         return uiBindable.whileActive(observable)
     }
 }

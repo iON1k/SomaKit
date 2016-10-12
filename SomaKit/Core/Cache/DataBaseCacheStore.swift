@@ -6,10 +6,10 @@
 //  Copyright © 2016 iON1k. All rights reserved.
 //
 
-public class DataBaseCacheStore<TData, TDataBase: CacheManagedObject>: AbstractDataBaseStore<String, CacheValue<TData>, TDataBase> {
-    public typealias GetterCacheHandlerType = TDataBase throws -> TData
+open class DataBaseCacheStore<TData, TDataBase: CacheManagedObject>: AbstractDataBaseStore<String, CacheValue<TData>, TDataBase> {
+    public typealias GetterCacheHandlerType = (TDataBase) throws -> TData
     
-    public init(setterHandler: SetterHandlerType, getterHandler: GetterCacheHandlerType) {
+    public init(setterHandler: @escaping SetterHandlerType, getterHandler: @escaping GetterCacheHandlerType) {
         super.init(keyProperty: CacheManagedObject.DefaultCacheKey, setterHandler: { (data, record) in
                 try setterHandler(data, record)
             }) { (record) -> CacheValue<TData> in

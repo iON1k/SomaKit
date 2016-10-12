@@ -9,24 +9,24 @@
 import Foundation
 
 extension Log {
-    public static func error(message: String, args: Any...) {
-        log(.Error, message: message, args: args)
+    public static func error(_ message: String, args: Any...) {
+        log(.error, message: message, args: args)
     }
     
-    public static func log(error: ErrorType) {
-        log(.Error, message: "Error: \(error)")
+    public static func log(_ error: Error) {
+        log(.error, message: "Error: \(error)")
     }
     
-    public static func warning(message: String, args: Any...) {
-        log(.Warning, message: message, args: args)
+    public static func warning(_ message: String, args: Any...) {
+        log(.warning, message: message, args: args)
     }
     
-    public static func info(message: String, args: Any...) {
-        log(.Info, message: message, args: args)
+    public static func info(_ message: String, args: Any...) {
+        log(.info, message: message, args: args)
     }
     
-    public static func debug(message: String, args: Any...) {
-        log(.Debug, message: message, args: args)
+    public static func debug(_ message: String, args: Any...) {
+        log(.debug, message: message, args: args)
     }
     
 }

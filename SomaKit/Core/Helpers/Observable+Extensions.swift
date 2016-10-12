@@ -21,11 +21,11 @@ public extension Observable where Element: OptionalType {
 
 public extension Observable {
     public func subcribeOnBackgroundScheduler() -> Observable<E> {
-        return self.subscribeOn(ConcurrentDispatchQueueScheduler(globalConcurrentQueueQOS: .Default))
+        return self.subscribeOn(ConcurrentDispatchQueueScheduler(globalConcurrentQueueQOS: .default))
     }
     
     public func observeOnBackgroundScheduler() -> Observable<E> {
-        return self.observeOn(ConcurrentDispatchQueueScheduler(globalConcurrentQueueQOS: .Default))
+        return self.observeOn(ConcurrentDispatchQueueScheduler(globalConcurrentQueueQOS: .default))
     }
     
     public func subcribeOnMainScheduler() -> Observable<E> {

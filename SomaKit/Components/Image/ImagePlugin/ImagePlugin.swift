@@ -16,23 +16,23 @@ extension UIImage {
         var processedImage = self
         
         for plugin in plugins {
-            processedImage = try plugin.transform(processedImage)
+            processedImage = try plugin.transform(image: processedImage)
         }
         
         return processedImage
     }
     
     public func performPlugins(plugins: ImagePluginType ...) throws -> UIImage {
-        return try performPlugins(plugins)
+        return try performPlugins(plugins: plugins)
     }
     
     public func performPluginsSafe(plugins: [ImagePluginType]) -> UIImage? {
         return Utils.safe {
-            return try self.performPlugins(plugins)
+            return try self.performPlugins(plugins: plugins)
         }
     }
     
     public func performPluginsSafe(plugins: ImagePluginType ...) -> UIImage? {
-        return performPluginsSafe(plugins)
+        return performPluginsSafe(plugins: plugins)
     }
 }

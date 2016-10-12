@@ -6,35 +6,37 @@
 //  Copyright © 2016 iON1k. All rights reserved.
 //
 
-public class DiskMemoryStore: StoreType {
+open class DiskMemoryStore: StoreType {
     public typealias KeyType = String
-    public typealias DataType = NSData
+    public typealias DataType = Data
     
-    private let fileManager = NSFileManager()
-    private let baseDirectory: String?
-    private let attributes: [String : AnyObject]?
+    public typealias AttributesType = [String : Any]
     
-    public init(baseDirectory: String? = nil, attributes: [String : AnyObject]? = nil) {
+    fileprivate let fileManager = FileManager()
+    fileprivate let baseDirectory: String?
+    fileprivate let attributes: AttributesType?
+    
+    public init(baseDirectory: String? = nil, attributes: AttributesType? = nil) {
         self.baseDirectory = baseDirectory
         self.attributes = attributes
     }
     
-    public func loadData(key: KeyType) throws -> DataType? {
+    open func loadData(_ key: KeyType) throws -> DataType? {
         let path = generatePath(key)
-        return fileManager.contentsAtPath(path)
+        return fileManager.contents(atPath: path)
     }
     
-    public func saveData(key: KeyType, data: DataType?) throws {
+    open func saveData(_ key: KeyType, data: DataType?) throws {
         let path = generatePath(key)
         guard let data = data else {
-            try fileManager.removeItemAtPath(path)
+            try fileManager.removeItem(atPath: path)
             return
         }
         
-        fileManager.createFileAtPath(path, contents: data, attributes: attributes)
+        fileManager.createFile(atPath: path, contents: data, attributes: attributes)
     }
     
-    private func generatePath(key: KeyType) -> String {
+    fileprivate func generatePath(_ key: KeyType) -> String {
         guard let baseDirectory = baseDirectory else {
             return key
         }

@@ -10,35 +10,31 @@ import RxSwift
 import Alamofire
 import AlamofireImage
 
-public class NetworkImageSource: ImageSourceType {
-    public typealias KeyType = String
+open class NetworkImageSource: ImageSourceType {
+    public typealias KeyType = URL
     
-    private let manager: Manager
+    fileprivate let sessionManager: SessionManager
     
-    public func loadImage(key: KeyType) -> Observable<UIImage> {
-        return loadImage(url: key)
-    }
-    
-    public func loadImage(url url: URLStringConvertible) -> Observable<UIImage> {
+    open func loadImage(_ key: KeyType) -> Observable<UIImage> {
         return Observable.create({ (observer) -> Disposable in
-            let request = self.manager.request(.GET, url)
+            let request = self.sessionManager.request(key)
                 .responseImage(completionHandler: { (response) in
                     switch response.result {
-                    case .Success(let image):
+                    case .success(let image):
                         observer.onNext(image)
                         observer.onCompleted()
-                    case .Failure(let error):
+                    case .failure(let error):
                         observer.onError(error)
                     }
                 })
             
-            return AnonymousDisposable() {
+            return Disposables.create {
                 request.cancel()
             }
         })
     }
     
-    public init(manager: Manager = Manager.sharedInstance) {
-        self.manager = manager
+    public init(sessionManager: SessionManager = SessionManager.default) {
+        self.sessionManager = sessionManager
     }
 }

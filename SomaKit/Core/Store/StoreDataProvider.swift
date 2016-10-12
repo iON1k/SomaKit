@@ -8,22 +8,22 @@
 
 import RxSwift
 
-public class StoreDataProvider<TData, TKey>: DataProviderType {
+open class StoreDataProvider<TData, TKey>: DataProviderType {
     public typealias DataType = TData
     public typealias KeyType = TKey
     
-    private let dataValue: Variable<DataType>
+    fileprivate let dataValue: Variable<DataType>
     
-    private let store: AnyStore<KeyType, DataType>
+    fileprivate let store: AnyStore<KeyType, DataType>
     
-    private let key: KeyType
-    private let defaultValue: DataType
+    fileprivate let key: KeyType
+    fileprivate let defaultValue: DataType
     
-    public func data() -> Observable<DataType> {
+    open func data() -> Observable<DataType> {
         return dataValue.asObservable()
     }
     
-    public init<TStore: StoreConvertibleType where TStore.DataType == DataType, TStore.KeyType == KeyType>(store: TStore, key: KeyType, defaultValue: DataType) {
+    public init<TStore: StoreConvertibleType>(store: TStore, key: KeyType, defaultValue: DataType) where TStore.DataType == DataType, TStore.KeyType == KeyType {
         self.store = store.asStore()
         
         self.key = key
@@ -32,30 +32,30 @@ public class StoreDataProvider<TData, TKey>: DataProviderType {
         dataValue = Variable(defaultValue)
     }
     
-    public func setData(data: DataType?) throws {
+    open func setData(_ data: DataType?) throws {
         try store.saveData(key, data: data)
         dataValue <= data ?? defaultValue
     }
     
-    public func loadData() throws -> DataType {
+    open func loadData() throws -> DataType {
         let data = normalizeData(try store.loadData(key))
         dataValue <= data
         return data
     }
     
-    public func setDataSafe(data: DataType?) {
+    open func setDataSafe(_ data: DataType?) {
         Utils.safe {
             try self.setData(data)
         }
     }
     
-    public func loadDataSafe() -> DataType {
+    open func loadDataSafe() -> DataType {
         return Utils.safe(defaultValue) {
             return try self.loadData()
         }
     }
     
-    private func normalizeData(data: DataType?) -> DataType {
+    fileprivate func normalizeData(_ data: DataType?) -> DataType {
         if let data = data {
             return data
         } else {
@@ -65,7 +65,7 @@ public class StoreDataProvider<TData, TKey>: DataProviderType {
 }
 
 extension StoreDataProvider where TData: DefaultValueType {
-    public convenience init<TStore: StoreType where TStore.DataType == DataType, TStore.KeyType == KeyType>(store: TStore, key: KeyType) {
+    public convenience init<TStore: StoreType>(store: TStore, key: KeyType) where TStore.DataType == DataType, TStore.KeyType == KeyType {
         self.init(store: store, key: key, defaultValue: TData.defaultValue)
     }
 }

@@ -9,32 +9,32 @@
 import UIKit
 
 public protocol ModuleTransitionHandler {
-    func openModule(module: UIViewController, transition: (UIViewController, UIViewController) -> Void)
-    func closeModule(transition: UIViewController -> Void)
+    func openModule(_ module: UIViewController, transition: (UIViewController, UIViewController) -> Void)
+    func closeModule(_ transition: (UIViewController) -> Void)
 }
 
 
 extension ModuleTransitionHandler {
-    func pushModule(module: UIViewController, animated: Bool) {
+    func pushModule(_ module: UIViewController, animated: Bool) {
         openModule(module) { (sourceModule, destinationModule) in
             sourceModule.navigationController?.pushViewController(destinationModule, animated: animated)
         }
     }
     
-    func presentModule(module: UIViewController, animated: Bool) {
+    func presentModule(_ module: UIViewController, animated: Bool) {
         openModule(module) { (sourceModule, destinationModule) in
-            sourceModule.presentViewController(destinationModule, animated: animated, completion: nil)
+            sourceModule.present(destinationModule, animated: animated, completion: nil)
         }
     }
     
-    public func closeModule(animated: Bool) {
+    public func closeModule(_ animated: Bool) {
         closeModule { (module) in
-            if let navigationController = module.parentViewController as? UINavigationController {
+            if let navigationController = module.parent as? UINavigationController {
                 if navigationController.childViewControllers.count > 1 {
-                    navigationController.popViewControllerAnimated(animated)
+                    navigationController.popViewController(animated: animated)
                 }
             } else if module.presentingViewController != nil {
-                module.dismissViewControllerAnimated(animated, completion: nil)
+                module.dismiss(animated: animated, completion: nil)
             } else if module.view.superview != nil {
                 module.removeFromParentViewController()
                 module.view.removeFromSuperview()

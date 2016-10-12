@@ -8,34 +8,34 @@
 
 import RxSwift
 
-public class AnchoredPagedDataProvider<TPage: AnchoredPageType>: AbstractAnchoredPagedDataProvider<TPage> {
+open class AnchoredPagedDataProvider<TPage: AnchoredPageType>: AbstractAnchoredPagedDataProvider<TPage> {
     public typealias AnchorType = PageType.AnchorType
-    public typealias AnchoredPageObservableFactory = (offset: Int, count: Int, anchor: AnchorType?) -> Observable<PageType>
+    public typealias AnchoredPageObservableFactory = (_ offset: Int, _ count: Int, _ anchor: AnchorType?) -> Observable<PageType>
     
-    private let anchoredPageObservableFactory: AnchoredPageObservableFactory
+    fileprivate let anchoredPageObservableFactory: AnchoredPageObservableFactory
     
-    public init(pageSize: Int, memoryCache: MemoryCacheType, anchoredPageObservableFactory: AnchoredPageObservableFactory) {
+    public init(pageSize: Int, memoryCache: MemoryCacheType, anchoredPageObservableFactory: @escaping AnchoredPageObservableFactory) {
         self.anchoredPageObservableFactory = anchoredPageObservableFactory
         super.init(pageSize: pageSize, memoryCache: memoryCache)
     }
     
-    public convenience init(pageSize: Int = PagedDataProviderDefaultPageSize, anchoredPageObservableFactory: AnchoredPageObservableFactory) {
+    public convenience init(pageSize: Int = PagedDataProviderDefaultPageSize, anchoredPageObservableFactory: @escaping AnchoredPageObservableFactory) {
         self.init(pageSize: pageSize, memoryCache: MemoryCacheType(), anchoredPageObservableFactory: anchoredPageObservableFactory)
     }
     
-    public override func _createLoadingAnchoredPageObservable(offset: Int, count: Int, anchoredPage: PageType?) -> Observable<PageType> {
-        return anchoredPageObservableFactory(offset: offset, count: count, anchor: anchoredPage?.anchor)
+    open override func _createLoadingAnchoredPageObservable(_ offset: Int, count: Int, anchoredPage: PageType?) -> Observable<PageType> {
+        return anchoredPageObservableFactory(offset, count, anchoredPage?.anchor)
     }
 }
 
 extension AnchoredPagedDataProvider {
-    public convenience init<TDataSource: ObservableConvertibleType, TCacheStore: StoreConvertibleType
-        where TDataSource: CachingKeyProvider, TCacheStore.KeyType == TDataSource.CachingKeyType,
-        TCacheStore.DataType == TDataSource.E, TDataSource.E == PageType>(pageSize: Int = PagedDataProviderDefaultPageSize,
+    public convenience init<TDataSource: ObservableConvertibleType, TCacheStore: StoreConvertibleType>(pageSize: Int = PagedDataProviderDefaultPageSize,
                                                                                             cacheStore: TCacheStore, cacheBehavior: CacheableDataProviderBehavior<PageType> = CacheableDataProviderBehaviors.cacheAndData(),
-                                                                                            dataSourceFactory: (offset: Int, count: Int, anchor: AnchorType?) -> TDataSource) {
+                                                                                            dataSourceFactory: @escaping (_ offset: Int, _ count: Int, _ anchor: AnchorType?) -> TDataSource)
+        where TDataSource: CachingKeyProvider, TCacheStore.KeyType == TDataSource.CachingKeyType,
+        TCacheStore.DataType == TDataSource.E, TDataSource.E == PageType {
         self.init(pageSize: pageSize, memoryCache: MemoryCacheType()) { (offset, count, anchor) -> Observable<PageType> in
-            return dataSourceFactory(offset: offset, count: count, anchor: anchor)
+            return dataSourceFactory(offset, count, anchor)
                 .asCacheableProvider(cacheStore, behavior: cacheBehavior)
                 .data()
                 .onlyData()

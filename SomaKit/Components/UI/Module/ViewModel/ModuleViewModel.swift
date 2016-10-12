@@ -9,5 +9,5 @@
 public protocol ModuleViewModel: ViewModelType {
     associatedtype Router: RouterType
     
-    func bindRouter(router: Router?)
+    func bindRouter(_ router: Router?)
 }

@@ -9,20 +9,20 @@
 import RxSwift
 
 public extension Observable {
-    public func logError(text: String, logLevel: LogLevel = .Error) -> Observable<E> {
-        return self.doOnError({ (error) in
+    public func logError(_ text: String, logLevel: LogLevel = .error) -> Observable<E> {
+        return self.do(onError: { (error) in
             Log.log(logLevel, message: text + "\n\(error)")
         })
     }
     
-    public func logNext(text: String, logLevel: LogLevel = .Debug) -> Observable<E> {
-        return self.doOnNext({ (element) in
+    public func logNext(_ text: String, logLevel: LogLevel = .debug) -> Observable<E> {
+        return self.do(onNext: { (element) in
             Log.log(logLevel, message: text + "\n\(element)")
         })
     }
     
-    public func logCompleted(text: String, logLevel: LogLevel = .Debug) -> Observable<E> {
-        return self.doOnCompleted({ 
+    public func logCompleted(_ text: String, logLevel: LogLevel = .debug) -> Observable<E> {
+        return self.do(onCompleted: { 
             Log.log(logLevel, message: text)
         })
     }

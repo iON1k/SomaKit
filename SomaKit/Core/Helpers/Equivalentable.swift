@@ -7,11 +7,11 @@
 //
 
 public protocol _Equivalentable {
-    func isEquivalent(other: Any) -> Bool
+    func isEquivalent(_ other: Any) -> Bool
 }
 
 extension _Equivalentable where Self: Equivalentable {
-    public func isEquivalent(other: Any) -> Bool {
+    public func isEquivalent(_ other: Any) -> Bool {
         guard let castedOhter = other as? Self else {
             return false
         }
@@ -21,11 +21,11 @@ extension _Equivalentable where Self: Equivalentable {
 }
 
 public protocol Equivalentable: _Equivalentable {
-    func isEquivalent(other: Self) -> Bool
+    func isEquivalent(_ other: Self) -> Bool
 }
 
 extension Equivalentable where Self: Equatable  {
-    public func isEquivalent(other: Self) -> Bool {
+    public func isEquivalent(_ other: Self) -> Bool {
         return self == other
     }
 }

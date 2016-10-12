@@ -11,47 +11,47 @@ import RxSwift
 public let PagedDataProviderDefaultPageSize = 100
 private let AbstractPagedDataProviderQueueName = "AbstractPagedDataProvider_Queue"
 
-public class AbstractPagedDataProvider<TPage: ItemsPageType>: ListDataProviderType {
+open class AbstractPagedDataProvider<TPage: ItemsPageType>: ListDataProviderType {
     public typealias PageType = TPage
     public typealias ItemType = PageType.ItemType
     public typealias ItemsMergeResult = (items: [ItemType?], hasChanges: Bool)
     public typealias MemoryCacheType = MemoryCache<Int, PageType>
     
-    private var allItemsCount: Int?
+    fileprivate var allItemsCount: Int?
     
-    private var itemsValue = [ItemType?]()
-    private let itemsValueSubject = BehaviorSubject(value: [ItemType?]())
+    fileprivate var itemsValue = [ItemType?]()
+    fileprivate let itemsValueSubject = BehaviorSubject(value: [ItemType?]())
     
-    private let workingScheduler = SerialDispatchQueueScheduler(internalSerialQueueName: AbstractPagedDataProviderQueueName)
-    private let stateSyncLock = SyncLock()
+    fileprivate let workingScheduler = SerialDispatchQueueScheduler(internalSerialQueueName: AbstractPagedDataProviderQueueName)
+    fileprivate let stateSyncLock = SyncLock()
     
-    private var loadingPagesObservables = [Int : Observable<PageType>]()
-    private let loadedPagesMemoryCache: MemoryCacheType
+    fileprivate var loadingPagesObservables = [Int : Observable<PageType>]()
+    fileprivate let loadedPagesMemoryCache: MemoryCacheType
     
-    private let pageSize: Int
+    fileprivate let pageSize: Int
     
     public init(pageSize: Int, memoryCache: MemoryCacheType) {
         self.pageSize = pageSize
         loadedPagesMemoryCache = memoryCache
     }
     
-    public var items: [ItemType?] {
+    open var items: [ItemType?] {
         return stateSyncLock.sync {
             return itemsValue
         }
     }
     
-    public func data() -> Observable<[ItemType?]> {
+    open func data() -> Observable<[ItemType?]> {
         return itemsValueSubject
     }
     
-    public var isAllItemsLoaded: Bool {
+    open var isAllItemsLoaded: Bool {
         return stateSyncLock.sync {
             return allItemsCount != nil
         }
     }
     
-    public func loadItem(index: Int) -> Observable<ItemType?> {
+    open func loadItem(_ index: Int) -> Observable<ItemType?> {
         return Observable.deferred { () -> Observable<ItemType?> in
             if self.validateItemIndex(index) {
                 return self.unsafeLoadItem(index)
@@ -62,7 +62,7 @@ public class AbstractPagedDataProvider<TPage: ItemsPageType>: ListDataProviderTy
         .subscribeOn(workingScheduler)
     }
     
-    public func unsafeLoadItem(index: Int) -> Observable<ItemType?> {
+    open func unsafeLoadItem(_ index: Int) -> Observable<ItemType?> {
         return Observable.deferred({ () -> Observable<PageType> in
             let pageIndex = self.pageForIndex(index)
             return self.createLoadingPageObservable(pageIndex)
@@ -79,7 +79,7 @@ public class AbstractPagedDataProvider<TPage: ItemsPageType>: ListDataProviderTy
         })
     }
     
-    private func createLoadingPageObservable(pageIndex: Int) -> Observable<PageType> {
+    fileprivate func createLoadingPageObservable(_ pageIndex: Int) -> Observable<PageType> {
         if let loadedPage = loadedPagesMemoryCache.loadDataSafe(pageIndex) {
             return Observable.just(loadedPage)
         }
@@ -90,7 +90,7 @@ public class AbstractPagedDataProvider<TPage: ItemsPageType>: ListDataProviderTy
         
         let newPageLoadingObservable = _createLoadingPageObservable(pageIndex * pageSize, count: pageSize)
             .observeOn(workingScheduler)
-            .doOnNext({ [weak self] (page) in
+            .do(onNext: { [weak self] (page) in
                 self?.onPageDidLoaded(page, pageIndex: pageIndex)
             })
             .shareReplay(1)
@@ -100,8 +100,8 @@ public class AbstractPagedDataProvider<TPage: ItemsPageType>: ListDataProviderTy
         return newPageLoadingObservable
     }
     
-    private func onPageDidLoaded(page: PageType, pageIndex: Int) {
-        loadingPagesObservables.removeValueForKey(pageIndex)
+    fileprivate func onPageDidLoaded(_ page: PageType, pageIndex: Int) {
+        loadingPagesObservables.removeValue(forKey: pageIndex)
         loadedPagesMemoryCache.saveDataSafe(pageIndex, data: page)
         
         guard validatePageIndex(pageIndex) else {
@@ -128,7 +128,7 @@ public class AbstractPagedDataProvider<TPage: ItemsPageType>: ListDataProviderTy
         }
     }
     
-    private func mergePage(page: PageType, pageIndex: Int) -> ItemsMergeResult {
+    fileprivate func mergePage(_ page: PageType, pageIndex: Int) -> ItemsMergeResult {
         let itemsOffset = pageFirstItemIndex(pageIndex)
         let pageItems = page.items
         let isLasPageType = _isLasPageType(page)
@@ -150,7 +150,7 @@ public class AbstractPagedDataProvider<TPage: ItemsPageType>: ListDataProviderTy
         return ItemsMergeResult(newItemsValue, hasChanges)
     }
     
-    private func mergePageItems(newItems: [ItemType], offset: Int, count: Int) -> ItemsMergeResult {
+    fileprivate func mergePageItems(_ newItems: [ItemType], offset: Int, count: Int) -> ItemsMergeResult {
         let maxIndex = offset + count
         
         if maxIndex < itemsValue.count {
@@ -182,19 +182,19 @@ public class AbstractPagedDataProvider<TPage: ItemsPageType>: ListDataProviderTy
         return ItemsMergeResult(allItems, true)
     }
     
-    private func pageForIndex(index: Int) -> Int {
+    fileprivate func pageForIndex(_ index: Int) -> Int {
         return index / pageSize
     }
     
-    private func indexOnPage(index: Int) -> Int {
+    fileprivate func indexOnPage(_ index: Int) -> Int {
         return index % pageSize
     }
     
-    private func pageFirstItemIndex(pageIndex: Int) -> Int {
+    fileprivate func pageFirstItemIndex(_ pageIndex: Int) -> Int {
         return pageIndex * pageSize
     }
     
-    private func validateItemIndex(itemIndex: Int) -> Bool {
+    fileprivate func validateItemIndex(_ itemIndex: Int) -> Bool {
         guard let allItemsCount = allItemsCount else {
             return true
         }
@@ -202,16 +202,16 @@ public class AbstractPagedDataProvider<TPage: ItemsPageType>: ListDataProviderTy
         return itemIndex < allItemsCount
     }
     
-    private func validatePageIndex(pageIndex: Int) -> Bool {
+    fileprivate func validatePageIndex(_ pageIndex: Int) -> Bool {
         let pageFirstItemIndex = pageSize * pageIndex
         return validateItemIndex(pageFirstItemIndex)
     }
     
-    public func _isLasPageType(page: PageType) -> Bool {
+    open func _isLasPageType(_ page: PageType) -> Bool {
         return page.items.count < pageSize
     }
     
-    public func _createLoadingPageObservable(offset: Int, count: Int) -> Observable<PageType> {
+    open func _createLoadingPageObservable(_ offset: Int, count: Int) -> Observable<PageType> {
         Utils.abstractMethod()
     }
 }

@@ -7,11 +7,11 @@
 //
 
 public final class Debug {
-    @noreturn public static func fatalError(message: String? = nil) {
+    public static func fatalError(_ message: String? = nil) -> Never  {
         Swift.fatalError(message ?? "Unknown fatal error")
     }
     
-    public static func error(message: String) {
+    public static func error(_ message: String) {
 #if DEVELOP_BUILD
         self.fatalError(message)
 #else
@@ -19,7 +19,7 @@ public final class Debug {
 #endif
     }
     
-    public static func assert(@autoclosure assertion: Void -> Bool, message: String) {
+    public static func assert(_ assertion: @autoclosure (Void) -> Bool, message: String) {
 #if DEVELOP_BUILD
         if !assertion() {
             fatalError(message)
@@ -27,7 +27,7 @@ public final class Debug {
 #endif
     }
     
-    private init() {
+    fileprivate init() {
         //Nothing
     }
 }

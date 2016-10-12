@@ -8,20 +8,20 @@
 
 import MagicalRecord
 
-public class AbstractDataBaseStore<TKey, TData, TDataBase: NSManagedObject>: StoreType {
+open class AbstractDataBaseStore<TKey, TData, TDataBase: NSManagedObject>: StoreType {
     public typealias KeyType = TKey
     public typealias DataType = TData
     public typealias DataBaseType = TDataBase
     public typealias SetterHandlerType = (DataType, DataBaseType) throws -> Void
     public typealias GetterHandlerType = (DataBaseType) throws -> DataType
     
-    public let keyProperty: String
+    open let keyProperty: String
     
-    private let setterHandler: SetterHandlerType
-    private let getterHandler: GetterHandlerType
+    fileprivate let setterHandler: SetterHandlerType
+    fileprivate let getterHandler: GetterHandlerType
     
-    public func loadData(key: KeyType) throws -> DataType? {
-        let optinalDBRecord = DataBaseType.MR_findFirstWithPredicate(try self.keyPredicate(key))
+    open func loadData(_ key: KeyType) throws -> DataType? {
+        let optinalDBRecord = DataBaseType.mr_findFirst(with: try self.keyPredicate(key))
         
         guard let dbRecord = optinalDBRecord else {
             return nil
@@ -32,19 +32,19 @@ public class AbstractDataBaseStore<TKey, TData, TDataBase: NSManagedObject>: Sto
         return resultData
     }
     
-    public func saveData(key: KeyType, data: DataType?) throws {
-        var error: ErrorType?
+    open func saveData(_ key: KeyType, data: DataType?) throws {
+        var error: Error?
         
-        MagicalRecord.saveWithBlockAndWait { (dbLocalContext) in
+        MagicalRecord.save( { (dbLocalContext) in
             do {
-                var dbRecord = DataBaseType.MR_findFirstWithPredicate(try self.keyPredicate(key), inContext: dbLocalContext)
+                var dbRecord = DataBaseType.mr_findFirst(with: try self.keyPredicate(key), in: dbLocalContext)
                 
                 guard let data = data else {
                     if let dbRecord = dbRecord {
-                        let removingResult = dbRecord.MR_deleteEntityInContext(dbLocalContext)
+                        let removingResult = dbRecord.mr_deleteEntity(in: dbLocalContext)
                         
                         if (!removingResult) {
-                            throw SomaError("DataBase \(Utils.typeName(TDataBase)) entity removing failed")
+                            throw SomaError("DataBase \(Utils.typeName(DataType.self)) entity removing failed")
                         }
                     }
                     
@@ -52,41 +52,33 @@ public class AbstractDataBaseStore<TKey, TData, TDataBase: NSManagedObject>: Sto
                 }
                 
                 if dbRecord == nil {
-                    dbRecord = DataBaseType.MR_createEntityInContext(dbLocalContext)
+                    dbRecord = DataBaseType.mr_createEntity(in: dbLocalContext)
                 }
                 
                 guard let resultDBRecord = dbRecord else {
-                    error = SomaError("DataBase \(Utils.typeName(TDataBase)) entity creating failed")
+                    error = SomaError("DataBase \(Utils.typeName(DataType.self)) entity creating failed")
                     return
                 }
                 
                 try self.setterHandler(data, resultDBRecord)
-                (resultDBRecord as NSManagedObject).setValue(try self.keyObject(key), forKey: self.keyProperty)
+                (resultDBRecord as NSManagedObject).setValue(key, forKey: self.keyProperty)
             } catch let catchedError {
                 error = catchedError
             }
-        }
+        })
         
         if let error = error {
             throw error
         }
     }
     
-    public init(keyProperty: String, setterHandler: SetterHandlerType, getterHandler: GetterHandlerType) {
+    public init(keyProperty: String, setterHandler: @escaping SetterHandlerType, getterHandler: @escaping GetterHandlerType) {
         self.keyProperty = keyProperty
         self.setterHandler = setterHandler
         self.getterHandler = getterHandler
     }
     
-    private func keyPredicate(key: KeyType) throws -> NSPredicate {
-        return NSPredicate(format: "%K = %@", argumentArray: [self.keyProperty, try keyObject(key)])
-    }
-    
-    private func keyObject(key: KeyType) throws -> AnyObject {
-        guard let keyObj = key as? AnyObject else {
-            throw SomaError("Database store wrong key type \(Utils.typeName(KeyType)). Expected type AnyObject.")
-        }
-        
-        return keyObj
+    fileprivate func keyPredicate(_ key: KeyType) throws -> NSPredicate {
+        return NSPredicate(format: "%K = %@", argumentArray: [self.keyProperty, key])
     }
 }

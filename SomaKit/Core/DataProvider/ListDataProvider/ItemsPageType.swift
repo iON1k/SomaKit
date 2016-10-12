@@ -12,10 +12,10 @@ public protocol ItemsPageType {
     var items: [ItemType] { get }
 }
 
-public class SimpleItemsPage<TItem>: ItemsPageType {
+open class SimpleItemsPage<TItem>: ItemsPageType {
     public typealias ItemType = TItem
     
-    public let items: [ItemType]
+    open let items: [ItemType]
     
     public init(items: [ItemType]) {
         self.items = items

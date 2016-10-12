@@ -11,7 +11,7 @@ import RxSwift
 public protocol ImageSourceType: ImageSourceConvertiable {
     associatedtype KeyType: StringKeyConvertiable
     
-    func loadImage(key: KeyType) -> Observable<UIImage>
+    func loadImage(_ key: KeyType) -> Observable<UIImage>
 }
 
 extension ImageSourceType {

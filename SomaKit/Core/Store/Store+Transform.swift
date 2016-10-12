@@ -7,8 +7,8 @@
 //
 
 extension StoreType {
-    public func transform<TKey, TData>(transformKeyHandler: TKey throws -> KeyType,
-                          transformDataHandler: TData throws -> DataType, revertTransformDataHandler: DataType throws -> TData) -> AnyStore<TKey, TData> {
+    public func transform<TKey, TData>(_ transformKeyHandler: @escaping (TKey) throws -> KeyType,
+                          transformDataHandler: @escaping (TData) throws -> DataType, revertTransformDataHandler: @escaping (DataType) throws -> TData) -> AnyStore<TKey, TData> {
         
         return AnyStore({ (key) -> TData? in
             let sourceKey = try transformKeyHandler(key)
@@ -30,13 +30,13 @@ extension StoreType {
             })
     }
     
-    public func transform<TKey, TDataConverter: ConverterType where TDataConverter.Type1 == DataType>
-        (transformKeyHandler: TKey throws -> KeyType, dataConverter: TDataConverter) -> AnyStore<TKey, TDataConverter.Type2> {
+    public func transform<TKey, TDataConverter: ConverterType>
+        (_ transformKeyHandler: @escaping (TKey) throws -> KeyType, dataConverter: TDataConverter) -> AnyStore<TKey, TDataConverter.Type2> where TDataConverter.Type1 == DataType {
         return transform(transformKeyHandler, transformDataHandler: dataConverter.convertValue, revertTransformDataHandler: dataConverter.convertValue)
     }
     
-    public func transform<TDataConverter: ConverterType where TDataConverter.Type1 == DataType>
-        (dataConverter: TDataConverter) -> AnyStore<KeyType, TDataConverter.Type2> {
+    public func transform<TDataConverter: ConverterType>
+        (_ dataConverter: TDataConverter) -> AnyStore<KeyType, TDataConverter.Type2> where TDataConverter.Type1 == DataType {
         return transform(SomaFunc.sameTransform, transformDataHandler: dataConverter.convertValue, revertTransformDataHandler: dataConverter.convertValue)
     }
 }

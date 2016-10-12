@@ -19,7 +19,7 @@ extension Array: DataProviderType {
         return true
     }
     
-    public func loadItem(index: Int) -> Observable<ItemType?> {
+    public func loadItem(_ index: Int) -> Observable<ItemType?> {
         return Observable.just(index < count ? self[index] : nil)
     }
     

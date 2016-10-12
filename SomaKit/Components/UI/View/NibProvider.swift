@@ -10,22 +10,22 @@ public protocol NibFactoryType {
     func loadNib() -> UINib
 }
 
-public class NibFactory: NibFactoryType {
-    public typealias NibFactoryHandler = Void -> UINib
+open class NibFactory: NibFactoryType {
+    public typealias NibFactoryHandler = (Void) -> UINib
     
-    private let nibFactoryHandler: NibFactoryHandler
+    fileprivate let nibFactoryHandler: NibFactoryHandler
     
-    public func loadNib() -> UINib {
+    open func loadNib() -> UINib {
         return nibFactoryHandler()
     }
     
-    public init(nibFactoryHandler: NibFactoryHandler) {
+    public init(nibFactoryHandler: @escaping NibFactoryHandler) {
         self.nibFactoryHandler = nibFactoryHandler
     }
 }
 
 extension NibFactory {
-    public convenience init(nibName: String, nibBundle: NSBundle? = nil) {
+    public convenience init(nibName: String, nibBundle: Bundle? = nil) {
         self.init() {
             return UINib(nibName: nibName, bundle: nibBundle)
         }
@@ -49,8 +49,8 @@ extension NibProviderType {
 }
 
 extension NibProviderType {
-    public static func loadFromNib(owner: AnyObject? = nil, options: [NSObject : AnyObject]? = nil) -> Self {
+    public static func loadFromNib(_ owner: Any? = nil, options: [AnyHashable: Any]? = nil) -> Self {
         let nib = loadNib()
-        return Utils.unsafeCast(nib.instantiateWithOwner(owner, options: options).first)
+        return Utils.unsafeCast(nib.instantiate(withOwner: owner, options: options).first)
     }
 }

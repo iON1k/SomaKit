@@ -9,31 +9,31 @@
 import Foundation
 
 public final class Utils {
-    private init() {
+    fileprivate init() {
         //Nothing
     }
 }
 
 extension Utils {
-    @noreturn public static func abstractMethod(methodName: String = "Method") {
+    public static func abstractMethod(_ methodName: String = "Method") -> Never  {
         Debug.fatalError("\(methodName) has not been implemented")
     }
 }
 
 extension Utils {
-    public static func typeName(classType: Any.Type) -> String {
-        return String(classType)
+    public static func typeName(_ classType: Any.Type) -> String {
+        return String(describing: classType)
     }
     
-    public static func sameTypes(first: Any, second: Any) -> Bool {
-        return first.dynamicType == second.dynamicType
+    public static func sameTypes(_ first: Any, second: Any) -> Bool {
+        return type(of: first) == type(of: second)
     }
 }
 
 extension Utils {
-    public static func unsafeCast<T>(sourceValue: Any) -> T {
+    public static func unsafeCast<T>(_ sourceValue: Any) -> T {
         guard let castedValue = sourceValue as? T else {
-            Debug.fatalError("Failing unsafe casting value with type \(T.self) to type \(sourceValue.dynamicType)")
+            Debug.fatalError("Failing unsafe casting value with type \(T.self) to type \(type(of: sourceValue))")
         }
         
         return castedValue
@@ -42,24 +42,26 @@ extension Utils {
 
 extension Utils {
     public static func ensureIsMainThread() {
-        guard NSThread.isMainThread() else {
+        guard Thread.isMainThread else {
             Debug.fatalError("Is not main thread")
         }
     }
 }
 
 extension Utils {
-    public static func isEquivalentValues<TValue>(value1: TValue, value2: TValue) -> Bool {
-        if let optionalValue1 = value1 as? _OptionalType, optionalValue2 = value2 as? _OptionalType {
+    public static func isEquivalentValues<TValue>(_ value1: TValue, value2: TValue) -> Bool {
+        if let optionalValue1 = value1 as? _OptionalType, let optionalValue2 = value2 as? _OptionalType {
             let hasValue1 = optionalValue1.hasValue
             let hasValue2 = optionalValue2.hasValue
             guard hasValue1 && hasValue2 else {
                 return !hasValue1 && !hasValue2
             }
+            
+            return isEquivalentValues(optionalValue1._value, value2: optionalValue2._value)
         }
         
-        if let value1Object = value1 as? AnyObject, value2Object = value2 as? AnyObject {
-            guard value1Object !== value2Object else {
+        if value1 is AnyObject && value2 is AnyObject {
+            guard (value1 as AnyObject) !== (value2 as AnyObject) else {
                 return true
             }
         }
@@ -73,7 +75,7 @@ extension Utils {
 }
 
 extension Utils {
-    public static func safe(body: Void throws -> Void) {
+    public static func safe(_ body: (Void) throws -> Void) {
         do {
             try body()
         } catch let error {
@@ -81,7 +83,7 @@ extension Utils {
         }
     }
     
-    public static func safe<TResult>(body: Void throws -> TResult?) -> TResult? {
+    public static func safe<TResult>(_ body: (Void) throws -> TResult?) -> TResult? {
         do {
             return try body()
         } catch let error {
@@ -91,7 +93,7 @@ extension Utils {
         return nil
     }
     
-    public static func safe<TResult>(defaultResult: TResult, body: Void throws -> TResult) -> TResult {
+    public static func safe<TResult>(_ defaultResult: TResult, body: (Void) throws -> TResult) -> TResult {
         do {
             return try body()
         } catch let error {

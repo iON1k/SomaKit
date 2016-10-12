@@ -15,12 +15,12 @@ public protocol ListDataProviderType: DataProviderType {
     var items: DataType { get }
     var isAllItemsLoaded: Bool { get }
     
-    func loadItem(index: Int) -> Observable<ItemType?>
+    func loadItem(_ index: Int) -> Observable<ItemType?>
 }
 
 extension ListDataProviderType {
-    public func loadItems(itemsRange: Range<Int>) -> Observable<[ItemType?]> {
-        return itemsRange.toObservable()
+    public func loadItems(_ itemsRange: Range<Int>) -> Observable<[ItemType?]> {
+        return Observable.from(Array(itemsRange.lowerBound..<itemsRange.upperBound))
             .map({ (index) -> Observable<ItemType?> in
                 return self.loadItem(index)
             })

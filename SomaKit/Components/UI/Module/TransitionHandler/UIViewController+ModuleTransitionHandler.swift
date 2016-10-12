@@ -13,11 +13,11 @@ extension UIViewController: ModuleTransitionHandler {
 }
 
 extension ModuleTransitionHandler where Self: UIViewController {
-    public func openModule(module: UIViewController, transition: (UIViewController, UIViewController) -> Void) {
+    public func openModule(_ module: UIViewController, transition: (UIViewController, UIViewController) -> Void) {
         transition(self, module)
     }
     
-    public func closeModule(transition: UIViewController -> Void) {
+    public func closeModule(_ transition: (UIViewController) -> Void) {
         transition(self)
     }
 }

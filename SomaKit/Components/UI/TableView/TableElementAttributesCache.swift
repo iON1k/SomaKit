@@ -9,29 +9,29 @@
 import RxSwift
 
 public protocol TableElementAttributesCacheSource: class {
-    func sectionHeaderAttributes(tableElementAttributesCache: TableElementAttributesCache, sectionIndex: Int) -> TableElementAttributes
-    func sectionFooterAttributes(tableElementAttributesCache: TableElementAttributesCache, sectionIndex: Int) -> TableElementAttributes
-    func cellAttributes(tableElementAttributesCache: TableElementAttributesCache, indexPath: NSIndexPath) -> TableElementAttributes
+    func sectionHeaderAttributes(_ tableElementAttributesCache: TableElementAttributesCache, sectionIndex: Int) -> TableElementAttributes
+    func sectionFooterAttributes(_ tableElementAttributesCache: TableElementAttributesCache, sectionIndex: Int) -> TableElementAttributes
+    func cellAttributes(_ tableElementAttributesCache: TableElementAttributesCache, indexPath: IndexPath) -> TableElementAttributes
 }
 
-public class TableElementAttributesCache {
-    private typealias SectionsAttributesByIndexType = [Int : MutableTableSectionElementsAttributes]
-    public weak var source: TableElementAttributesCacheSource?
+open class TableElementAttributesCache {
+    fileprivate typealias SectionsAttributesByIndexType = [Int : MutableTableSectionElementsAttributes]
+    open weak var source: TableElementAttributesCacheSource?
     
-    private var _sectionAttributesByIndex = SectionsAttributesByIndexType()
+    fileprivate var _sectionAttributesByIndex = SectionsAttributesByIndexType()
     
-    public func cellAttributes(indexPath: NSIndexPath) -> TableElementAttributes {
+    open func cellAttributes(_ indexPath: IndexPath) -> TableElementAttributes {
         Utils.ensureIsMainThread()
         
-        let sectionAttributes = sectionAttributesByIndex(indexPath.section)
-        if let cellAttributes = sectionAttributes.cellsAttributes[indexPath.row] {
+        let sectionAttributes = sectionAttributesByIndex((indexPath as NSIndexPath).section)
+        if let cellAttributes = sectionAttributes.cellsAttributes[(indexPath as NSIndexPath).row] {
             return cellAttributes
         }
         
         return _reloadCellAttributes(indexPath)
     }
     
-    public func sectionHeaderAttributes(sectionIndex: Int) -> TableElementAttributes {
+    open func sectionHeaderAttributes(_ sectionIndex: Int) -> TableElementAttributes {
         Utils.ensureIsMainThread()
         
         let sectionAttributes = sectionAttributesByIndex(sectionIndex)
@@ -42,7 +42,7 @@ public class TableElementAttributesCache {
         return _reloadSectionHeaderAttributes(sectionIndex)
     }
     
-    public func sectionFooterAttributes(sectionIndex: Int) -> TableElementAttributes {
+    open func sectionFooterAttributes(_ sectionIndex: Int) -> TableElementAttributes {
         Utils.ensureIsMainThread()
         
         let sectionAttributes = sectionAttributesByIndex(sectionIndex)
@@ -53,80 +53,80 @@ public class TableElementAttributesCache {
         return _reloadSectionFooterAttributes(sectionIndex)
     }
     
-    public func sectionAttributes(sectionIndex: Int) -> TableSectionElementsAttributes {
+    open func sectionAttributes(_ sectionIndex: Int) -> TableSectionElementsAttributes {
         Utils.ensureIsMainThread()
         
         return sectionAttributesByIndex(sectionIndex).copy()
     }
     
-    public func resetCacheWithPreloadedData(preloadedData: [TableSectionElementsAttributes]) {
+    open func resetCacheWithPreloadedData(_ preloadedData: [TableSectionElementsAttributes]) {
         invalidateCache()
         
-        for (index, sectionData) in preloadedData.enumerate() {
+        for (index, sectionData) in preloadedData.enumerated() {
             _sectionAttributesByIndex[index] = sectionData.mutableCopy()
         }
     }
     
-    public func invalidateCache() {
+    open func invalidateCache() {
         Utils.ensureIsMainThread()
         
         _sectionAttributesByIndex.removeAll()
     }
     
-    public func invalidateSectionCache(sectionIndex: Int) {
+    open func invalidateSectionCache(_ sectionIndex: Int) {
         Utils.ensureIsMainThread()
         
-        _sectionAttributesByIndex.removeValueForKey(sectionIndex)
+        _sectionAttributesByIndex.removeValue(forKey: sectionIndex)
     }
     
-    public func invalidateCellCache(indexPath: NSIndexPath) {
+    open func invalidateCellCache(_ indexPath: IndexPath) {
         Utils.ensureIsMainThread()
         
-        var sectionAttributes = sectionAttributesByIndex(indexPath.section)
-        sectionAttributes.cellsAttributes.removeValueForKey(indexPath.row)
+        var sectionAttributes = sectionAttributesByIndex((indexPath as NSIndexPath).section)
+        sectionAttributes.cellsAttributes.removeValue(forKey: (indexPath as NSIndexPath).row)
     }
     
-    public func invalidateSectionHeaderCache(sectionIndex: Int) {
+    open func invalidateSectionHeaderCache(_ sectionIndex: Int) {
         Utils.ensureIsMainThread()
         
         var sectionAttributes = sectionAttributesByIndex(sectionIndex)
         sectionAttributes.headerAttributes = nil
     }
     
-    public func invalidateSectionFooterCache(sectionIndex: Int) {
+    open func invalidateSectionFooterCache(_ sectionIndex: Int) {
         Utils.ensureIsMainThread()
         
         var sectionAttributes = sectionAttributesByIndex(sectionIndex)
         sectionAttributes.footerAttributes = nil
     }
     
-    public func reloadCellAttributes(indexPath: NSIndexPath) {
+    open func reloadCellAttributes(_ indexPath: IndexPath) {
         Utils.ensureIsMainThread()
         
         _ = _reloadCellAttributes(indexPath)
     }
     
-    public func reloadSectionHeaderAttributes(sectionIndex: Int) {
+    open func reloadSectionHeaderAttributes(_ sectionIndex: Int) {
         Utils.ensureIsMainThread()
         
         _ = _reloadSectionHeaderAttributes(sectionIndex)
     }
     
-    public func reloadSectionFooterAttributes(sectionIndex: Int) {
+    open func reloadSectionFooterAttributes(_ sectionIndex: Int) {
         Utils.ensureIsMainThread()
         
         _ = _reloadSectionFooterAttributes(sectionIndex)
     }
     
-    private func _reloadCellAttributes(indexPath: NSIndexPath) -> TableElementAttributes {
+    fileprivate func _reloadCellAttributes(_ indexPath: IndexPath) -> TableElementAttributes {
         let cellAttributes = strongSource().cellAttributes(self, indexPath: indexPath)
-        var sectionAttributes = sectionAttributesByIndex(indexPath.section)
-        sectionAttributes.cellsAttributes[indexPath.row] = cellAttributes
+        var sectionAttributes = sectionAttributesByIndex((indexPath as NSIndexPath).section)
+        sectionAttributes.cellsAttributes[(indexPath as NSIndexPath).row] = cellAttributes
         
         return cellAttributes
     }
     
-    private func _reloadSectionHeaderAttributes(sectionIndex: Int) -> TableElementAttributes {
+    fileprivate func _reloadSectionHeaderAttributes(_ sectionIndex: Int) -> TableElementAttributes {
         let sectionHeaderAttributes = strongSource().sectionHeaderAttributes(self, sectionIndex: sectionIndex)
         var sectionAttributes = sectionAttributesByIndex(sectionIndex)
         sectionAttributes.headerAttributes = sectionHeaderAttributes
@@ -134,7 +134,7 @@ public class TableElementAttributesCache {
         return sectionHeaderAttributes
     }
     
-    private func _reloadSectionFooterAttributes(sectionIndex: Int) -> TableElementAttributes {
+    fileprivate func _reloadSectionFooterAttributes(_ sectionIndex: Int) -> TableElementAttributes {
         let sectionFooterAttributes = strongSource().sectionFooterAttributes(self, sectionIndex: sectionIndex)
         var sectionAttributes = sectionAttributesByIndex(sectionIndex)
         sectionAttributes.footerAttributes = sectionFooterAttributes
@@ -142,7 +142,7 @@ public class TableElementAttributesCache {
         return sectionFooterAttributes
     }
     
-    private func sectionAttributesByIndex(sectionIndex: Int) -> MutableTableSectionElementsAttributes {
+    fileprivate func sectionAttributesByIndex(_ sectionIndex: Int) -> MutableTableSectionElementsAttributes {
         if let sectionAttributes = _sectionAttributesByIndex[sectionIndex] {
             return sectionAttributes
         }
@@ -153,7 +153,7 @@ public class TableElementAttributesCache {
         return sectionAttributes
     }
     
-    private func strongSource() -> TableElementAttributesCacheSource {
+    fileprivate func strongSource() -> TableElementAttributesCacheSource {
         guard let strongSource = source else {
             Debug.fatalError("TableElementAttributesCache source is nil")
         }

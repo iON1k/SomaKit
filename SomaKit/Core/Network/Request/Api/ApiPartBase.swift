@@ -9,14 +9,14 @@
 import ObjectMapper
 import RxSwift
 
-public class ApiPartBase<TManager: ApiRequestManagerType> {
-    private let requestManager: TManager
+open class ApiPartBase<TManager: ApiRequestManagerType> {
+    fileprivate let requestManager: TManager
     
     public init(requestManager: TManager) {
         self.requestManager = requestManager
     }
     
-    public func _request<TRequest: RequestType where TRequest.ResponseType: Mappable>(requestFactory: TManager -> TRequest) -> TRequest {
+    open func _request<TRequest: RequestType>(_ requestFactory: (TManager) -> TRequest) -> TRequest where TRequest.ResponseType: Mappable {
         return requestFactory(requestManager)
     }
 }

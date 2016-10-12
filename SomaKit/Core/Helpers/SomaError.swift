@@ -6,8 +6,8 @@
 //  Copyright © 2016 iON1k. All rights reserved.
 //
 
-public struct SomaError: ErrorType, CustomStringConvertible {
-    private let errorDescription: String
+public struct SomaError: Error, CustomStringConvertible {
+    fileprivate let errorDescription: String
     
     public init(_ errorDescription: String) {
         self.errorDescription = errorDescription

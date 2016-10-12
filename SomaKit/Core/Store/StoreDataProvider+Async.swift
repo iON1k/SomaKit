@@ -9,7 +9,7 @@
 import RxSwift
 
 public extension StoreDataProvider {
-    public func setDataAsync(data: DataType) -> Observable<Void> {
+    public func setDataAsync(_ data: DataType) -> Observable<Void> {
         return Observable.deferred({ () -> Observable<Void> in
             return Observable.just(try self.setData(data))
         })
