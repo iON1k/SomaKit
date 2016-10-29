@@ -9,10 +9,10 @@
 import RxSwift
 
 open class SomaUIBindable: UiBindableType {
-    fileprivate let isBindedSubject: BehaviorSubject<Bool>
-    fileprivate let isActiveSubject: BehaviorSubject<Bool>
+    private let isBindedSubject: BehaviorSubject<Bool>
+    private let isActiveSubject: BehaviorSubject<Bool>
     
-    fileprivate let scheduler: ImmediateSchedulerType?
+    private let scheduler: ImmediateSchedulerType?
     
     public init(isBindedSubject: BehaviorSubject<Bool>, isActiveSubject: BehaviorSubject<Bool>, scheduler: ImmediateSchedulerType? = nil) {
         self.isBindedSubject = isBindedSubject
@@ -36,7 +36,7 @@ open class SomaUIBindable: UiBindableType {
             .whileBinded(self)
     }
     
-    fileprivate func applyScheduler<T>(_ observable: Observable<T>) -> Observable<T> {
+    private func applyScheduler<T>(_ observable: Observable<T>) -> Observable<T> {
         if let scheduler = scheduler {
             return observable.observeOn(scheduler)
         }

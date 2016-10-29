@@ -9,7 +9,7 @@
 import Foundation
 
 public final class Utils {
-    fileprivate init() {
+    private init() {
         //Nothing
     }
 }
@@ -45,32 +45,6 @@ extension Utils {
         guard Thread.isMainThread else {
             Debug.fatalError("Is not main thread")
         }
-    }
-}
-
-extension Utils {
-    public static func isEquivalentValues<TValue>(_ value1: TValue, value2: TValue) -> Bool {
-        if let optionalValue1 = value1 as? _OptionalType, let optionalValue2 = value2 as? _OptionalType {
-            let hasValue1 = optionalValue1.hasValue
-            let hasValue2 = optionalValue2.hasValue
-            guard hasValue1 && hasValue2 else {
-                return !hasValue1 && !hasValue2
-            }
-            
-            return isEquivalentValues(optionalValue1._value, value2: optionalValue2._value)
-        }
-        
-        if value1 is AnyObject && value2 is AnyObject {
-            guard (value1 as AnyObject) !== (value2 as AnyObject) else {
-                return true
-            }
-        }
-        
-        guard let equivalentableValue1 = value1 as? _Equivalentable else {
-            return false
-        }
-        
-        return equivalentableValue1.isEquivalent(value2)
     }
 }
 

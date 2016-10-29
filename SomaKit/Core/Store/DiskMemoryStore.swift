@@ -12,9 +12,9 @@ open class DiskMemoryStore: StoreType {
     
     public typealias AttributesType = [String : Any]
     
-    fileprivate let fileManager = FileManager()
-    fileprivate let baseDirectory: String?
-    fileprivate let attributes: AttributesType?
+    private let fileManager = FileManager()
+    private let baseDirectory: String?
+    private let attributes: AttributesType?
     
     public init(baseDirectory: String? = nil, attributes: AttributesType? = nil) {
         self.baseDirectory = baseDirectory
@@ -36,7 +36,7 @@ open class DiskMemoryStore: StoreType {
         fileManager.createFile(atPath: path, contents: data, attributes: attributes)
     }
     
-    fileprivate func generatePath(_ key: KeyType) -> String {
+    private func generatePath(_ key: KeyType) -> String {
         guard let baseDirectory = baseDirectory else {
             return key
         }

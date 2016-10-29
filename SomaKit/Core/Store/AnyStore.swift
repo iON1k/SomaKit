@@ -13,8 +13,8 @@ open class AnyStore<TKey, TData>: StoreType {
     public typealias LoadDataHandler = (KeyType) throws -> DataType?
     public typealias SaveDataHandler = (KeyType, DataType?) throws -> Void
     
-    fileprivate let loadDataHandler: LoadDataHandler
-    fileprivate let saveDataHandler: SaveDataHandler
+    private let loadDataHandler: LoadDataHandler
+    private let saveDataHandler: SaveDataHandler
     
     open func loadData(_ key: KeyType) throws -> DataType? {
         return try loadDataHandler(key)

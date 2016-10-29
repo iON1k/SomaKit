@@ -9,9 +9,9 @@
 import RxSwift
 
 open class AbstractAnchoredPagedDataProvider<TPage: AnchoredPageType>: AbstractPagedDataProvider<TPage> {  
-    fileprivate var anchoredPage: PageType?
-    fileprivate var isAnchoredPageLoading = Variable<Bool>(false)
-    fileprivate let syncLock = SyncLock()
+    private var anchoredPage: PageType?
+    private var isAnchoredPageLoading = Variable<Bool>(false)
+    private let syncLock = SyncLock()
     
     public override init(pageSize: Int, memoryCache: MemoryCacheType) {
         super.init(pageSize: pageSize, memoryCache: memoryCache)
@@ -47,7 +47,7 @@ open class AbstractAnchoredPagedDataProvider<TPage: AnchoredPageType>: AbstractP
         return wrapAnchorLoadingPageObservable(_createLoadingAnchoredPageObservable(offset, count: count, anchoredPage: nil))
     }
     
-    fileprivate func wrapAnchorLoadingPageObservable(_ sourceObservable: Observable<PageType>) -> Observable<PageType> {
+    private func wrapAnchorLoadingPageObservable(_ sourceObservable: Observable<PageType>) -> Observable<PageType> {
         return Observable.create({ (observer) -> Disposable in
             let lastLoadedPage = AtomicValue<PageType?>(value: nil)
             
@@ -67,7 +67,7 @@ open class AbstractAnchoredPagedDataProvider<TPage: AnchoredPageType>: AbstractP
         })
     }
     
-    fileprivate func onAnchoredPageLoadingDidCompleted(_ loadedPage: PageType?) {
+    private func onAnchoredPageLoadingDidCompleted(_ loadedPage: PageType?) {
         syncLock.sync {
             if let loadedPage = loadedPage {
                 anchoredPage = loadedPage

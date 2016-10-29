@@ -12,12 +12,12 @@ open class StoreDataProvider<TData, TKey>: DataProviderType {
     public typealias DataType = TData
     public typealias KeyType = TKey
     
-    fileprivate let dataValue: Variable<DataType>
+    private let dataValue: Variable<DataType>
     
-    fileprivate let store: AnyStore<KeyType, DataType>
+    private let store: AnyStore<KeyType, DataType>
     
-    fileprivate let key: KeyType
-    fileprivate let defaultValue: DataType
+    private let key: KeyType
+    private let defaultValue: DataType
     
     open func data() -> Observable<DataType> {
         return dataValue.asObservable()
@@ -55,7 +55,7 @@ open class StoreDataProvider<TData, TKey>: DataProviderType {
         }
     }
     
-    fileprivate func normalizeData(_ data: DataType?) -> DataType {
+    private func normalizeData(_ data: DataType?) -> DataType {
         if let data = data {
             return data
         } else {

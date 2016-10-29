@@ -6,18 +6,18 @@
 //  Copyright © 2016 iON1k. All rights reserved.
 //
 
-public typealias CellsAttributes = [Int : TableElementAttributes]
+public typealias CellsAttributes = [Int : TableElementAttributesType]
 
 public struct TableSectionElementsAttributes {
     public let cellsAttributes: CellsAttributes
-    public let headerAttributes: TableElementAttributes?
-    public let footerAttributes: TableElementAttributes?
+    public let headerAttributes: TableElementAttributesType?
+    public let footerAttributes: TableElementAttributesType?
     
     public func mutableCopy() -> MutableTableSectionElementsAttributes {
         return MutableTableSectionElementsAttributes(cellsAttributes: cellsAttributes, headerAttributes: headerAttributes, footerAttributes: footerAttributes)
     }
     
-    public init(cellsAttributes: CellsAttributes, headerAttributes: TableElementAttributes? = nil, footerAttributes: TableElementAttributes? = nil) {
+    public init(cellsAttributes: CellsAttributes, headerAttributes: TableElementAttributesType? = nil, footerAttributes: TableElementAttributesType? = nil) {
         self.cellsAttributes = cellsAttributes
         self.headerAttributes = headerAttributes
         self.footerAttributes = footerAttributes
@@ -26,8 +26,8 @@ public struct TableSectionElementsAttributes {
 
 public struct MutableTableSectionElementsAttributes {
     public var cellsAttributes = CellsAttributes()
-    public var headerAttributes: TableElementAttributes?
-    public var footerAttributes: TableElementAttributes?
+    public var headerAttributes: TableElementAttributesType?
+    public var footerAttributes: TableElementAttributesType?
     
     public func copy() -> TableSectionElementsAttributes {
         return TableSectionElementsAttributes(cellsAttributes: cellsAttributes, headerAttributes: headerAttributes, footerAttributes: footerAttributes)

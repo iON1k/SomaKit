@@ -8,11 +8,11 @@
 
 import Foundation
 
-open class UserDefaultsStore<TKey: StringKeyConvertiable, TData: Any>: StoreType {
+open class UserDefaultsStore<TKey: StringKeyConvertible, TData: Any>: StoreType {
     public typealias KeyType = TKey
     public typealias DataType = TData
     
-    fileprivate let userDefaults: UserDefaults
+    private let userDefaults: UserDefaults
     
     open func loadData(_ key: KeyType) throws -> DataType? {
         let stringKey = key.stringKey

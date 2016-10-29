@@ -10,7 +10,7 @@ import ObjectMapper
 import RxSwift
 
 open class ApiPartBase<TManager: ApiRequestManagerType> {
-    fileprivate let requestManager: TManager
+    private let requestManager: TManager
     
     public init(requestManager: TManager) {
         self.requestManager = requestManager

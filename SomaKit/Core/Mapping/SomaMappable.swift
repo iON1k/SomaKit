@@ -8,7 +8,7 @@
 
 import ObjectMapper
 
-public protocol SomaMappable: Mappable, JsnonCovertible {
+public protocol SomaMappable: Mappable, JsonCovertible {
     //Nothing
 }
 

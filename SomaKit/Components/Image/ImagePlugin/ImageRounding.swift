@@ -23,7 +23,7 @@ public enum ImageRoundingMode {
 }
 
 open class ImageRounding: ImagePluginType {
-    fileprivate let mode: ImageRoundingMode
+    private let mode: ImageRoundingMode
     
     open var imagePluginKey: String {
         return mode.imagePluginKey

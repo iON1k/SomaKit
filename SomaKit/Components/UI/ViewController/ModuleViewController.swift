@@ -11,12 +11,12 @@ import RxSwift
 open class ModuleViewController<TViewModel: ModuleViewModel>: SomaViewController, ViewPresenterType, UiBindableType {
     public typealias ViewModel = TViewModel
     
-    open fileprivate(set) var viewModel: ViewModel?
+    open private(set) var viewModel: ViewModel?
     
-    fileprivate let isBindedSubject = BehaviorSubject(value: false)
-    fileprivate let isActiveSubject = BehaviorSubject(value: false)
+    private let isBindedSubject = BehaviorSubject(value: false)
+    private let isActiveSubject = BehaviorSubject(value: false)
     
-    fileprivate let uiBindable: SomaUIBindable
+    private let uiBindable: SomaUIBindable
     
     public required init(context: InitContext) {
         uiBindable = SomaUIBindable(isBindedSubject: isBindedSubject, isActiveSubject: isActiveSubject, scheduler: MainScheduler.instance)
@@ -63,7 +63,7 @@ open class ModuleViewController<TViewModel: ModuleViewModel>: SomaViewController
         bindViewModel(nil)
     }
     
-    fileprivate func tryToBindViewModel() {
+    private func tryToBindViewModel() {
         guard isViewLoaded else {
             return
         }

@@ -31,7 +31,7 @@ public enum LogLevel: UInt32, CustomStringConvertible {
 public struct LogPriority: Equatable, CustomStringConvertible {
     fileprivate let logLevels: UInt32
     
-    fileprivate init(logLevels: UInt32) {
+    private init(logLevels: UInt32) {
         self.logLevels = logLevels
     }
     
@@ -88,7 +88,7 @@ public final class Log {
         logInstance.log(logLevel, message: message, args: args)
     }
     
-    fileprivate func log(_ logLevel: LogLevel, message: String, args: Any...) {
+    private func log(_ logLevel: LogLevel, message: String, args: Any...) {
         guard logPriority.contain(logLevel) else {
             return
         }
@@ -97,14 +97,14 @@ public final class Log {
         logProcessor.log(messageWithType, args: args)
     }
     
-    fileprivate init(logProcessor: LogProcessor, logPriority: LogPriority) {
+    private init(logProcessor: LogProcessor, logPriority: LogPriority) {
         self.logProcessor = logProcessor
         self.logPriority = logPriority
     }
     
-    fileprivate static var logInstance: Log = Log(logProcessor: NativeLogProcessor(), logPriority: .Info)
+    private static var logInstance: Log = Log(logProcessor: NativeLogProcessor(), logPriority: .Info)
     
-    fileprivate let logProcessor: LogProcessor
+    private let logProcessor: LogProcessor
     
-    fileprivate let logPriority: LogPriority
+    private let logPriority: LogPriority
 }

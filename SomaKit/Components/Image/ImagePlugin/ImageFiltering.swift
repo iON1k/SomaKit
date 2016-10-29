@@ -9,10 +9,10 @@
 import AlamofireImage
 
 open class ImageFiltering: ImagePluginType {
-    public typealias FitlerParamsType = [String : StringKeyConvertiable]
+    public typealias FitlerParamsType = [String : StringKeyConvertible]
 
-    fileprivate let filterName: String
-    fileprivate let filterParams: FitlerParamsType?
+    private let filterName: String
+    private let filterParams: FitlerParamsType?
     
     open var imagePluginKey: String {
         var resultKey = filterName

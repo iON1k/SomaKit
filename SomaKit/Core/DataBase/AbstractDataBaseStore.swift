@@ -17,8 +17,8 @@ open class AbstractDataBaseStore<TKey, TData, TDataBase: NSManagedObject>: Store
     
     open let keyProperty: String
     
-    fileprivate let setterHandler: SetterHandlerType
-    fileprivate let getterHandler: GetterHandlerType
+    private let setterHandler: SetterHandlerType
+    private let getterHandler: GetterHandlerType
     
     open func loadData(_ key: KeyType) throws -> DataType? {
         let optinalDBRecord = DataBaseType.mr_findFirst(with: try self.keyPredicate(key))
@@ -78,7 +78,7 @@ open class AbstractDataBaseStore<TKey, TData, TDataBase: NSManagedObject>: Store
         self.getterHandler = getterHandler
     }
     
-    fileprivate func keyPredicate(_ key: KeyType) throws -> NSPredicate {
+    private func keyPredicate(_ key: KeyType) throws -> NSPredicate {
         return NSPredicate(format: "%K = %@", argumentArray: [self.keyProperty, key])
     }
 }

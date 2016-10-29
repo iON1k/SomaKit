@@ -19,31 +19,3 @@ extension Dictionary {
         return newDictionary
     }
 }
-
-extension Array {
-    public func indexOfEquivalent(_ object: Element) -> Int? {
-        return index(where: { (element) -> Bool in
-            return Utils.isEquivalentValues(element, value2: object)
-        })
-    }
-    
-    public func optionalCovariance() -> [Element?] {
-        return map(SomaFunc.sameTransform)
-    }
-}
-
-extension Array: Equivalentable {
-    public func isEquivalent(_ other: Array) -> Bool {
-        guard count == other.count else {
-            return false
-        }
-        
-        for index in 0..<count {
-            if !Utils.isEquivalentValues(self[index], value2: other[index]) {
-                return false
-            }
-        }
-        
-        return true
-    }
-}

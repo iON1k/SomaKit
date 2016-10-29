@@ -12,7 +12,7 @@ public typealias TableBehaviorModuleViewModel = ModuleViewModel & TableViewBehav
 
 open class AbstractTableViewController<TViewModel: TableBehaviorModuleViewModel>: ModuleViewController<TViewModel> {
     open var _tableManager: TableViewManager!
-    fileprivate var refreshControl: UIRefreshControl!
+    private var refreshControl: UIRefreshControl!
     
     open var _tableView: UITableView {
         Utils.abstractMethod()
@@ -52,7 +52,7 @@ open class AbstractTableViewController<TViewModel: TableBehaviorModuleViewModel>
         return false
     }
     
-    @objc fileprivate func beginRefreshing() {
+    @objc private func beginRefreshing() {
         _ = viewModel?.tableBehavior
             .beginRefreshData()
             .whileBinded(self)

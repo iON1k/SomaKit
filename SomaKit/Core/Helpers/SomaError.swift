@@ -7,7 +7,7 @@
 //
 
 public struct SomaError: Error, CustomStringConvertible {
-    fileprivate let errorDescription: String
+    private let errorDescription: String
     
     public init(_ errorDescription: String) {
         self.errorDescription = errorDescription

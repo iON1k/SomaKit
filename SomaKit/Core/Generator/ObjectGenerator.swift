@@ -9,11 +9,11 @@
 public final class ObjectGenerator<TObject> {
     public typealias GenerationHandlerType = (Void) -> TObject
     
-    fileprivate let generationHandler: GenerationHandlerType
-    fileprivate var objectsPool: [TObject] = []
-    fileprivate let poolLock = SyncLock()
+    private let generationHandler: GenerationHandlerType
+    private var objectsPool: [TObject] = []
+    private let poolLock = SyncLock()
     
-    fileprivate init(generationHandler: @escaping GenerationHandlerType) {
+    private init(generationHandler: @escaping GenerationHandlerType) {
         self.generationHandler = generationHandler
     }
     
@@ -48,7 +48,7 @@ public final class ObjectGenerator<TObject> {
         return getNewObject()
     }
     
-    fileprivate func getNewObject() -> TObject {
+    private func getNewObject() -> TObject {
         return generationHandler()
     }
 }

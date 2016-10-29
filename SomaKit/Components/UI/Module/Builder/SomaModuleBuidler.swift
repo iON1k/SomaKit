@@ -12,9 +12,9 @@ public final class SomaModuleBuidler<TModulePresenter: UIViewController>: Module
     public typealias ViewModelBuilder = (Void) -> TModulePresenter.ViewModel
     public typealias RouterBuilder = (Void) -> TModulePresenter.ViewModel.Router
     
-    fileprivate var modulePresenterBuilder: ModulPresenterBuilder
-    fileprivate var viewModelBuilder: ViewModelBuilder?
-    fileprivate var routerBuilder: RouterBuilder?
+    private var modulePresenterBuilder: ModulPresenterBuilder
+    private var viewModelBuilder: ViewModelBuilder?
+    private var routerBuilder: RouterBuilder?
     
     public init(modulePresenterBuilder: @escaping ModulPresenterBuilder) {
         self.modulePresenterBuilder = modulePresenterBuilder

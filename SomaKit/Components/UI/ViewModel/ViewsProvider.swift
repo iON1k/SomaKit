@@ -12,10 +12,10 @@ open class ViewsProvider<TContext> {
     
     open let context: TContext
     
-    fileprivate var registeredViewsData = [String : ViewData]()
-    fileprivate let syncLock = SyncLock()
+    private var registeredViewsData = [String : ViewData]()
+    private let syncLock = SyncLock()
     
-    fileprivate let emptyViewData = ViewData(UIView.self) { (viewModel, context) -> UIView in
+    private let emptyViewData = ViewData(UIView.self) { (viewModel, context) -> UIView in
         return UIView()
     }
     
@@ -42,13 +42,13 @@ open class ViewsProvider<TContext> {
         return viewDataForViewModel(viewModel).viewType
     }
     
-    fileprivate func viewDataForViewModel(_ viewModel: ViewModelType) -> ViewData {
+    private func viewDataForViewModel(_ viewModel: ViewModelType) -> ViewData {
         return syncLock.sync {
             return unsafeViewDataForViewModel(viewModel)
         }
     }
     
-    fileprivate func unsafeViewDataForViewModel(_ viewModel: ViewModelType) -> ViewData {
+    private func unsafeViewDataForViewModel(_ viewModel: ViewModelType) -> ViewData {
         let generatorKey = viewGeneratorKey(type(of: viewModel))
         guard let viewData = registeredViewsData[generatorKey] else {
             Log.error("ViewsProvider: view data with key \(generatorKey) not registered")
@@ -58,13 +58,13 @@ open class ViewsProvider<TContext> {
         return viewData
     }
     
-    fileprivate func registerViewGenerator(_ viewKey: String, viewType: UIView.Type, viewGenerator: @escaping ViewGenerator) {
+    private func registerViewGenerator(_ viewKey: String, viewType: UIView.Type, viewGenerator: @escaping ViewGenerator) {
         syncLock.sync {
             unsafeRegisterViewGenerator(viewKey, viewType: viewType, viewGenerator: viewGenerator)
         }
     }
     
-    fileprivate func unsafeRegisterViewGenerator(_ viewKey: String, viewType: UIView.Type, viewGenerator: @escaping ViewGenerator) {
+    private func unsafeRegisterViewGenerator(_ viewKey: String, viewType: UIView.Type, viewGenerator: @escaping ViewGenerator) {
         guard registeredViewsData[viewKey] == nil else {
             Log.error("ViewsProvider: view generator with key \(viewKey) already registered")
             return
@@ -73,7 +73,7 @@ open class ViewsProvider<TContext> {
         registeredViewsData[viewKey] = ViewData(viewType, viewGenerator)
     }
     
-    fileprivate func viewGeneratorKey(_ viewModelType: ViewModelType.Type) -> String {
+    private func viewGeneratorKey(_ viewModelType: ViewModelType.Type) -> String {
         return Utils.typeName(viewModelType)
     }
 }

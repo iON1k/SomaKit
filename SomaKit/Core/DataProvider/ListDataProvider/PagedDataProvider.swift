@@ -11,7 +11,7 @@ import RxSwift
 open class PagedDataProvider<TPage: ItemsPageType>: AbstractPagedDataProvider<TPage> {
     public typealias PageObservableFactory = (_ offset: Int, _ count: Int) -> Observable<PageType>
     
-    fileprivate let pageObservableFactory: PageObservableFactory
+    private let pageObservableFactory: PageObservableFactory
     
     public init(pageSize: Int, memoryCache: MemoryCacheType, pageObservableFactory: @escaping PageObservableFactory) {
         self.pageObservableFactory = pageObservableFactory

@@ -9,8 +9,8 @@
 import Foundation
 
 open class AtomicValue<TValue> {
-    fileprivate var innerValue: TValue
-    fileprivate let syncLock = SyncLock()
+    private var innerValue: TValue
+    private let syncLock = SyncLock()
     
     open var value: TValue {
         get {

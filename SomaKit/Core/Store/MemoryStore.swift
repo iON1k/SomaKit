@@ -10,8 +10,8 @@ open class MemoryStore<TKey: Hashable, TData>: StoreType {
     public typealias KeyType = TKey
     public typealias DataType = TData
     
-    fileprivate var syncLock = SyncLock()
-    fileprivate var dictionaryStore: [TKey : TData] = [:]
+    private var syncLock = SyncLock()
+    private var dictionaryStore: [TKey : TData] = [:]
     
     open func loadData(_ key: KeyType) throws -> DataType? {
         return syncLock.sync {

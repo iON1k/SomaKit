@@ -52,7 +52,7 @@ open class AbstractApiRequest<TResponse, TManager: RequestManagerType>: RequestT
             .subscribeOn(_workingScheduler)
     }
     
-    fileprivate func execute() -> Observable<ResponseType> {
+    private func execute() -> Observable<ResponseType> {
         return _requestEngine()
             .observeOn(_workingScheduler)
             .do(onNext: { (response) in
@@ -65,7 +65,7 @@ open class AbstractApiRequest<TResponse, TManager: RequestManagerType>: RequestT
     }
     
     open var _workingScheduler: ImmediateSchedulerType {
-        return ConcurrentDispatchQueueScheduler(globalConcurrentQueueQOS: .default)
+        return ConcurrentDispatchQueueScheduler(qos: .default)
     }
     
     open func _validateParams() throws -> Void {

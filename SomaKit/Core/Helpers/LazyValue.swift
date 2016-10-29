@@ -42,7 +42,7 @@ open class LazyValue<TValue> {
         }
     }
     
-    fileprivate var innerValue: TValue?
-    fileprivate var factory: FactoryType?
-    fileprivate let lock = SyncLock()
+    private var innerValue: TValue?
+    private var factory: FactoryType?
+    private let lock = SyncLock()
 }

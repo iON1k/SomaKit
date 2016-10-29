@@ -10,7 +10,7 @@ import RxSwift
 
 extension Array where Element: ViewModelType {
     public func asTableViewSectionsModels() -> TableViewManager.SectionsModels {
-        let sectionsModels = TableViewSectionModel(cellsViewModels: self.map(SomaFunc.sameTransform))
+        let sectionsModels = TableViewSectionModel(cellsViewModels: self)
         return [sectionsModels]
     }
 }

@@ -8,11 +8,11 @@
 
 import RxSwift
 
-open class ImageLoader<TKey: StringKeyConvertiable> {
-    fileprivate let imageSource: AnyImageSource<TKey>
+open class ImageLoader<TKey: StringKeyConvertible> {
+    private let imageSource: AnyImageSource<TKey>
     
-    fileprivate let imageCache: AnyStore<String, UIImage>
-    fileprivate let processedImageCache: AnyStore<String, UIImage>
+    private let imageCache: AnyStore<String, UIImage>
+    private let processedImageCache: AnyStore<String, UIImage>
     
     open func loadImage(_ key: TKey, placeholder: UIImage? = nil, plugins: [ImagePluginType] = []) -> Observable<UIImage> {
         return Observable.deferred({ () -> Observable<UIImage> in
@@ -43,7 +43,7 @@ open class ImageLoader<TKey: StringKeyConvertiable> {
         .subcribeOnBackgroundScheduler()
     }
     
-    fileprivate func sourceLoadingImageObservable(_ key: TKey, imageCacheKey: String, processedImageCacheKey: String, plugins: [ImagePluginType]) -> Observable<UIImage> {
+    private func sourceLoadingImageObservable(_ key: TKey, imageCacheKey: String, processedImageCacheKey: String, plugins: [ImagePluginType]) -> Observable<UIImage> {
         return imageSource.loadImage(key)
             .observeOnBackgroundScheduler()
             .do(onNext: { (image) in
@@ -55,19 +55,19 @@ open class ImageLoader<TKey: StringKeyConvertiable> {
             })
     }
     
-    fileprivate func tryLoadImageFromCache(_ imageCache: AnyStore<String, UIImage>, cacheKey: String) -> UIImage? {
+    private func tryLoadImageFromCache(_ imageCache: AnyStore<String, UIImage>, cacheKey: String) -> UIImage? {
         return Utils.safe {
             return try imageCache.loadData(cacheKey)
         }
     }
     
-    fileprivate func saveProcessedImageIfNeeded(_ processedImageCacheKey: String, processedImage: UIImage, sourceImage: UIImage) {
+    private func saveProcessedImageIfNeeded(_ processedImageCacheKey: String, processedImage: UIImage, sourceImage: UIImage) {
         if sourceImage !== processedImage {
             _ = processedImageCache.saveDataAsync(processedImageCacheKey, data: processedImage)
         }
     }
     
-    fileprivate func pluginsCachingKey(_ imageCacheKey: String, plugins: [ImagePluginType]) -> String {
+    private func pluginsCachingKey(_ imageCacheKey: String, plugins: [ImagePluginType]) -> String {
         var cachingKey = imageCacheKey
         
         for plugin in plugins {
@@ -77,7 +77,7 @@ open class ImageLoader<TKey: StringKeyConvertiable> {
         return cachingKey
     }
     
-    public init<TSource: ImageSourceConvertiable, TImageCache: StoreConvertibleType, TProcessedImageCache: StoreConvertibleType>
+    public init<TSource: ImageSourceConvertible, TImageCache: StoreConvertibleType, TProcessedImageCache: StoreConvertibleType>
         (imageSource: TSource, imageCache: TImageCache, processedImageCache: TProcessedImageCache)
         where TSource.KeyType == TKey, TImageCache.KeyType == String, TImageCache.DataType == UIImage,
         TProcessedImageCache.KeyType == String, TProcessedImageCache.DataType == UIImage {

@@ -15,8 +15,8 @@ open class AnyConverter<TValue1, TValue2>: ConverterType {
     public typealias ConverterHandler1Type = (Type1) throws -> Type2
     public typealias ConverterHandler2Type = (Type2) throws -> Type1
     
-    fileprivate let converterHandler1: ConverterHandler1Type
-    fileprivate let converterHandler2: ConverterHandler2Type
+    private let converterHandler1: ConverterHandler1Type
+    private let converterHandler2: ConverterHandler2Type
     
     open func convertValue(_ value: Type1) throws -> Type2 {
         return try converterHandler1(value)

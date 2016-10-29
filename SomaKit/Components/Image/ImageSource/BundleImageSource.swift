@@ -11,7 +11,7 @@ import RxSwift
 open class BundleImageSource: ImageSourceType {
     public typealias KeyType = String
     
-    fileprivate let bundle: Bundle
+    private let bundle: Bundle
     
     open func loadImage(_ key: KeyType) -> Observable<UIImage> {
         return Observable.deferred({ () -> Observable<UIImage> in

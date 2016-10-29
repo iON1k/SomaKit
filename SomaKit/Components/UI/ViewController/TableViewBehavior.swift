@@ -9,7 +9,7 @@
 import RxSwift
 
 public protocol TableViewBehavior {
-    var sectionModels: Observable<[TableViewSectionModel]> { get }
+    var sectionModels: Observable<[TableViewSectionModelType]> { get }
     
     var isDataLoading: Observable<Bool> { get }
     

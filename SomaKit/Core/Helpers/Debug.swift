@@ -27,7 +27,7 @@ public final class Debug {
 #endif
     }
     
-    fileprivate init() {
+    private init() {
         //Nothing
     }
 }

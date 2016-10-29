@@ -13,7 +13,7 @@ import AlamofireImage
 open class NetworkImageSource: ImageSourceType {
     public typealias KeyType = URL
     
-    fileprivate let sessionManager: SessionManager
+    private let sessionManager: SessionManager
     
     open func loadImage(_ key: KeyType) -> Observable<UIImage> {
         return Observable.create({ (observer) -> Disposable in

@@ -12,7 +12,7 @@ open class AnchoredPagedDataProvider<TPage: AnchoredPageType>: AbstractAnchoredP
     public typealias AnchorType = PageType.AnchorType
     public typealias AnchoredPageObservableFactory = (_ offset: Int, _ count: Int, _ anchor: AnchorType?) -> Observable<PageType>
     
-    fileprivate let anchoredPageObservableFactory: AnchoredPageObservableFactory
+    private let anchoredPageObservableFactory: AnchoredPageObservableFactory
     
     public init(pageSize: Int, memoryCache: MemoryCacheType, anchoredPageObservableFactory: @escaping AnchoredPageObservableFactory) {
         self.anchoredPageObservableFactory = anchoredPageObservableFactory

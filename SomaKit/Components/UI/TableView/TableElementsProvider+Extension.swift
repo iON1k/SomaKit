@@ -36,13 +36,7 @@ extension TableElementsProvider {
         registerCellReuseGenerator(viewModelType, cellType: cellType, reuseId: normalizedReuseId, cellFactory: cellFactory)
     }
     
-    public func registerCellNib<TViewModel: ViewModelType, TCell: UITableViewCell>(_ viewModelType: TViewModel.Type,
-                                                                                                       cellType: TCell.Type, reuseId: String? = nil) -> Void
-        where TCell: TableElementPresenterType, TCell: NibProviderType, TCell.ViewModel == TViewModel {
-        registerCellNib(viewModelType, cellType: cellType, nib: cellType.loadNib(), reuseId: reuseId)
-    }
-    
-    fileprivate func registerCellReuseGenerator<TViewModel: ViewModelType, TCell: UITableViewCell>(_ viewModelType: TViewModel.Type, cellType: TCell.Type, reuseId: String, cellFactory: @escaping (Void) -> TCell?)
+    private func registerCellReuseGenerator<TViewModel: ViewModelType, TCell: UITableViewCell>(_ viewModelType: TViewModel.Type, cellType: TCell.Type, reuseId: String, cellFactory: @escaping (Void) -> TCell?)
         where TCell: TableElementPresenterType, TCell.ViewModel == TViewModel {
         registerViewReuseGenerator(viewModelType, viewType: cellType, reuseId: reuseId, viewFactory: cellFactory) { (tableView, reuseId) -> UIView? in
             return tableView.dequeueReusableCell(withIdentifier: reuseId)
@@ -67,13 +61,7 @@ extension TableElementsProvider {
         registerHeaderFooterReuseGenerator(viewModelType, viewType: viewType, reuseId: normalizedReuseId, viewFactory: viewFactory)
     }
     
-    public func registerCellNib<TViewModel: ViewModelType, TView: UIView>(_ viewModelType: TViewModel.Type,
-                                                                                                       viewType: TView.Type, reuseId: String? = nil) -> Void
-        where TView: TableElementPresenterType, TView: NibProviderType, TView.ViewModel == TViewModel {
-        registerHeaderFooterNib(viewModelType, viewType: viewType, nib: viewType.loadNib(), reuseId: reuseId)
-    }
-    
-    fileprivate func registerHeaderFooterReuseGenerator<TViewModel: ViewModelType, TView: UIView>(_ viewModelType: TViewModel.Type, viewType: TView.Type,
+    private func registerHeaderFooterReuseGenerator<TViewModel: ViewModelType, TView: UIView>(_ viewModelType: TViewModel.Type, viewType: TView.Type,
                                                                                reuseId: String, viewFactory: @escaping (Void) -> TView?)
         where TView: TableElementPresenterType, TView.ViewModel == TViewModel {
         registerViewReuseGenerator(viewModelType, viewType: viewType, reuseId: reuseId, viewFactory: viewFactory) { (tableView, reuseId) -> UIView? in
@@ -81,7 +69,7 @@ extension TableElementsProvider {
         }
     }
     
-    fileprivate func registerViewReuseGenerator<TViewModel: ViewModelType, TView: UIView>(_ viewModelType: TViewModel.Type, viewType: TView.Type,
+    private func registerViewReuseGenerator<TViewModel: ViewModelType, TView: UIView>(_ viewModelType: TViewModel.Type, viewType: TView.Type,
                                                                                reuseId: String, viewFactory: @escaping (Void) -> TView?, reuseIdFactory: @escaping (UITableView, String) -> UIView?)
         where TView: TableElementPresenterType, TView.ViewModel == TViewModel {
         registerTableElementGenerator { (viewModel: TViewModel, tableView) -> TView in
@@ -101,7 +89,7 @@ extension TableElementsProvider {
         }
     }
     
-    fileprivate func normalizeReuseId(_ reuseId: String?, viewType: UIView.Type) -> String {
+    private func normalizeReuseId(_ reuseId: String?, viewType: UIView.Type) -> String {
         return reuseId ?? Utils.typeName(viewType)
     }
 }

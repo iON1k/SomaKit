@@ -12,7 +12,7 @@ extension Array: DataProviderType {
     public typealias ItemType = Element
     
     public var items: [ItemType?] {
-        return self.optionalCovariance()
+        return self
     }
     
     var isAllItemsLoaded: Bool {
@@ -24,6 +24,6 @@ extension Array: DataProviderType {
     }
     
     public func data() -> Observable<[ItemType?]> {
-        return Observable.just(self.optionalCovariance())
+        return Observable.just(self)
     }
 }

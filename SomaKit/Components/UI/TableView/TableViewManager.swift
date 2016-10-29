@@ -12,27 +12,27 @@ import RxCocoa
 open class TableViewManager: SomaProxy, UITableViewDataSource, UITableViewDelegate, TableElementAttributesCacheSource {
     open let tableView: UITableView
     
-    public typealias SectionsModels = [TableViewSectionModel]
+    public typealias SectionsModels = [TableViewSectionModelType]
     public typealias SectionsAttributes = [TableSectionElementsAttributes]
     public typealias UpdatingHandler = (_ tableView: UITableView, _ updatingData: UpdatingData) -> Void
     
     open let elementsProvider: TableElementsProvider
     
-    fileprivate let elementsAttributesCache = TableElementAttributesCache()
-    fileprivate let defaultElementsAttributes = DefaultTableElementAttributes(prefferedHeight: 10)
+    private let elementsAttributesCache = TableElementAttributesCache()
+    private let defaultElementsAttributes = TableElementAttributes(prefferedHeight: 10)
     
-    fileprivate static let defautSectionsData = SectionsModels()
+    private static let defautSectionsData = SectionsModels()
     
-    fileprivate let updateDataEvents = Variable(UpdatingEvent(sectionsData: defautSectionsData))
+    private let updateDataEvents = Variable(UpdatingEvent(sectionsData: defautSectionsData))
     
-    open fileprivate(set) var showingSectionsData = defautSectionsData
+    open private(set) var showingSectionsData = defautSectionsData
     
     open var actualSectionsData: SectionsModels {
         return updateDataEvents.value.sectionsData
     }
     
-    fileprivate weak var forwardDelegate: UITableViewDelegate?
-    fileprivate weak var forwardDataSource: UITableViewDataSource?
+    private weak var forwardDelegate: UITableViewDelegate?
+    private weak var forwardDataSource: UITableViewDataSource?
     
     public init(tableView: UITableView) {
         self.tableView = tableView
@@ -71,12 +71,12 @@ open class TableViewManager: SomaProxy, UITableViewDataSource, UITableViewDelega
     
     //TableElementAttributesCacheSource
     
-    open func cellAttributes(_ tableElementAttributesCache: TableElementAttributesCache, indexPath: IndexPath) -> TableElementAttributes {
+    open func cellAttributes(_ tableElementAttributesCache: TableElementAttributesCache, indexPath: IndexPath) -> TableElementAttributesType {
         let viewModel = cellViewModel(indexPath)
         return generateTableElementAttributes(viewModel)
     }
     
-    open func sectionHeaderAttributes(_ tableElementAttributesCache: TableElementAttributesCache, sectionIndex: Int) -> TableElementAttributes {
+    open func sectionHeaderAttributes(_ tableElementAttributesCache: TableElementAttributesCache, sectionIndex: Int) -> TableElementAttributesType {
         guard let viewModel = headerViewModel(sectionIndex) else {
             Debug.error("Section model with index \(sectionIndex) no has header model")
             return defaultElementsAttributes
@@ -85,7 +85,7 @@ open class TableViewManager: SomaProxy, UITableViewDataSource, UITableViewDelega
         return generateTableElementAttributes(viewModel)
     }
     
-    open func sectionFooterAttributes(_ tableElementAttributesCache: TableElementAttributesCache, sectionIndex: Int) -> TableElementAttributes {
+    open func sectionFooterAttributes(_ tableElementAttributesCache: TableElementAttributesCache, sectionIndex: Int) -> TableElementAttributesType {
         guard let viewModel = footerViewModel(sectionIndex) else {
             Debug.error("Section model with index \(sectionIndex) no has footer model")
             return defaultElementsAttributes
@@ -180,31 +180,31 @@ open class TableViewManager: SomaProxy, UITableViewDataSource, UITableViewDelega
     
     //Other
     
-    fileprivate func headerViewModel(_ sectionIndex: Int) -> ViewModelType? {
+    private func headerViewModel(_ sectionIndex: Int) -> ViewModelType? {
         return sectionModel(sectionIndex).headerViewModel
     }
     
-    fileprivate func footerViewModel(_ sectionIndex: Int) -> ViewModelType? {
+    private func footerViewModel(_ sectionIndex: Int) -> ViewModelType? {
         return sectionModel(sectionIndex).footerViewModel
     }
     
-    fileprivate func cellViewModel(_ indexPath: IndexPath) -> ViewModelType {
+    private func cellViewModel(_ indexPath: IndexPath) -> ViewModelType {
         return sectionModel((indexPath as NSIndexPath).section).cellsViewModels[(indexPath as NSIndexPath).row]
     }
     
-    fileprivate func sectionModel(_ sectionIndex: Int) -> TableViewSectionModel {
+    private func sectionModel(_ sectionIndex: Int) -> TableViewSectionModelType {
         return showingSectionsData[sectionIndex]
     }
     
-    fileprivate func rowsCount(_ sectionIndex: Int) -> Int {
+    private func rowsCount(_ sectionIndex: Int) -> Int {
         return sectionModel(sectionIndex).cellsViewModels.count
     }
     
-    fileprivate func sectionsCount() -> Int {
+    private func sectionsCount() -> Int {
         return showingSectionsData.count
     }
     
-    fileprivate func beginUpdating(_ updatingEvent: UpdatingEvent, updatingData: UpdatingData) {
+    private func beginUpdating(_ updatingEvent: UpdatingEvent, updatingData: UpdatingData) {
         Utils.ensureIsMainThread()
         
         if updatingEvent.disposable.isDisposed {
@@ -221,7 +221,7 @@ open class TableViewManager: SomaProxy, UITableViewDataSource, UITableViewDelega
         updatingEvent.updatingHandler(tableView, updatingData)
     }
     
-    fileprivate func prepareUpdatingDataObserver(_ updatingEvent: UpdatingEvent) -> Observable<UpdatingData> {
+    private func prepareUpdatingDataObserver(_ updatingEvent: UpdatingEvent) -> Observable<UpdatingData> {
         return Observable.create({ (observer) -> Disposable in
             let sectionsData = updatingEvent.sectionsData
             let updatingData = updatingEvent.needPrepareData ? self.prepareUpdatingData(sectionsData) : UpdatingData(sectionsData: sectionsData)
@@ -233,16 +233,16 @@ open class TableViewManager: SomaProxy, UITableViewDataSource, UITableViewDelega
         })
     }
     
-    fileprivate func prepareUpdatingData(_ sectionsModels: SectionsModels) -> UpdatingData {
+    private func prepareUpdatingData(_ sectionsModels: SectionsModels) -> UpdatingData {
         var sectionsAttributes = SectionsAttributes()
         
         for sectionModel in sectionsModels {
-            var sectionHeaderAttributes: TableElementAttributes?
+            var sectionHeaderAttributes: TableElementAttributesType?
             if let headerViewModel = sectionModel.headerViewModel {
                 sectionHeaderAttributes = generateTableElementAttributes(headerViewModel)
             }
             
-            var sectionFooterAttributes: TableElementAttributes?
+            var sectionFooterAttributes: TableElementAttributesType?
             if let footerViewModel = sectionModel.footerViewModel {
                 sectionFooterAttributes = generateTableElementAttributes(footerViewModel)
             }
@@ -261,10 +261,10 @@ open class TableViewManager: SomaProxy, UITableViewDataSource, UITableViewDelega
         return UpdatingData(sectionsData: sectionsModels, sectionsAttributes: sectionsAttributes)
     }
     
-    fileprivate func generateTableElementAttributes(_ viewModel: ViewModelType) -> TableElementAttributes {
+    private func generateTableElementAttributes(_ viewModel: ViewModelType) -> TableElementAttributesType {
         let viewType = elementsProvider.viewTypeForViewModel(viewModel)
         
-        guard let elementBehaviorType = viewType as? TableElementBehavior.Type else {
+        guard let elementBehaviorType = viewType as? TableElementLogic.Type else {
             Debug.error("View type \(viewType) for view model \(type(of: viewModel)) has no implementation for TableElementPresenterType protocol")
             return defaultElementsAttributes
         }
@@ -272,24 +272,24 @@ open class TableViewManager: SomaProxy, UITableViewDataSource, UITableViewDelega
         return elementBehaviorType.tableElementAttributes(viewModel)
     }
     
-    fileprivate func onViewDidEndDisplaying(_ view: UIView) {
-        tableElementBehavior(view)?.tableElementReset()
+    private func onViewDidEndDisplaying(_ view: UIView) {
+        tableElementLogic(view)?.tableElementReset()
     }
     
-    fileprivate func bindAttributes(_ attributes: TableElementAttributes, view: UIView) {
-        tableElementBehavior(view)?.bindTableElementAttributes(attributes)
+    private func bindAttributes(_ attributes: TableElementAttributesType, view: UIView) {
+        tableElementLogic(view)?.bindTableElementAttributes(attributes)
     }
     
-    fileprivate func tableElementBehavior(_ view: UIView) -> TableElementBehavior? {
-        guard let tableElementBehavior = view as? TableElementBehavior else {
-            Debug.error("View type \(type(of: view)) not implemented TableElementBehavior protocol")
+    private func tableElementLogic(_ view: UIView) -> TableElementLogic? {
+        guard let tableElementLogic = view as? TableElementLogic else {
+            Debug.error("View type \(type(of: view)) not implemented TableElementLogic protocol")
             return nil
         }
         
-        return tableElementBehavior
+        return tableElementLogic
     }
     
-    fileprivate func startObserveUpdatingEvents() {
+    private func startObserveUpdatingEvents() {
         _ = updateDataEvents.asObservable()
             .skip(1)
             .map({ [weak self] (updatingEvent) -> Observable<(UpdatingEvent, UpdatingData)> in
@@ -327,7 +327,7 @@ open class TableViewManager: SomaProxy, UITableViewDataSource, UITableViewDelega
         public let updatingHandler: UpdatingHandler
         public let disposable = BooleanDisposable()
         
-        init(sectionsData: [TableViewSectionModel], needPrepareData: Bool = true, updatingHandler: @escaping UpdatingHandler = UpdatingEvent.defaultUpdatingHandler) {
+        init(sectionsData: [TableViewSectionModelType], needPrepareData: Bool = true, updatingHandler: @escaping UpdatingHandler = UpdatingEvent.defaultUpdatingHandler) {
             self.sectionsData = sectionsData
             self.needPrepareData = needPrepareData
             self.updatingHandler = updatingHandler

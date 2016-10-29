@@ -8,10 +8,10 @@
 
 import RxSwift
 
-open class AnyImageSource<TKey: StringKeyConvertiable>: ImageSourceType {
+open class AnyImageSource<TKey: StringKeyConvertible>: ImageSourceType {
     public typealias KeyType = TKey
     
-    fileprivate let sourceLoadImageHandler: (KeyType) -> Observable<UIImage>
+    private let sourceLoadImageHandler: (KeyType) -> Observable<UIImage>
     
     open func loadImage(_ key: KeyType) -> Observable<UIImage> {
         return sourceLoadImageHandler(key)

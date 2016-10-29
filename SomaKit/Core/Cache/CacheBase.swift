@@ -19,8 +19,8 @@ open class CacheBase<TKey, TData>: StoreType {
     public typealias DataType = TData
     public typealias CacheDataType = CacheValue<DataType>
 
-    fileprivate let sourceStore: AnyStore<TKey, CacheDataType>
-    fileprivate let lifeTimeType: CacheLifeTimeType
+    private let sourceStore: AnyStore<TKey, CacheDataType>
+    private let lifeTimeType: CacheLifeTimeType
     
     open func loadData(_ key: KeyType) throws -> DataType? {
         if case .never = lifeTimeType {
@@ -53,7 +53,7 @@ open class CacheBase<TKey, TData>: StoreType {
         self.lifeTimeType = lifeTimeType
     }
     
-    fileprivate func currentTime() -> Double {
+    private func currentTime() -> Double {
         if case .value(_, let timeGenerator) = lifeTimeType {
             return timeGenerator()
         }
@@ -61,7 +61,7 @@ open class CacheBase<TKey, TData>: StoreType {
         return 0
     }
     
-    fileprivate func isActualCache(_ cacheData: CacheDataType) -> Bool {
+    private func isActualCache(_ cacheData: CacheDataType) -> Bool {
         switch lifeTimeType {
         case .forever:
             return true

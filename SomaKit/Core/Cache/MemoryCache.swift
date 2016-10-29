@@ -7,8 +7,8 @@
 //
 
 open class MemoryCache<TKey: Hashable, TData>: CacheBase<TKey, TData> {
-    fileprivate let memoryStore = MemoryStore<TKey, CacheDataType>()
-    fileprivate let clearOnMemoryWarning: Bool
+    private let memoryStore = MemoryStore<TKey, CacheDataType>()
+    private let clearOnMemoryWarning: Bool
     
     public init(lifeTimeType: CacheLifeTimeType = .forever, clearOnMemoryWarning: Bool = false) {
         self.clearOnMemoryWarning = clearOnMemoryWarning
@@ -31,7 +31,7 @@ open class MemoryCache<TKey: Hashable, TData>: CacheBase<TKey, TData> {
         }
     }
     
-    @objc fileprivate func onMemoryWarning() {
+    @objc private func onMemoryWarning() {
         memoryStore.removeAllData()
     }
 }

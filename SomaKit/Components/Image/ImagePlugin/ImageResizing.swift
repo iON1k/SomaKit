@@ -15,8 +15,8 @@ public enum ImageResizingMode: String {
 }
 
 open class ImageResizing: ImagePluginType {
-    fileprivate let mode: ImageResizingMode
-    fileprivate let size: CGSize
+    private let mode: ImageResizingMode
+    private let size: CGSize
     
     open var imagePluginKey: String {
         return mode.rawValue + String(describing: size.width) + String(describing: size.height)

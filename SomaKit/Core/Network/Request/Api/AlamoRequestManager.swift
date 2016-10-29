@@ -12,9 +12,9 @@ import Alamofire
 import ObjectMapper
 
 open class AlamoRequestManager: ApiRequestManagerType {
-    fileprivate let sessionManager: SessionManager
-    fileprivate let baseUrl: URLConvertible
-    fileprivate let responseMapper: _StringMapperType
+    private let sessionManager: SessionManager
+    private let baseUrl: URLConvertible
+    private let responseMapper: _StringMapperType
     
     public init(baseUrl: URLConvertible, sessionManager: SessionManager = SessionManager.default, responseMapper: _StringMapperType = JsonMapper()) {
         self.sessionManager = sessionManager
@@ -38,7 +38,7 @@ open class AlamoRequestManager: ApiRequestManagerType {
         return URLEncoding.default
     }
     
-    fileprivate func buildURLString(_ endPoint: String) throws -> String {
+    private func buildURLString(_ endPoint: String) throws -> String {
         let url = URL(string: endPoint, relativeTo: baseUrl.url as URL?)
         
         if let url = url {
@@ -48,7 +48,7 @@ open class AlamoRequestManager: ApiRequestManagerType {
         throw SomaError("URL building with endpoint \(endPoint) failed")
     }
     
-    fileprivate func alamoMethodType(_ somaMethodType: ApiMethodType) throws -> HTTPMethod {
+    private func alamoMethodType(_ somaMethodType: ApiMethodType) throws -> HTTPMethod {
         guard let alamoMethod = HTTPMethod.init(rawValue: somaMethodType.rawValue) else {
             throw SomaError("Alamofire doesn't have api method type \(somaMethodType)")
         }

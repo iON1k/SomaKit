@@ -51,7 +51,7 @@ open class ApiRequestBase<TResponse, TManager: ApiRequestManagerType>: AbstractA
         return _manager.apiRequestEngine(self)
     }
     
-    fileprivate func buildCachingKey() -> String {
+    private func buildCachingKey() -> String {
         var resultString = ""
         
         resultString += methodType.rawValue

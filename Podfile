@@ -9,12 +9,10 @@ post_install do |installer|
     end
 end
 
-source 'https://github.com/CocoaPods/Specs.git'
-
 target 'SomaKit' do
-    pod 'RxSwift', '3.0.0-beta.1'
-    pod 'RxCocoa', '3.0.0-beta.1'
-    pod 'RxAlamofire', '3.0.0-beta.1'
+    pod 'RxSwift', '3.0.0'
+    pod 'RxCocoa', '3.0.0'
+    pod 'RxAlamofire', '3.0.0'
     pod 'ObjectMapper', '~> 2.1'
     pod 'MagicalRecord', '~> 2.3'
     pod 'AlamofireImage', '~> 3.1'

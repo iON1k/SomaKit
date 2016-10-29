@@ -41,7 +41,7 @@ public final class SomaFunc {
         return nil
     }
     
-    fileprivate init() {
+    private init() {
         //Nothing
     }
 }

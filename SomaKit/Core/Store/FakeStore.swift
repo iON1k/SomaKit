@@ -10,7 +10,7 @@ open class FakeStore<TKey, TData>: StoreType {
     public typealias KeyType = TKey
     public typealias DataType = TData
     
-    fileprivate let defaultValue: DataType?
+    private let defaultValue: DataType?
     
     open func loadData(_ key: KeyType) throws -> DataType? {
         return defaultValue
