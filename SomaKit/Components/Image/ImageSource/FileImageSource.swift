@@ -29,7 +29,7 @@ open class FileImageSource: ImageSourceType {
 }
 
 extension FileImageSource {
-    public func loadImageAsync(_ key: KeyType) -> Observable<UIImage> {
+    public func loadImageInBackground(_ key: KeyType) -> Observable<UIImage> {
         return loadImage(key)
             .subcribeOnBackgroundScheduler()
     }

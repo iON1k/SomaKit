@@ -12,14 +12,10 @@ public extension Disposable {
     public func dispose<E>(when disposeObservable: Observable<E>) {
         _ = disposeObservable
             .take(1)
-            .subscribe({ (event) in
-                switch event {
-                case .completed, .error:
-                    self.dispose()
-                default:
-                    break
-                }
+            .do(onDispose: { 
+                self.dispose()
             })
+            .subscribe()
     }
     
     public func dispose(whenDeallocated object: NSObject) {

@@ -1,5 +1,5 @@
 //
-//  AbstractDataBaseStore.swift
+//  AbstractDatabaseStore.swift
 //  SomaKit
 //
 //  Created by Anton on 25.06.16.
@@ -8,12 +8,12 @@
 
 import MagicalRecord
 
-open class AbstractDataBaseStore<TKey, TData, TDataBase: NSManagedObject>: StoreType {
+open class AbstractDatabaseStore<TKey, TData, TDatabase: NSManagedObject>: StoreType {
     public typealias KeyType = TKey
     public typealias DataType = TData
-    public typealias DataBaseType = TDataBase
-    public typealias SetterHandlerType = (DataType, DataBaseType) throws -> Void
-    public typealias GetterHandlerType = (DataBaseType) throws -> DataType
+    public typealias DatabaseType = TDatabase
+    public typealias SetterHandlerType = (DataType, DatabaseType) throws -> Void
+    public typealias GetterHandlerType = (DatabaseType) throws -> DataType
     
     open let keyProperty: String
     
@@ -21,7 +21,7 @@ open class AbstractDataBaseStore<TKey, TData, TDataBase: NSManagedObject>: Store
     private let getterHandler: GetterHandlerType
     
     open func loadData(_ key: KeyType) throws -> DataType? {
-        let optinalDBRecord = DataBaseType.mr_findFirst(with: try self.keyPredicate(key))
+        let optinalDBRecord = DatabaseType.mr_findFirst(with: try self.keyPredicate(key))
         
         guard let dbRecord = optinalDBRecord else {
             return nil
@@ -37,14 +37,14 @@ open class AbstractDataBaseStore<TKey, TData, TDataBase: NSManagedObject>: Store
         
         MagicalRecord.save( { (dbLocalContext) in
             do {
-                var dbRecord = DataBaseType.mr_findFirst(with: try self.keyPredicate(key), in: dbLocalContext)
+                var dbRecord = DatabaseType.mr_findFirst(with: try self.keyPredicate(key), in: dbLocalContext)
                 
                 guard let data = data else {
                     if let dbRecord = dbRecord {
                         let removingResult = dbRecord.mr_deleteEntity(in: dbLocalContext)
                         
                         if (!removingResult) {
-                            throw SomaError("DataBase \(Utils.typeName(DataType.self)) entity removing failed")
+                            throw SomaError("Database \(Utils.typeName(DataType.self)) entity removing failed")
                         }
                     }
                     
@@ -52,11 +52,11 @@ open class AbstractDataBaseStore<TKey, TData, TDataBase: NSManagedObject>: Store
                 }
                 
                 if dbRecord == nil {
-                    dbRecord = DataBaseType.mr_createEntity(in: dbLocalContext)
+                    dbRecord = DatabaseType.mr_createEntity(in: dbLocalContext)
                 }
                 
                 guard let resultDBRecord = dbRecord else {
-                    error = SomaError("DataBase \(Utils.typeName(DataType.self)) entity creating failed")
+                    error = SomaError("Database \(Utils.typeName(DataType.self)) entity creating failed")
                     return
                 }
                 

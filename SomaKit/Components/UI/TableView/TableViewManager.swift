@@ -52,7 +52,7 @@ open class TableViewManager: SomaProxy, UITableViewDataSource, UITableViewDelega
     }
     
     open func bindForwardObject(_ forwardObject: Any?, retain: Bool) {
-        Utils.ensureIsMainThread()
+        Debug.ensureIsMainThread()
         
         forwardDelegate = forwardObject as? UITableViewDelegate
         forwardDataSource = forwardObject as? UITableViewDataSource
@@ -60,7 +60,7 @@ open class TableViewManager: SomaProxy, UITableViewDataSource, UITableViewDelega
     }
     
     open func resetForwardObject() {
-        Utils.ensureIsMainThread()
+        Debug.ensureIsMainThread()
         
         bindForwardObject(nil, retain: false)
     }
@@ -205,7 +205,7 @@ open class TableViewManager: SomaProxy, UITableViewDataSource, UITableViewDelega
     }
     
     private func beginUpdating(_ updatingEvent: UpdatingEvent, updatingData: UpdatingData) {
-        Utils.ensureIsMainThread()
+        Debug.ensureIsMainThread()
         
         if updatingEvent.disposable.isDisposed {
             return

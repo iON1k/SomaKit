@@ -28,11 +28,11 @@ public protocol ApiRequestManagerType: RequestManagerType {
 
 open class ApiRequestBase<TResponse, TManager: ApiRequestManagerType>: AbstractApiRequest<TResponse, TManager>, ApiParamsProvider, StringCachingKeyProvider {
     open var method: String {
-        Utils.abstractMethod()
+        Debug.abstractMethod()
     }
     
     open var methodType: ApiMethodType {
-        Utils.abstractMethod()
+        Debug.abstractMethod()
     }
     
     open var params: ApiParamsType? {
@@ -44,35 +44,31 @@ open class ApiRequestBase<TResponse, TManager: ApiRequestManagerType>: AbstractA
     }
     
     open var stringCachingKey: String {
-        return buildCachingKey()
-    }
-    
-    open override func _requestEngine() -> Observable<TResponse> {
-        return _manager.apiRequestEngine(self)
-    }
-    
-    private func buildCachingKey() -> String {
         var resultString = ""
         
         resultString += methodType.rawValue
         resultString += method
         
         if let params = params {
-            let filteredParams = params.filter({ (element) -> Bool in
+            let filteredParams = params.filterDictionary({ (element) -> Bool in
                 return self._shouldUseParamInCachingKey(element.0, paramValue: element.1)
             })
             
-            resultString += filteredParams.stringKey
+            resultString += filteredParams.description
         }
         
         if let headers = headers {
-            let filteredHeaderParams = headers.filter({ (element) -> Bool in
+            let filteredHeaderParams = headers.filterDictionary({ (element) -> Bool in
                 return self._shouldUseHeaderParamInCachingKey(element.0, paramValue: element.1)
             })
-            resultString += filteredHeaderParams.stringKey
+            resultString += filteredHeaderParams.description
         }
         
         return resultString
+    }
+    
+    open override func _requestEngine() -> Observable<TResponse> {
+        return _manager.apiRequestEngine(self)
     }
     
     open func _shouldUseParamInCachingKey(_ paramName: String, paramValue: Any) -> Bool {

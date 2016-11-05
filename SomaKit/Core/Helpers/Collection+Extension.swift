@@ -9,13 +9,15 @@
 import Foundation
 
 extension Dictionary {
-    public func mapValues<TNewValue>(transform: (Value) throws -> TNewValue) rethrows -> Dictionary<Key, TNewValue> {
-        var newDictionary = Dictionary<Key, TNewValue>(minimumCapacity: count)
+    public func filterDictionary(_ isIncluded: (Key, Value) throws -> Bool) rethrows -> Dictionary<Key, Value> {
+        var resultDictionary = Dictionary<Key, Value>(minimumCapacity: count)
         
         for (key, value) in self {
-            newDictionary[key] = try transform(value)
+            if try isIncluded(key, value) {
+                resultDictionary[key] = value
+            }
         }
         
-        return newDictionary
+        return resultDictionary
     }
 }

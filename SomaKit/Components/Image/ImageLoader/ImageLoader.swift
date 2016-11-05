@@ -8,15 +8,15 @@
 
 import RxSwift
 
-open class ImageLoader<TKey: StringKeyConvertible> {
-    private let imageSource: AnyImageSource<TKey>
+open class ImageLoader<TKey: CustomStringConvertible> {
+    private let imageSource: ImageSource<TKey>
     
-    private let imageCache: AnyStore<String, UIImage>
-    private let processedImageCache: AnyStore<String, UIImage>
+    private let imageCache: Store<String, UIImage>
+    private let processedImageCache: Store<String, UIImage>
     
     open func loadImage(_ key: TKey, placeholder: UIImage? = nil, plugins: [ImagePluginType] = []) -> Observable<UIImage> {
         return Observable.deferred({ () -> Observable<UIImage> in
-            let imageCacheKey = key.stringKey
+            let imageCacheKey = key.description
             let processedImageCacheKey = self.pluginsCachingKey(imageCacheKey, plugins: plugins)
             
             if let processedImage = self.tryLoadImageFromCache(self.processedImageCache, cacheKey: processedImageCacheKey) {
@@ -47,7 +47,7 @@ open class ImageLoader<TKey: StringKeyConvertible> {
         return imageSource.loadImage(key)
             .observeOnBackgroundScheduler()
             .do(onNext: { (image) in
-                _ = self.imageCache.saveDataAsync(imageCacheKey, data: image)
+                _ = self.imageCache.saveDataInBackground(imageCacheKey, data: image)
             })
             .do(onNext: { (sourceImage) in
                 let processedImage = try sourceImage.performPlugins(plugins: plugins)
@@ -55,7 +55,7 @@ open class ImageLoader<TKey: StringKeyConvertible> {
             })
     }
     
-    private func tryLoadImageFromCache(_ imageCache: AnyStore<String, UIImage>, cacheKey: String) -> UIImage? {
+    private func tryLoadImageFromCache(_ imageCache: Store<String, UIImage>, cacheKey: String) -> UIImage? {
         return Utils.safe {
             return try imageCache.loadData(cacheKey)
         }
@@ -63,7 +63,7 @@ open class ImageLoader<TKey: StringKeyConvertible> {
     
     private func saveProcessedImageIfNeeded(_ processedImageCacheKey: String, processedImage: UIImage, sourceImage: UIImage) {
         if sourceImage !== processedImage {
-            _ = processedImageCache.saveDataAsync(processedImageCacheKey, data: processedImage)
+            _ = processedImageCache.saveDataInBackground(processedImageCacheKey, data: processedImage)
         }
     }
     
@@ -77,7 +77,7 @@ open class ImageLoader<TKey: StringKeyConvertible> {
         return cachingKey
     }
     
-    public init<TSource: ImageSourceConvertible, TImageCache: StoreConvertibleType, TProcessedImageCache: StoreConvertibleType>
+    public init<TSource: ImageSourceType, TImageCache: StoreType, TProcessedImageCache: StoreType>
         (imageSource: TSource, imageCache: TImageCache, processedImageCache: TProcessedImageCache)
         where TSource.KeyType == TKey, TImageCache.KeyType == String, TImageCache.DataType == UIImage,
         TProcessedImageCache.KeyType == String, TProcessedImageCache.DataType == UIImage {

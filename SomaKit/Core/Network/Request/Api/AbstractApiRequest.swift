@@ -36,24 +36,22 @@ open class AbstractApiRequest<TResponse, TManager: RequestManagerType>: RequestT
     open let _manager: ManagerType
     
     open func response() -> Observable<ResponseType> {
-        return Observable.deferred({ () -> Observable<ResponseType> in
-            self._manager.requestStarted(self)
-            
-            try self._validateParams()
-            
-            return self.execute()
-        })
+        return self.execute()
             .do(onNext: { (response) in
                 self._manager.requestGetResponse(self, response: response)
-            })
-            .do(onError: { (error) in
+            }, onError: { (error) in
                 self._manager.requestFailed(self, error: error)
+            }, onSubscribe: { () in
+                self._manager.requestStarted(self)
             })
             .subscribeOn(_workingScheduler)
     }
     
     private func execute() -> Observable<ResponseType> {
-        return _requestEngine()
+        return Observable.deferred({ () -> Observable<ResponseType> in
+            try self._validateParams()
+            return self._requestEngine()
+        })
             .observeOn(_workingScheduler)
             .do(onNext: { (response) in
                 try self._validateResponse(response)
@@ -77,6 +75,6 @@ open class AbstractApiRequest<TResponse, TManager: RequestManagerType>: RequestT
     }
     
     open func _requestEngine() -> Observable<ResponseType> {
-        Utils.abstractMethod()
+        Debug.abstractMethod()
     }
 }

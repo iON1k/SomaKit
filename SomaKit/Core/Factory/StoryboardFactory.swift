@@ -8,10 +8,7 @@
 
 import Foundation
 
-open class StoryboardFactory<VCType: RawRepresentable>: FactoryType where VCType.RawValue == String {
-    public typealias Instance = UIViewController
-    public typealias InstanceType = VCType
-    
+open class StoryboardFactory<ViewControllerType: RawRepresentable> where ViewControllerType.RawValue == String {
     private let storyboard: UIStoryboard
     
     public init(storyboard: UIStoryboard) {
@@ -22,15 +19,9 @@ open class StoryboardFactory<VCType: RawRepresentable>: FactoryType where VCType
         self.init(storyboard: UIStoryboard(name: storyboardName, bundle: storyboardBundle))
     }
     
-    public func createInstance(type: InstanceType) -> Instance {
-        return storyboard.instantiateViewController(withIdentifier: type.rawValue)
-    }
-}
-
-public extension StoryboardFactory {
-    public func loadViewController<TViewController: UIViewController>(type: InstanceType) -> TViewController {
-        guard let resultView = createInstance(type: type) as? TViewController else {
-            Debug.fatalError("StoryboardFactory factory view controller with type \(type) loading failed")
+    public func loadViewController<TViewController: UIViewController>(type: ViewControllerType) -> TViewController {
+        guard let resultView = storyboard.instantiateViewController(withIdentifier: type.rawValue) as? TViewController else {
+            Debug.fatalError("StoryboardFactory with storyboard \(storyboard) view controller with id \(type) loading failed")
         }
         
         return resultView

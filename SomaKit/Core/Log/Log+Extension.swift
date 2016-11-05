@@ -13,7 +13,7 @@ extension Log {
         log(.error, message: message, args: args)
     }
     
-    public static func log(_ error: Error) {
+    public static func error(_ error: Error) {
         log(.error, message: "Error: \(error)")
     }
     

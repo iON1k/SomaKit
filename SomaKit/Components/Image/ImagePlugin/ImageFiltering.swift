@@ -9,7 +9,7 @@
 import AlamofireImage
 
 open class ImageFiltering: ImagePluginType {
-    public typealias FitlerParamsType = [String : StringKeyConvertible]
+    public typealias FitlerParamsType = [String : Any]
 
     private let filterName: String
     private let filterParams: FitlerParamsType?
@@ -17,7 +17,7 @@ open class ImageFiltering: ImagePluginType {
     open var imagePluginKey: String {
         var resultKey = filterName
         if let filterParams = filterParams {
-            resultKey += filterParams.stringKey
+            resultKey += filterParams.description
         }
         
         return resultKey

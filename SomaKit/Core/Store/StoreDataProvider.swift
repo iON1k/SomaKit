@@ -14,7 +14,7 @@ open class StoreDataProvider<TData, TKey>: DataProviderType {
     
     private let dataValue: Variable<DataType>
     
-    private let store: AnyStore<KeyType, DataType>
+    private let store: Store<KeyType, DataType>
     
     private let key: KeyType
     private let defaultValue: DataType
@@ -23,7 +23,7 @@ open class StoreDataProvider<TData, TKey>: DataProviderType {
         return dataValue.asObservable()
     }
     
-    public init<TStore: StoreConvertibleType>(store: TStore, key: KeyType, defaultValue: DataType) where TStore.DataType == DataType, TStore.KeyType == KeyType {
+    public init<TStore: StoreType>(store: TStore, key: KeyType, defaultValue: DataType) where TStore.DataType == DataType, TStore.KeyType == KeyType {
         self.store = store.asStore()
         
         self.key = key
@@ -61,11 +61,5 @@ open class StoreDataProvider<TData, TKey>: DataProviderType {
         } else {
             return self.defaultValue
         }
-    }
-}
-
-extension StoreDataProvider where TData: DefaultValueType {
-    public convenience init<TStore: StoreType>(store: TStore, key: KeyType) where TStore.DataType == DataType, TStore.KeyType == KeyType {
-        self.init(store: store, key: key, defaultValue: TData.defaultValue)
     }
 }

@@ -6,17 +6,19 @@
 //  Copyright © 2016 iON1k. All rights reserved.
 //
 
-public protocol StoreType: StoreConvertibleType {
+public protocol StoreType {
     associatedtype KeyType
     associatedtype DataType
     
     func loadData(_ key: KeyType) throws -> DataType?
     func saveData(_ key: KeyType, data: DataType?) throws
+    
+    func asStore() -> Store<KeyType, DataType>
 }
 
 extension StoreType {
-    public func asStore() -> AnyStore<KeyType, DataType> {
-        return AnyStore(loadData, saveData)
+    public func asStore() -> Store<KeyType, DataType> {
+        return Store(loadData, saveData)
     }
 }
 

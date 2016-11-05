@@ -39,7 +39,7 @@ open class AlamoRequestManager: ApiRequestManagerType {
     }
     
     private func buildURLString(_ endPoint: String) throws -> String {
-        let url = URL(string: endPoint, relativeTo: baseUrl.url as URL?)
+        let url = URL(string: endPoint, relativeTo: try baseUrl.asURL())
         
         if let url = url {
             return url.absoluteString

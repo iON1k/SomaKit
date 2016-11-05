@@ -10,8 +10,7 @@ import RxSwift
 
 open class AbstractAnchoredPagedDataProvider<TPage: AnchoredPageType>: AbstractPagedDataProvider<TPage> {  
     private var anchoredPage: PageType?
-    private var isAnchoredPageLoading = Variable<Bool>(false)
-    private let syncLock = SyncLock()
+    private var isAnchoredPageLoadingVariable = Variable<Bool>(false)
     
     public override init(pageSize: Int, memoryCache: MemoryCacheType) {
         super.init(pageSize: pageSize, memoryCache: memoryCache)
@@ -24,18 +23,14 @@ open class AbstractAnchoredPagedDataProvider<TPage: AnchoredPageType>: AbstractP
     }
     
     public final func beginPageLoading(_ offset: Int, count: Int) -> Observable<PageType> {
-        return syncLock.sync {
-            return unsafeBeginPageLoading(offset, count: count)
-        }
-    }
-    
-    public final func unsafeBeginPageLoading(_ offset: Int, count: Int) -> Observable<PageType> {
-        if let anchoredPage = anchoredPage {
+        let isAnchoredPageLoading = isAnchoredPageLoadingVariable.value
+        
+        if let anchoredPage = anchoredPage, !isAnchoredPageLoading  {
             return _createLoadingAnchoredPageObservable(offset, count: count, anchoredPage: anchoredPage)
         }
         
-        if isAnchoredPageLoading.value {
-            return isAnchoredPageLoading.asObservable()
+        if isAnchoredPageLoading {
+            return isAnchoredPageLoadingVariable.asObservable()
                 .filter(SomaFunc.negativePredicate)
                 .take(1)
                 .flatMap({ (_) -> Observable<PageType> in
@@ -43,41 +38,21 @@ open class AbstractAnchoredPagedDataProvider<TPage: AnchoredPageType>: AbstractP
                 })
         }
         
-        isAnchoredPageLoading <= true
+        isAnchoredPageLoadingVariable <= true
         return wrapAnchorLoadingPageObservable(_createLoadingAnchoredPageObservable(offset, count: count, anchoredPage: nil))
     }
     
     private func wrapAnchorLoadingPageObservable(_ sourceObservable: Observable<PageType>) -> Observable<PageType> {
-        return Observable.create({ (observer) -> Disposable in
-            let lastLoadedPage = AtomicValue<PageType?>(value: nil)
-            
-            let sourceDisposable = sourceObservable.subscribe({ (event) in
-                switch event {
-                case .next(let page):
-                    lastLoadedPage.value = page
-                case .completed, .error:
-                    self.onAnchoredPageLoadingDidCompleted(lastLoadedPage.value)
-                }
-            })
-            
-            return Disposables.create {
-                sourceDisposable.dispose()
-                self.onAnchoredPageLoadingDidCompleted(nil)
-            }
-        })
-    }
-    
-    private func onAnchoredPageLoadingDidCompleted(_ loadedPage: PageType?) {
-        syncLock.sync {
-            if let loadedPage = loadedPage {
-                anchoredPage = loadedPage
-            }
-            
-            isAnchoredPageLoading <= false
-        }
+        return sourceObservable
+            .subscribeOn(_workingScheduler)
+            .do(onNext: { (page) in
+                    self.anchoredPage = page
+                }, onDispose: { 
+                    self.isAnchoredPageLoadingVariable <= false
+                })
     }
     
     open func _createLoadingAnchoredPageObservable(_ offset: Int, count: Int, anchoredPage: PageType?) -> Observable<PageType> {
-        Utils.abstractMethod()
+        Debug.abstractMethod()
     }
 }

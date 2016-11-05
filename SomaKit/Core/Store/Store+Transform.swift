@@ -8,15 +8,15 @@
 
 extension StoreType {
     public func transform<TKey, TData>(_ transformKeyHandler: @escaping (TKey) throws -> KeyType,
-                          transformDataHandler: @escaping (TData) throws -> DataType, revertTransformDataHandler: @escaping (DataType) throws -> TData) -> AnyStore<TKey, TData> {
+                          transformDataHandler: @escaping (TData) throws -> DataType, revertTransformDataHandler: @escaping (DataType) throws -> TData) -> Store<TKey, TData> {
         
-        return AnyStore({ (key) -> TData? in
-            let sourceKey = try transformKeyHandler(key)
-            guard let sourceData = try self.loadData(sourceKey) else {
-                return nil
-            }
-            
-            return try revertTransformDataHandler(sourceData)
+        return Store({ (key) -> TData? in
+                let sourceKey = try transformKeyHandler(key)
+                guard let sourceData = try self.loadData(sourceKey) else {
+                    return nil
+                }
+                
+                return try revertTransformDataHandler(sourceData)
             }, { (key, data) in
                 let sourceKey = try transformKeyHandler(key)
                 guard let data = data else {
@@ -31,12 +31,12 @@ extension StoreType {
     }
     
     public func transform<TKey, TDataConverter: ConverterType>
-        (_ transformKeyHandler: @escaping (TKey) throws -> KeyType, dataConverter: TDataConverter) -> AnyStore<TKey, TDataConverter.Type2> where TDataConverter.Type1 == DataType {
+        (_ transformKeyHandler: @escaping (TKey) throws -> KeyType, dataConverter: TDataConverter) -> Store<TKey, TDataConverter.Type2> where TDataConverter.Type1 == DataType {
         return transform(transformKeyHandler, transformDataHandler: dataConverter.convertValue, revertTransformDataHandler: dataConverter.convertValue)
     }
     
     public func transform<TDataConverter: ConverterType>
-        (_ dataConverter: TDataConverter) -> AnyStore<KeyType, TDataConverter.Type2> where TDataConverter.Type1 == DataType {
+        (_ dataConverter: TDataConverter) -> Store<KeyType, TDataConverter.Type2> where TDataConverter.Type1 == DataType {
         return transform(SomaFunc.sameTransform, transformDataHandler: dataConverter.convertValue, revertTransformDataHandler: dataConverter.convertValue)
     }
 }

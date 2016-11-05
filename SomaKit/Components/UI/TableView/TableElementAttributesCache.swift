@@ -21,7 +21,7 @@ open class TableElementAttributesCache {
     private var _sectionAttributesByIndex = SectionsAttributesByIndexType()
     
     open func cellAttributes(_ indexPath: IndexPath) -> TableElementAttributesType {
-        Utils.ensureIsMainThread()
+        Debug.ensureIsMainThread()
         
         let sectionAttributes = sectionAttributesByIndex((indexPath as NSIndexPath).section)
         if let cellAttributes = sectionAttributes.cellsAttributes[(indexPath as NSIndexPath).row] {
@@ -32,7 +32,7 @@ open class TableElementAttributesCache {
     }
     
     open func sectionHeaderAttributes(_ sectionIndex: Int) -> TableElementAttributesType {
-        Utils.ensureIsMainThread()
+        Debug.ensureIsMainThread()
         
         let sectionAttributes = sectionAttributesByIndex(sectionIndex)
         if let sectionHeaderAttributes = sectionAttributes.headerAttributes {
@@ -43,7 +43,7 @@ open class TableElementAttributesCache {
     }
     
     open func sectionFooterAttributes(_ sectionIndex: Int) -> TableElementAttributesType {
-        Utils.ensureIsMainThread()
+        Debug.ensureIsMainThread()
         
         let sectionAttributes = sectionAttributesByIndex(sectionIndex)
         if let sectionFooterAttributes = sectionAttributes.footerAttributes {
@@ -54,7 +54,7 @@ open class TableElementAttributesCache {
     }
     
     open func sectionAttributes(_ sectionIndex: Int) -> TableSectionElementsAttributes {
-        Utils.ensureIsMainThread()
+        Debug.ensureIsMainThread()
         
         return sectionAttributesByIndex(sectionIndex).copy()
     }
@@ -68,52 +68,52 @@ open class TableElementAttributesCache {
     }
     
     open func invalidateCache() {
-        Utils.ensureIsMainThread()
+        Debug.ensureIsMainThread()
         
         _sectionAttributesByIndex.removeAll()
     }
     
     open func invalidateSectionCache(_ sectionIndex: Int) {
-        Utils.ensureIsMainThread()
+        Debug.ensureIsMainThread()
         
         _sectionAttributesByIndex.removeValue(forKey: sectionIndex)
     }
     
     open func invalidateCellCache(_ indexPath: IndexPath) {
-        Utils.ensureIsMainThread()
+        Debug.ensureIsMainThread()
         
         var sectionAttributes = sectionAttributesByIndex((indexPath as NSIndexPath).section)
         sectionAttributes.cellsAttributes.removeValue(forKey: (indexPath as NSIndexPath).row)
     }
     
     open func invalidateSectionHeaderCache(_ sectionIndex: Int) {
-        Utils.ensureIsMainThread()
+        Debug.ensureIsMainThread()
         
         var sectionAttributes = sectionAttributesByIndex(sectionIndex)
         sectionAttributes.headerAttributes = nil
     }
     
     open func invalidateSectionFooterCache(_ sectionIndex: Int) {
-        Utils.ensureIsMainThread()
+        Debug.ensureIsMainThread()
         
         var sectionAttributes = sectionAttributesByIndex(sectionIndex)
         sectionAttributes.footerAttributes = nil
     }
     
     open func reloadCellAttributes(_ indexPath: IndexPath) {
-        Utils.ensureIsMainThread()
+        Debug.ensureIsMainThread()
         
         _ = _reloadCellAttributes(indexPath)
     }
     
     open func reloadSectionHeaderAttributes(_ sectionIndex: Int) {
-        Utils.ensureIsMainThread()
+        Debug.ensureIsMainThread()
         
         _ = _reloadSectionHeaderAttributes(sectionIndex)
     }
     
     open func reloadSectionFooterAttributes(_ sectionIndex: Int) {
-        Utils.ensureIsMainThread()
+        Debug.ensureIsMainThread()
         
         _ = _reloadSectionFooterAttributes(sectionIndex)
     }

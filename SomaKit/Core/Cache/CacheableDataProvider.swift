@@ -61,7 +61,7 @@ open class CacheableDataProvider<TKey, TData>: DataProviderType {
     
     private let behavior: CacheableDataProviderBehavior<SourceDataType>
     private let dataSource: Observable<SourceDataType>
-    private let cacheStore: AnyStore<TKey, SourceDataType>
+    private let cacheStore: Store<TKey, SourceDataType>
     private let cacheKey: TKey
     private let disposeBag = DisposeBag()
     
@@ -97,7 +97,7 @@ open class CacheableDataProvider<TKey, TData>: DataProviderType {
         })
     }
     
-    public init<TDataSource: ObservableConvertibleType, TCacheStore: StoreConvertibleType>(dataSource: TDataSource, cacheStore: TCacheStore, cacheKey: TKey, behavior: CacheableDataProviderBehavior<SourceDataType>
+    public init<TDataSource: ObservableConvertibleType, TCacheStore: StoreType>(dataSource: TDataSource, cacheStore: TCacheStore, cacheKey: TKey, behavior: CacheableDataProviderBehavior<SourceDataType>
             = CacheableDataProviderBehaviors.dataOrCache())
         where TDataSource.E == SourceDataType, TCacheStore.KeyType == TKey,
         TCacheStore.DataType == SourceDataType {
@@ -120,11 +120,11 @@ open class CacheableDataProvider<TKey, TData>: DataProviderType {
     }
     
     private func cacheStoreLoadDataObservable(_ needLogErrors: Bool) -> Observable<DataType> {
-        return cacheStore.loadDataAsync(self.cacheKey)
+        return cacheStore.loadDataInBackground(self.cacheKey)
             .ignoreNil()
             .do(onError: { (error) in
                 if needLogErrors {
-                    Log.log(error)
+                    Log.error(error)
                 }
             })
             .map({ (data) -> DataType in
@@ -133,7 +133,7 @@ open class CacheableDataProvider<TKey, TData>: DataProviderType {
     }
     
     private func asyncSaveToCache(_ data: SourceDataType) {
-        cacheStore.saveDataAsync(cacheKey, data: data)
+        cacheStore.saveDataInBackground(cacheKey, data: data)
             .subscribe()
             .addDisposableTo(disposeBag)
     }

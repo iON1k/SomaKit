@@ -11,7 +11,7 @@ import RxSwift
 public let PagedDataProviderDefaultPageSize = 100
 private let AbstractPagedDataProviderQueueName = "AbstractPagedDataProvider_Queue"
 
-open class AbstractPagedDataProvider<TPage: ItemsPageType>: ListDataProviderType {
+open class AbstractPagedDataProvider<TPage: PageType>: ListDataProviderType {
     public typealias PageType = TPage
     public typealias ItemType = PageType.ItemType
     public typealias MemoryCacheType = MemoryCache<Int, PageType>
@@ -21,7 +21,7 @@ open class AbstractPagedDataProvider<TPage: ItemsPageType>: ListDataProviderType
     private var itemsValue = [ItemType?]()
     private let itemsValueSubject = BehaviorSubject(value: [ItemType?]())
     
-    private let workingScheduler = SerialDispatchQueueScheduler(internalSerialQueueName: AbstractPagedDataProviderQueueName)
+    public let _workingScheduler = SerialDispatchQueueScheduler(internalSerialQueueName: AbstractPagedDataProviderQueueName)
     private let stateSyncLock = SyncLock()
     
     private var loadingPagesObservables = [Int : Observable<PageType>]()
@@ -58,7 +58,7 @@ open class AbstractPagedDataProvider<TPage: ItemsPageType>: ListDataProviderType
                 return Observable.just(nil)
             }
         }
-        .subscribeOn(workingScheduler)
+        .subscribeOn(_workingScheduler)
     }
     
     open func unsafeLoadItem(_ index: Int) -> Observable<ItemType?> {
@@ -88,7 +88,7 @@ open class AbstractPagedDataProvider<TPage: ItemsPageType>: ListDataProviderType
         }
         
         let newPageLoadingObservable = _createLoadingPageObservable(pageIndex * pageSize, count: pageSize)
-            .observeOn(workingScheduler)
+            .observeOn(_workingScheduler)
             .do(onNext: { [weak self] (page) in
                 self?.onPageDidLoaded(page, pageIndex: pageIndex)
             })
@@ -182,6 +182,6 @@ open class AbstractPagedDataProvider<TPage: ItemsPageType>: ListDataProviderType
     }
     
     open func _createLoadingPageObservable(_ offset: Int, count: Int) -> Observable<PageType> {
-        Utils.abstractMethod()
+        Debug.abstractMethod()
     }
 }

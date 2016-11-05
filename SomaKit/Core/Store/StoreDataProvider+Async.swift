@@ -9,14 +9,14 @@
 import RxSwift
 
 public extension StoreDataProvider {
-    public func setDataAsync(_ data: DataType) -> Observable<Void> {
+    public func setDataInBackground(_ data: DataType) -> Observable<Void> {
         return Observable.deferred({ () -> Observable<Void> in
             return Observable.just(try self.setData(data))
         })
             .subcribeOnBackgroundScheduler()
     }
     
-    public func loadDataAsync() -> Observable<DataType?> {
+    public func loadDataInBackground() -> Observable<DataType?> {
         return Observable.deferred({ () -> Observable<DataType?> in
             return Observable.just(try self.loadData())
         })

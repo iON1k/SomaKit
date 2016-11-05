@@ -31,3 +31,15 @@ public final class Debug {
         //Nothing
     }
 }
+
+extension Debug {
+    public static func abstractMethod(_ methodName: String = "Method") -> Never  {
+        fatalError("\(methodName) has not been implemented")
+    }
+    
+    public static func ensureIsMainThread() {
+        guard Thread.isMainThread else {
+            Debug.fatalError("Is not main thread")
+        }
+    }
+}

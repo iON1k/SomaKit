@@ -1,5 +1,5 @@
 //
-//  Observable+Extensions.swift
+//  Rx+Extensions.swift
 //  SomaKit
 //
 //  Created by Anton on 22.06.16.
@@ -35,4 +35,9 @@ public extension Observable {
     public func observeOnMainScheduler() -> Observable<E> {
         return self.observeOn(MainScheduler.instance)
     }
+}
+
+infix operator <=
+func <= <TResult>(variable: Variable<TResult>, newValue: TResult) -> Void {
+    variable.value = newValue
 }

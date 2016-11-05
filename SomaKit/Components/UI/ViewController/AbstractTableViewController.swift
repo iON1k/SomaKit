@@ -15,7 +15,7 @@ open class AbstractTableViewController<TViewModel: TableBehaviorModuleViewModel>
     private var refreshControl: UIRefreshControl!
     
     open var _tableView: UITableView {
-        Utils.abstractMethod()
+        Debug.abstractMethod()
     }
     
     open override func _onViewModelBind(_ viewModel: ViewModel) {
@@ -45,7 +45,7 @@ open class AbstractTableViewController<TViewModel: TableBehaviorModuleViewModel>
     }
     
     open func _showActivityIndicator(_ show: Bool) {
-        Utils.abstractMethod()
+        Debug.abstractMethod()
     }
     
     open func _supportPullToRefresh() -> Bool {

@@ -8,14 +8,14 @@
 
 import RxSwift
 
-extension Array: DataProviderType {
+extension Array: ListDataProviderType {
     public typealias ItemType = Element
     
     public var items: [ItemType?] {
         return self
     }
     
-    var isAllItemsLoaded: Bool {
+    public var isAllItemsLoaded: Bool {
         return true
     }
     

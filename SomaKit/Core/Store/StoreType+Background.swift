@@ -1,5 +1,5 @@
 //
-//  StoreType+Async.swift
+//  StoreType+Background.swift
 //  SomaKit
 //
 //  Created by Anton on 25.06.16.
@@ -9,14 +9,14 @@
 import RxSwift
 
 public extension StoreType {
-    public func saveDataAsync(_ key: KeyType, data: DataType?) -> Observable<Void> {
+    public func saveDataInBackground(_ key: KeyType, data: DataType?) -> Observable<Void> {
         return Observable.deferred({ () -> Observable<Void> in
             return Observable.just(try self.saveData(key, data: data))
         })
             .subcribeOnBackgroundScheduler()
     }
     
-    public func loadDataAsync(_ key: KeyType) -> Observable<DataType?> {
+    public func loadDataInBackground(_ key: KeyType) -> Observable<DataType?> {
         return Observable.deferred({ () -> Observable<DataType?> in
             return Observable.just(try self.loadData(key))
         })

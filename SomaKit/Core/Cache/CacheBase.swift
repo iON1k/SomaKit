@@ -19,7 +19,7 @@ open class CacheBase<TKey, TData>: StoreType {
     public typealias DataType = TData
     public typealias CacheDataType = CacheValue<DataType>
 
-    private let sourceStore: AnyStore<TKey, CacheDataType>
+    private let sourceStore: Store<TKey, CacheDataType>
     private let lifeTimeType: CacheLifeTimeType
     
     open func loadData(_ key: KeyType) throws -> DataType? {
@@ -48,7 +48,7 @@ open class CacheBase<TKey, TData>: StoreType {
         try sourceStore.saveData(key, data: cacheValue)
     }
     
-    public init<TStore: StoreConvertibleType>(sourceStore: TStore, lifeTimeType: CacheLifeTimeType = .forever) where TStore.KeyType == KeyType, TStore.DataType == CacheDataType {
+    public init<TStore: StoreType>(sourceStore: TStore, lifeTimeType: CacheLifeTimeType = .forever) where TStore.KeyType == KeyType, TStore.DataType == CacheDataType {
         self.sourceStore = sourceStore.asStore()
         self.lifeTimeType = lifeTimeType
     }

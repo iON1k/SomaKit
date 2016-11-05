@@ -15,18 +15,8 @@ public final class Utils {
 }
 
 extension Utils {
-    public static func abstractMethod(_ methodName: String = "Method") -> Never  {
-        Debug.fatalError("\(methodName) has not been implemented")
-    }
-}
-
-extension Utils {
     public static func typeName(_ classType: Any.Type) -> String {
         return String(describing: classType)
-    }
-    
-    public static func sameTypes(_ first: Any, second: Any) -> Bool {
-        return type(of: first) == type(of: second)
     }
 }
 
@@ -41,19 +31,11 @@ extension Utils {
 }
 
 extension Utils {
-    public static func ensureIsMainThread() {
-        guard Thread.isMainThread else {
-            Debug.fatalError("Is not main thread")
-        }
-    }
-}
-
-extension Utils {
     public static func safe(_ body: (Void) throws -> Void) {
         do {
             try body()
         } catch let error {
-            Log.log(error)
+            Log.error(error)
         }
     }
     
@@ -61,7 +43,7 @@ extension Utils {
         do {
             return try body()
         } catch let error {
-            Log.log(error)
+            Log.error(error)
         }
         
         return nil
@@ -71,7 +53,7 @@ extension Utils {
         do {
             return try body()
         } catch let error {
-            Log.log(error)
+            Log.error(error)
         }
         
         return defaultResult

@@ -42,7 +42,7 @@ extension TableViewManager {
             .subcribeOnBackgroundScheduler()
     }
     
-    public func updateDataAsync(_ sectionsData: SectionsModels, updatingHandler: @escaping UpdatingHandler = UpdatingEvent.defaultUpdatingHandler) {
+    public func updateDataInBackground(_ sectionsData: SectionsModels, updatingHandler: @escaping UpdatingHandler = UpdatingEvent.defaultUpdatingHandler) {
         _ = updateDataAsyncObservable(sectionsData, updatingHandler: updatingHandler)
             .subscribe()
     }
@@ -60,7 +60,7 @@ extension TableViewManager {
             .subscribe()
     }
     
-    public func reloadDataAsync(_ updatingHandler: @escaping UpdatingHandler = UpdatingEvent.defaultUpdatingHandler) -> Disposable {
+    public func reloadDataInBackground(_ updatingHandler: @escaping UpdatingHandler = UpdatingEvent.defaultUpdatingHandler) -> Disposable {
         return reloadDataAsyncObservable(updatingHandler)
             .subscribe()
     }
@@ -69,7 +69,7 @@ extension TableViewManager {
         where TDataSource.E == SectionsModels {
         return dataSource.asObservable()
             .do(onNext: { (sectionsData) in
-                self.updateDataAsync(sectionsData, updatingHandler: updatingHandler)
+                self.updateDataInBackground(sectionsData, updatingHandler: updatingHandler)
             })
             .subscribe()
     }

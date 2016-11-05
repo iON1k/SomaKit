@@ -1,12 +1,12 @@
 //
-//  AnyStore.swift
+//  Store.swift
 //  SomaKit
 //
-//  Created by Anton on 25.06.16.
+//  Created by Anton on 05.11.16.
 //  Copyright © 2016 iON1k. All rights reserved.
 //
 
-open class AnyStore<TKey, TData>: StoreType {
+open class Store<TKey, TData>: StoreType {
     public typealias KeyType = TKey
     public typealias DataType = TData
     
@@ -29,8 +29,9 @@ open class AnyStore<TKey, TData>: StoreType {
         self.saveDataHandler = saveDataHandler
     }
 }
-extension AnyStore {
-    public func asStore() -> AnyStore<KeyType, DataType> {
+
+extension Store {
+    public func asStore() -> Store<KeyType, DataType> {
         return self
     }
 }

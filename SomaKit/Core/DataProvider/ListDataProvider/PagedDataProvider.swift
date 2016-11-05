@@ -8,7 +8,7 @@
 
 import RxSwift
 
-open class PagedDataProvider<TPage: ItemsPageType>: AbstractPagedDataProvider<TPage> {
+open class PagedDataProvider<TPage: PageType>: AbstractPagedDataProvider<TPage> {
     public typealias PageObservableFactory = (_ offset: Int, _ count: Int) -> Observable<PageType>
     
     private let pageObservableFactory: PageObservableFactory
@@ -28,7 +28,7 @@ open class PagedDataProvider<TPage: ItemsPageType>: AbstractPagedDataProvider<TP
 }
 
 extension PagedDataProvider {
-    public convenience init<TDataSource: ObservableConvertibleType, TCacheStore: StoreConvertibleType>(pageSize: Int = PagedDataProviderDefaultPageSize,
+    public convenience init<TDataSource: ObservableConvertibleType, TCacheStore: StoreType>(pageSize: Int = PagedDataProviderDefaultPageSize,
                                     cacheStore: TCacheStore, cacheBehavior: CacheableDataProviderBehavior<PageType> = CacheableDataProviderBehaviors.cacheAndData(),
                                     dataSourceFactory: @escaping (_ offset: Int, _ count: Int) -> TDataSource)
         where TDataSource: CachingKeyProvider, TCacheStore.KeyType == TDataSource.CachingKeyType,

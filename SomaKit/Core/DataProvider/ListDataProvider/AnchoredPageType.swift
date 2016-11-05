@@ -6,13 +6,13 @@
 //  Copyright © 2016 iON1k. All rights reserved.
 //
 
-public protocol AnchoredPageType: ItemsPageType {
+public protocol AnchoredPageType: PageType {
     associatedtype AnchorType: Equatable
     
     var anchor: AnchorType { get }
 }
 
-open class SimpleAnchoredPage<TItem, TAnchor: Equatable>: SimpleItemsPage<TItem>, AnchoredPageType {
+open class AnchoredPage<TItem, TAnchor: Equatable>: Page<TItem>, AnchoredPageType {
     public typealias AnchorType = TAnchor
     
     open let anchor: AnchorType
