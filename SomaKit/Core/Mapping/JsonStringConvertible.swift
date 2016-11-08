@@ -1,23 +1,23 @@
 //
-//  JsonCovertible.swift
+//  JsonStringConvertible.swift
 //  SomaKit
 //
 //  Created by Anton on 23.08.16.
 //  Copyright © 2016 iON1k. All rights reserved.
 //
 
-public protocol _JsonCovertible {
+public protocol _JsonStringConvertible {
     static func _convertToJson(_ object: Any) throws -> String
     static func _convertToObject(_ json: String) throws -> Any
 }
 
-public extension _JsonCovertible {
+public extension _JsonStringConvertible {
     public func convertToJson() throws -> String {
         return try Self._convertToJson(self)
     }
 }
 
-public extension _JsonCovertible where Self: JsonCovertible {
+public extension _JsonStringConvertible where Self: JsonStringConvertible {
     public static func _convertToJson(_ object: Any) throws -> String {
         guard let castedObject = object as? Self else {
             throw SomaError("Converting to json wrong type \(type(of: (object)))")
@@ -31,7 +31,7 @@ public extension _JsonCovertible where Self: JsonCovertible {
     }
 }
 
-public protocol JsonCovertible: _JsonCovertible {
+public protocol JsonStringConvertible: _JsonStringConvertible {
     static func convertToJson(_ object: Self) throws -> String
     static func convertToObject(_ json: String) throws -> Self
 }

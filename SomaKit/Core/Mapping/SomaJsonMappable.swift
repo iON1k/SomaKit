@@ -1,5 +1,5 @@
 //
-//  SomaMappable.swift
+//  SomaJsonMappable.swift
 //  SomaKit
 //
 //  Created by Anton on 23.08.16.
@@ -8,11 +8,11 @@
 
 import ObjectMapper
 
-public protocol SomaMappable: Mappable, JsonCovertible {
+public protocol SomaJsonMappable: Mappable, JsonStringConvertible {
     //Nothing
 }
 
-extension SomaMappable {
+extension SomaJsonMappable {
     public static func convertToJson(_ object: Self) throws -> String {
         let mappingResult = Mapper().toJSONString(object)
         

@@ -14,9 +14,9 @@ import ObjectMapper
 open class AlamoRequestManager: ApiRequestManagerType {
     private let sessionManager: SessionManager
     private let baseUrl: URLConvertible
-    private let responseMapper: _StringMapperType
+    private let responseMapper: UnsafeJsonMapperType
     
-    public init(baseUrl: URLConvertible, sessionManager: SessionManager = SessionManager.default, responseMapper: _StringMapperType = JsonMapper()) {
+    public init(baseUrl: URLConvertible, sessionManager: SessionManager = SessionManager.default, responseMapper: UnsafeJsonMapperType = UnsafeJsonMapper()) {
         self.sessionManager = sessionManager
         self.baseUrl = baseUrl
         self.responseMapper = responseMapper

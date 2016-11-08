@@ -13,11 +13,11 @@ open class UnsafeJsonMappingConverter<TValue>: ConverterType {
     public typealias Type2 = String
     
     open func convertValue(_ value: Type1) throws -> Type2 {
-        return try castToJsonCovertibleType(Type1.self)._convertToJson(value)
+        return try castToJsonStringConvertibleType(Type1.self)._convertToJson(value)
     }
     
     open func convertValue(_ value: Type2) throws -> Type1 {
-        let resultObject = try castToJsonCovertibleType(Type1.self)._convertToObject(value)
+        let resultObject = try castToJsonStringConvertibleType(Type1.self)._convertToObject(value)
         
         guard let result = resultObject as? Type1 else {
             throw SomaError("JsonMappingConverter wrong mapping type \(type(of: resultObject))")
@@ -26,9 +26,9 @@ open class UnsafeJsonMappingConverter<TValue>: ConverterType {
         return result
     }
     
-    private func castToJsonCovertibleType<TValue>(_ type: TValue.Type) throws -> _JsonCovertible.Type {
-        guard let jsonConvertibleType = Type1.self as? _JsonCovertible.Type else {
-            throw SomaError("Type \(Type1.self) doesn't conform to protocol _JsonCovertible")
+    private func castToJsonStringConvertibleType<TValue>(_ type: TValue.Type) throws -> _JsonStringConvertible.Type {
+        guard let jsonConvertibleType = Type1.self as? _JsonStringConvertible.Type else {
+            throw SomaError("Type \(Type1.self) doesn't conform to protocol _JsonStringConvertible")
         }
         
         return jsonConvertibleType

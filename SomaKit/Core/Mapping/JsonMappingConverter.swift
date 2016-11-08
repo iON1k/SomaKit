@@ -8,7 +8,7 @@
 
 import ObjectMapper
 
-open class JsonMappingConverter<TValue: JsonCovertible>: ConverterType {
+open class JsonMappingConverter<TValue: JsonStringConvertible>: ConverterType {
     public typealias Type1 = TValue
     public typealias Type2 = String
     
