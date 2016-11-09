@@ -6,12 +6,14 @@
 //  Copyright © 2016 iON1k. All rights reserved.
 //
 
-public enum CacheLifeTimeType {
+public enum CacheLifeTimeBehavior {
     public typealias TimeGenerator = (Void) -> CacheTimeType
     
     case never
     case forever
     case value(lifeTime: CacheTimeType, timeGenerator: TimeGenerator)
+    
+    static let `default` = forever
 }
 
 open class CacheBase<TKey, TData>: StoreType {
@@ -20,10 +22,10 @@ open class CacheBase<TKey, TData>: StoreType {
     public typealias CacheDataType = CacheValue<DataType>
 
     private let sourceStore: Store<TKey, CacheDataType>
-    private let lifeTimeType: CacheLifeTimeType
+    private let lifeTimeBehavior: CacheLifeTimeBehavior
     
     open func loadData(_ key: KeyType) throws -> DataType? {
-        if case .never = lifeTimeType {
+        if case .never = lifeTimeBehavior {
             return nil
         }
         
@@ -35,7 +37,7 @@ open class CacheBase<TKey, TData>: StoreType {
     }
     
     open func saveData(_ key: KeyType, data: DataType?) throws {
-        if case .never = lifeTimeType {
+        if case .never = lifeTimeBehavior {
             return
         }
         
@@ -48,13 +50,13 @@ open class CacheBase<TKey, TData>: StoreType {
         try sourceStore.saveData(key, data: cacheValue)
     }
     
-    public init<TStore: StoreType>(sourceStore: TStore, lifeTimeType: CacheLifeTimeType = .forever) where TStore.KeyType == KeyType, TStore.DataType == CacheDataType {
+    public init<TStore: StoreType>(sourceStore: TStore, lifeTimeBehavior: CacheLifeTimeBehavior = .default) where TStore.KeyType == KeyType, TStore.DataType == CacheDataType {
         self.sourceStore = sourceStore.asStore()
-        self.lifeTimeType = lifeTimeType
+        self.lifeTimeBehavior = lifeTimeBehavior
     }
     
     private func currentTime() -> Double {
-        if case .value(_, let timeGenerator) = lifeTimeType {
+        if case .value(_, let timeGenerator) = lifeTimeBehavior {
             return timeGenerator()
         }
         
@@ -62,7 +64,7 @@ open class CacheBase<TKey, TData>: StoreType {
     }
     
     private func isActualCache(_ cacheData: CacheDataType) -> Bool {
-        switch lifeTimeType {
+        switch lifeTimeBehavior {
         case .forever:
             return true
         case .value(let lifeTime, let timeGenerator):

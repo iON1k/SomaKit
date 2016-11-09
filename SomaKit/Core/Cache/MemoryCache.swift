@@ -10,19 +10,15 @@ open class MemoryCache<TKey: Hashable, TData>: CacheBase<TKey, TData> {
     private let memoryStore = MemoryStore<TKey, CacheDataType>()
     private let clearOnMemoryWarning: Bool
     
-    public init(lifeTimeType: CacheLifeTimeType = .forever, clearOnMemoryWarning: Bool = false) {
+    public init(lifeTimeBehavior: CacheLifeTimeBehavior = .default, clearOnMemoryWarning: Bool = false) {
         self.clearOnMemoryWarning = clearOnMemoryWarning
         
-        super.init(sourceStore: memoryStore, lifeTimeType: lifeTimeType)
+        super.init(sourceStore: memoryStore, lifeTimeBehavior: lifeTimeBehavior)
         
         if clearOnMemoryWarning {
             NotificationCenter.default.addObserver(self, selector: #selector(onMemoryWarning),
                                                              name: NSNotification.Name.UIApplicationDidReceiveMemoryWarning, object: UIApplication.shared)
         }
-    }
-    
-    public convenience init(lifeTime: CacheTimeType) {
-        self.init(lifeTimeType: .value(lifeTime: lifeTime, timeGenerator: TimeHelper.absoluteTime))
     }
     
     deinit {
