@@ -37,6 +37,14 @@ public extension Observable {
     }
 }
 
+public extension Observable {
+    public func catchErrorNoReturn() -> Observable<E> {
+        return self.catchError({ (error) -> Observable<E> in
+            return Observable.empty()
+        })
+    }
+}
+
 infix operator <=
 func <= <TResult>(variable: Variable<TResult>, newValue: TResult) -> Void {
     variable.value = newValue

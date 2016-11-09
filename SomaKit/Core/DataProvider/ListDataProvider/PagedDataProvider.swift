@@ -29,7 +29,7 @@ open class PagedDataProvider<TPage: PageType>: AbstractPagedDataProvider<TPage> 
 
 extension PagedDataProvider {
     public convenience init<TDataSource: ObservableConvertibleType, TCacheStore: StoreType>(pageSize: Int = PagedDataProviderDefaultPageSize,
-                                    cacheStore: TCacheStore, cacheBehavior: CacheableDataProviderBehavior<PageType> = CacheableDataProviderBehaviors.cacheAndData(),
+                                    cacheStore: TCacheStore, cacheBehavior: CacheableDataProviderBehavior = .default,
                                     dataSourceFactory: @escaping (_ offset: Int, _ count: Int) -> TDataSource)
         where TDataSource: CachingKeyProvider, TCacheStore.KeyType == TDataSource.CachingKeyType,
         TCacheStore.DataType == TDataSource.E, TDataSource.E == PageType {
@@ -37,7 +37,6 @@ extension PagedDataProvider {
             return dataSourceFactory(offset, count)
                 .asCacheableProvider(cacheStore, behavior: cacheBehavior)
                 .data()
-                .onlyData()
         }
     }
 }

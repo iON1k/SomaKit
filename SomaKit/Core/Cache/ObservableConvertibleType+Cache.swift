@@ -9,8 +9,8 @@
 import RxSwift
 
 public extension ObservableConvertibleType where Self: CachingKeyProvider {
-    public func asCacheableProvider<TCacheStore: StoreType>(_ cacheStore: TCacheStore, behavior: CacheableDataProviderBehavior<E>
-        = CacheableDataProviderBehaviors.dataOrCache()) -> CacheableDataProvider<CachingKeyType, E>
+    public func asCacheableProvider<TCacheStore: StoreType>(_ cacheStore: TCacheStore,
+                                    behavior: CacheableDataProviderBehavior = .default) -> CacheableDataProvider<CachingKeyType, E>
         where TCacheStore.KeyType == CachingKeyType,
         TCacheStore.DataType == E {
         return CacheableDataProvider(dataSource: self, cacheStore: cacheStore, cacheKey: cachingKey, behavior: behavior)

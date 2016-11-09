@@ -30,7 +30,8 @@ open class AnchoredPagedDataProvider<TPage: AnchoredPageType>: AbstractAnchoredP
 
 extension AnchoredPagedDataProvider {
     public convenience init<TDataSource: ObservableConvertibleType, TCacheStore: StoreType>(pageSize: Int = PagedDataProviderDefaultPageSize,
-                                                                                            cacheStore: TCacheStore, cacheBehavior: CacheableDataProviderBehavior<PageType> = CacheableDataProviderBehaviors.cacheAndData(),
+                                                                                            cacheStore: TCacheStore,
+                                                                                            cacheBehavior: CacheableDataProviderBehavior = .default,
                                                                                             dataSourceFactory: @escaping (_ offset: Int, _ count: Int, _ anchor: AnchorType?) -> TDataSource)
         where TDataSource: CachingKeyProvider, TCacheStore.KeyType == TDataSource.CachingKeyType,
         TCacheStore.DataType == TDataSource.E, TDataSource.E == PageType {
@@ -38,7 +39,6 @@ extension AnchoredPagedDataProvider {
             return dataSourceFactory(offset, count, anchor)
                 .asCacheableProvider(cacheStore, behavior: cacheBehavior)
                 .data()
-                .onlyData()
         }
     }
 }
