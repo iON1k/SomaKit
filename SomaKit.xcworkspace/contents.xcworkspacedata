@@ -5,6 +5,9 @@
       location = "group:SomaKit.xcodeproj">
    </FileRef>
    <FileRef
+      location = "group:SomaKitExample/SomaKitExample.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:Pods/Pods.xcodeproj">
    </FileRef>
 </Workspace>
