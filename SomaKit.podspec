@@ -30,10 +30,10 @@ TODO: Add long description of the pod here.
 
   s.public_header_files = 'SomaKit/**/*.h'
   s.frameworks = 'UIKit'
-  s.dependency 'RxSwift', '~> 2.6'
-  s.dependency 'RxCocoa', '~> 2.6'
-  s.dependency 'RxAlamofire', '~> 2.5'
-  s.dependency 'ObjectMapper', '~> 1.4'
+  s.dependency 'RxSwift', '~> 3.0.0'
+  s.dependency 'RxCocoa', '~> 3.0.0'
+  s.dependency 'RxAlamofire', '~> 3.0.0'
+  s.dependency 'ObjectMapper', '~> 2.1'
   s.dependency 'MagicalRecord', '~> 2.3'
-  s.dependency 'AlamofireImage', '~> 2.4'
+  s.dependency 'AlamofireImage', '~> 3.1'
 end
