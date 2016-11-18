@@ -49,3 +49,11 @@ infix operator <=
 func <= <TResult>(variable: Variable<TResult>, newValue: TResult) -> Void {
     variable.value = newValue
 }
+
+public extension Observable {
+    public func mapToJust<TElement>(_ element: TElement) -> Observable<TElement> {
+        return self.map({ (_) -> TElement in
+            return element
+        })
+    }
+}

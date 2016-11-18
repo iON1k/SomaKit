@@ -19,52 +19,59 @@ open class ImageLoader<TKey: CustomStringConvertible> {
             let imageCacheKey = key.description
             let processedImageCacheKey = self.pluginsCachingKey(imageCacheKey, plugins: plugins)
             
-            if let processedImage = self.tryLoadImageFromCache(self.processedImageCache, cacheKey: processedImageCacheKey) {
-                return Observable.just(processedImage)
-            }
-            
-            if let sourceImage = self.tryLoadImageFromCache(self.imageCache, cacheKey: imageCacheKey) {
-                let processedImage = try sourceImage.performPlugins(plugins: plugins)
-                self.saveProcessedImageIfNeeded(processedImageCacheKey, processedImage: processedImage, sourceImage: sourceImage)
-                
-                return Observable.just(processedImage)
-            }
-            
-            let sourceLoading = self.sourceLoadingImageObservable(key, imageCacheKey: imageCacheKey, processedImageCacheKey: processedImageCacheKey, plugins: plugins)
-            
-            if let placeholder = placeholder {
-                return sourceLoading
-                    .startWith(placeholder)
-            }
-            
-            return sourceLoading
-            
+            return self.processedImageCache.loadData(key: processedImageCacheKey)
+                .observeOnBackgroundScheduler()
+                .flatMap({ (processedImage) -> Observable<UIImage?> in
+                    if let processedImage = processedImage {
+                        return Observable.just(processedImage)
+                    } else {
+                        return self.imageCache.loadData(key: imageCacheKey)
+                            .observeOnBackgroundScheduler()
+                    }
+                })
+                .flatMap({ (sourceImage) -> Observable<UIImage> in
+                    if let sourceImage = sourceImage {
+                        return self.processAndCacheSourceImage(sourceImage: sourceImage, plugins: plugins, processedImageCacheKey: processedImageCacheKey)
+                    } else {
+                        var sourceLoading = self.sourceLoadingImageObservable(key, imageCacheKey: imageCacheKey,
+                                                                              processedImageCacheKey: processedImageCacheKey, plugins: plugins)
+                        
+                        if let placeholder = placeholder {
+                            sourceLoading = sourceLoading
+                                .startWith(placeholder)
+                        }
+                        
+                        return sourceLoading
+                    }
+                })
         })
         .subcribeOnBackgroundScheduler()
     }
     
-    private func sourceLoadingImageObservable(_ key: TKey, imageCacheKey: String, processedImageCacheKey: String, plugins: [ImagePluginType]) -> Observable<UIImage> {
+    private func sourceLoadingImageObservable(_ key: TKey, imageCacheKey: String,
+                                              processedImageCacheKey: String, plugins: [ImagePluginType]) -> Observable<UIImage> {
         return imageSource.loadImage(key)
             .observeOnBackgroundScheduler()
-            .do(onNext: { (image) in
-                _ = self.imageCache.saveDataInBackground(imageCacheKey, data: image)
+            .flatMap({ (image) -> Observable<UIImage> in
+                return self.imageCache.storeData(key: imageCacheKey, data: image)
+                    .mapToJust(image)
             })
-            .do(onNext: { (sourceImage) in
-                let processedImage = try sourceImage.performPlugins(plugins: plugins)
-                self.saveProcessedImageIfNeeded(processedImageCacheKey, processedImage: processedImage, sourceImage: sourceImage)
+            .flatMap({ (image) -> Observable<UIImage> in
+                return self.processAndCacheSourceImage(sourceImage: image, plugins: plugins, processedImageCacheKey: processedImageCacheKey)
             })
     }
     
-    private func tryLoadImageFromCache(_ imageCache: Store<String, UIImage>, cacheKey: String) -> UIImage? {
-        return Utils.safe {
-            return try imageCache.loadData(cacheKey)
-        }
-    }
-    
-    private func saveProcessedImageIfNeeded(_ processedImageCacheKey: String, processedImage: UIImage, sourceImage: UIImage) {
-        if sourceImage !== processedImage {
-            _ = processedImageCache.saveDataInBackground(processedImageCacheKey, data: processedImage)
-        }
+    private func processAndCacheSourceImage(sourceImage: UIImage, plugins: [ImagePluginType], processedImageCacheKey: String) -> Observable<UIImage> {
+        return Observable.deferred({ () -> Observable<UIImage> in
+            let processedImage = try sourceImage.performPlugins(plugins: plugins)
+            if sourceImage !== processedImage {
+                return self.processedImageCache.storeData(key: processedImageCacheKey, data: processedImage)
+                    .observeOnBackgroundScheduler()
+                    .mapToJust(processedImage)
+            } else {
+                return Observable.just(processedImage)
+            }
+        })
     }
     
     private func pluginsCachingKey(_ imageCacheKey: String, plugins: [ImagePluginType]) -> String {

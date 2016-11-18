@@ -79,18 +79,28 @@ open class AbstractPagedDataProvider<TPage: PageType>: ListDataProviderType {
     }
     
     private func createLoadingPageObservable(_ pageIndex: Int) -> Observable<PageType> {
-        if let loadedPage = loadedPagesMemoryCache.loadDataSafe(pageIndex) {
-            return Observable.just(loadedPage)
-        }
-        
-        if let loadingPage = loadingPagesObservables[pageIndex] {
-            return loadingPage
-        }
-        
+        return loadedPagesMemoryCache.loadData(key: pageIndex)
+            .observeOn(_workingScheduler)
+            .flatMap { (loadedPage) -> Observable<PageType> in
+                if let loadedPage = loadedPage {
+                    return Observable.just(loadedPage)
+                } else if let loadingPage = self.loadingPagesObservables[pageIndex] {
+                    return loadingPage
+                } else {
+                    return self.startLoadingPage(pageIndex)
+                }
+            }
+    }
+    
+    private func startLoadingPage(_ pageIndex: Int) -> Observable<PageType> {
         let newPageLoadingObservable = _createLoadingPageObservable(pageIndex * pageSize, count: pageSize)
             .observeOn(_workingScheduler)
-            .do(onNext: { [weak self] (page) in
-                self?.onPageDidLoaded(page, pageIndex: pageIndex)
+            .flatMap { (page) -> Observable<PageType> in
+                return self.loadedPagesMemoryCache.storeData(key: pageIndex, data: page)
+                    .mapToJust(page)
+            }
+            .do(onNext: { (page) in
+                self.onPageDidLoaded(page, pageIndex: pageIndex)
             })
             .shareReplay(1)
         
@@ -100,17 +110,16 @@ open class AbstractPagedDataProvider<TPage: PageType>: ListDataProviderType {
     }
     
     private func onPageDidLoaded(_ page: PageType, pageIndex: Int) {
-        loadingPagesObservables.removeValue(forKey: pageIndex)
-        loadedPagesMemoryCache.saveDataSafe(pageIndex, data: page)
+        self.loadingPagesObservables.removeValue(forKey: pageIndex)
         
-        guard validatePageIndex(pageIndex) else {
+        guard self.validatePageIndex(pageIndex) else {
             return
         }
         
         let newItems = mergePage(page, pageIndex: pageIndex)
         let isLasPageType = _isLasPageType(page)
         
-        stateSyncLock.sync {
+        self.stateSyncLock.sync {
             if isLasPageType {
                 allItemsCount = newItems.count
             }

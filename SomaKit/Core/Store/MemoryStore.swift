@@ -6,38 +6,46 @@
 //  Copyright © 2016 iON1k. All rights reserved.
 //
 
+import RxSwift
+
 open class MemoryStore<TKey: Hashable, TData>: StoreType {
     public typealias KeyType = TKey
     public typealias DataType = TData
     
     private var syncLock = SyncLock()
-    private var dictionaryStore: [TKey : TData] = [:]
+    private var dictionaryStore: [KeyType : DataType] = [:]
     
-    open func loadData(_ key: KeyType) throws -> DataType? {
+    public func loadData(key: KeyType) -> Observable<DataType?> {
+        return Observable.deferred({ () -> Observable<DataType?> in
+            return Observable.just(self.beginLoadData(key: key))
+        })
+    }
+    
+    private func beginLoadData(key: KeyType) -> DataType? {
         return syncLock.sync {
             return dictionaryStore[key]
         }
     }
     
-    open func saveData(_ key: KeyType, data: DataType?) throws {
-        return syncLock.sync {
+    public func storeData(key: TKey, data: DataType?) -> Observable<Void> {
+        return Observable.deferred({ () -> Observable<Void> in
+            return Observable.just(self.beginStoreData(key: key, data: data))
+        })
+    }
+    
+    private func beginStoreData(key: TKey, data: DataType?) {
+        syncLock.sync {
             guard let data = data else {
                 dictionaryStore.removeValue(forKey: key)
                 return
             }
             
-            return dictionaryStore[key] = data
-        }
-    }
-    
-    open func removeData(_ key: KeyType) {
-        return syncLock.sync {
-            return dictionaryStore.removeValue(forKey: key)
+            dictionaryStore[key] = data
         }
     }
     
     open func removeAllData() {
-        return syncLock.sync {
+        syncLock.sync {
             return dictionaryStore.removeAll()
         }
     }

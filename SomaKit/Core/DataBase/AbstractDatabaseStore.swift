@@ -7,6 +7,7 @@
 //
 
 import MagicalRecord
+import RxSwift
 
 open class AbstractDatabaseStore<TKey, TData, TDatabase: NSManagedObject>: StoreType {
     public typealias KeyType = TKey
@@ -15,64 +16,79 @@ open class AbstractDatabaseStore<TKey, TData, TDatabase: NSManagedObject>: Store
     public typealias SetterHandlerType = (DataType, DatabaseType) throws -> Void
     public typealias GetterHandlerType = (DatabaseType) throws -> DataType
     
-    open let keyProperty: String
+    public let keyProperty: String
+    public let dbContext: NSManagedObjectContext
     
     private let setterHandler: SetterHandlerType
     private let getterHandler: GetterHandlerType
     
-    open func loadData(_ key: KeyType) throws -> DataType? {
-        let optinalDBRecord = DatabaseType.mr_findFirst(with: try self.keyPredicate(key))
+    public func loadData(key: TKey) -> Observable<DataType?> {
+        return Observable.deferred({ () -> Observable<DataType?> in
+            return Observable.just(try self.beginLoadData(key: key))
+        })
+    }
+    
+    private func beginLoadData(key: TKey) throws -> DataType? {
+        var resultData: TData? = nil
         
-        guard let dbRecord = optinalDBRecord else {
-            return nil
+        if let dbRecord = DatabaseType.mr_findFirst(with: try keyPredicate(key)) {
+            resultData = try getterHandler(dbRecord)
         }
-        
-        let resultData = try getterHandler(dbRecord)
         
         return resultData
     }
     
-    open func saveData(_ key: KeyType, data: DataType?) throws {
-        var error: Error?
-        
-        MagicalRecord.save( { (dbLocalContext) in
-            do {
-                var dbRecord = DatabaseType.mr_findFirst(with: try self.keyPredicate(key), in: dbLocalContext)
-                
-                guard let data = data else {
-                    if let dbRecord = dbRecord {
-                        let removingResult = dbRecord.mr_deleteEntity(in: dbLocalContext)
-                        
-                        if (!removingResult) {
-                            throw SomaError("Database \(Utils.typeName(DataType.self)) entity removing failed")
-                        }
-                    }
-                    
-                    return
-                }
-                
+    public func storeData(key: TKey, data: TData?) -> Observable<Void> {
+        return Observable.create({ (observer) -> Disposable in
+            self.dbContext.perform {
+                self.beginStoreData(key: key, data: data, observer: observer)
+            }
+            
+            return Disposables.create()
+        })
+    }
+    
+    private func beginStoreData(key: TKey, data: TData?, observer: AnyObserver<Void>) {
+        do {
+            var dbRecord = DatabaseType.mr_findFirst(with: try keyPredicate(key), in: dbContext)
+            
+            if let data = data {
                 if dbRecord == nil {
-                    dbRecord = DatabaseType.mr_createEntity(in: dbLocalContext)
+                    dbRecord = DatabaseType.mr_createEntity(in: dbContext)
                 }
                 
                 guard let resultDBRecord = dbRecord else {
-                    error = SomaError("Database \(Utils.typeName(DataType.self)) entity creating failed")
-                    return
+                    throw SomaError("Database \(Utils.typeName(DataType.self)) entity creating failed")
                 }
                 
-                try self.setterHandler(data, resultDBRecord)
-                (resultDBRecord as NSManagedObject).setValue(key, forKey: self.keyProperty)
-            } catch let catchedError {
-                error = catchedError
+                try setterHandler(data, resultDBRecord)
+                (resultDBRecord as NSManagedObject).setValue(key, forKey: keyProperty)
+            } else {
+                if let dbRecord = dbRecord {
+                    let removingResult = dbRecord.mr_deleteEntity(in: dbContext)
+                    
+                    if (!removingResult) {
+                        throw SomaError("Database \(Utils.typeName(DataType.self)) entity removing failed")
+                    }
+                }
             }
-        })
-        
-        if let error = error {
-            throw error
+            
+            dbContext.mr_save(options: .parentContexts, completion: { (_, error) in
+                if let error = error {
+                    observer.onError(error)
+                } else {
+                    observer.onNext()
+                    observer.onCompleted()
+                }
+            })
+        } catch let error {
+            observer.onError(error)
         }
     }
     
-    public init(keyProperty: String, setterHandler: @escaping SetterHandlerType, getterHandler: @escaping GetterHandlerType) {
+    public init(dbContext: NSManagedObjectContext, keyProperty: String,
+                setterHandler: @escaping SetterHandlerType, getterHandler: @escaping GetterHandlerType) {
+        self.dbContext = dbContext
         self.keyProperty = keyProperty
         self.setterHandler = setterHandler
         self.getterHandler = getterHandler

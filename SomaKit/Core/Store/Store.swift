@@ -6,22 +6,24 @@
 //  Copyright © 2016 iON1k. All rights reserved.
 //
 
+import RxSwift
+
 open class Store<TKey, TData>: StoreType {
     public typealias KeyType = TKey
     public typealias DataType = TData
     
-    public typealias LoadDataHandler = (KeyType) throws -> DataType?
-    public typealias SaveDataHandler = (KeyType, DataType?) throws -> Void
+    public typealias LoadDataHandler = (KeyType) -> Observable<TData?>
+    public typealias SaveDataHandler = (KeyType, DataType?) -> Observable<Void>
     
     private let loadDataHandler: LoadDataHandler
     private let saveDataHandler: SaveDataHandler
     
-    open func loadData(_ key: KeyType) throws -> DataType? {
-        return try loadDataHandler(key)
+    public func loadData(key: TKey) -> Observable<TData?> {
+        return loadDataHandler(key)
     }
     
-    open func saveData(_ key: KeyType, data: DataType?) throws {
-        try saveDataHandler(key, data)
+    public func storeData(key: TKey, data: TData?) -> Observable<Void> {
+        return saveDataHandler(key, data)
     }
     
     public init(_ loadDataHandler: @escaping LoadDataHandler, _ saveDataHandler: @escaping SaveDataHandler) {

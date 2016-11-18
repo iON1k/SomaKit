@@ -6,7 +6,7 @@
 //  Copyright © 2016 iON1k. All rights reserved.
 //
 
-import Foundation
+import RxSwift
 
 open class UserDefaultsStore<TData: Any>: StoreType {
     public typealias KeyType = String
@@ -14,22 +14,33 @@ open class UserDefaultsStore<TData: Any>: StoreType {
     
     private let userDefaults: UserDefaults
     
-    open func loadData(_ key: KeyType) throws -> DataType? {
-        let stringKey = key
-        let optionalSomeObject = userDefaults.object(forKey: stringKey)
+    public func loadData(key: KeyType) -> Observable<DataType?> {
+        return Observable.deferred({ () -> Observable<DataType?> in
+            return Observable.just(try self.beginLoadData(key: key))
+        })
+    }
+    
+    private func beginLoadData(key: KeyType) throws -> DataType? {
+        let optionalSomeObject = userDefaults.object(forKey: key)
         
         guard let someObject = optionalSomeObject else {
             return nil
         }
         
         guard let resultData = someObject as? DataType else {
-            throw SomaError("User defaults has no valid data \(type(of: (someObject))) for key \(stringKey)")
+            throw SomaError("User defaults has no valid data \(type(of: (someObject))) for key \(key)")
         }
         
         return resultData
     }
     
-    open func saveData(_ key: KeyType, data: DataType?) throws {
+    public func storeData(key: String, data: TData?) -> Observable<Void> {
+        return Observable.deferred({ () -> Observable<Void> in
+            return Observable.just(try self.beginStoreData(key: key, data: data))
+        })
+    }
+    
+    private func beginStoreData(key: String, data: TData?) throws {
         guard let data = data else {
             userDefaults.removeObject(forKey: key)
             return

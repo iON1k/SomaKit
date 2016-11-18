@@ -6,42 +6,20 @@
 //  Copyright © 2016 iON1k. All rights reserved.
 //
 
+import RxSwift
+
 public protocol StoreType {
     associatedtype KeyType
     associatedtype DataType
     
-    func loadData(_ key: KeyType) throws -> DataType?
-    func saveData(_ key: KeyType, data: DataType?) throws
+    func loadData(key: KeyType) -> Observable<DataType?>
+    func storeData(key: KeyType, data: DataType?) -> Observable<Void>
     
     func asStore() -> Store<KeyType, DataType>
 }
 
 extension StoreType {
     public func asStore() -> Store<KeyType, DataType> {
-        return Store(loadData, saveData)
-    }
-}
-
-extension StoreType {
-    public func loadDataSafe(_ key: KeyType) -> DataType? {
-        return Utils.safe {
-            return try self.loadData(key)
-        }
-    }
-    
-    public func saveDataSafe(_ key: KeyType, data: DataType?) {
-        Utils.safe {
-            try self.saveData(key, data: data)
-        }
-    }
-    
-    public func removeData(_ key: KeyType) throws {
-        try saveData(key, data: nil)
-    }
-    
-    public func removeDataSafe(_ key: KeyType) throws {
-        Utils.safe {
-            try self.saveData(key, data: nil)
-        }
+        return Store(loadData, storeData)
     }
 }

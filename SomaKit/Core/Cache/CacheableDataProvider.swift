@@ -68,14 +68,16 @@ open class CacheableDataProvider<TKey, TData>: DataProviderType {
     }
     
     private func loadDataFromCacheObservable() -> Observable<DataType> {
-        return cacheStore.loadDataInBackground(self.cacheKey)
+        return cacheStore.loadData(key: self.cacheKey)
+            .subcribeOnBackgroundScheduler()
             .ignoreNil()
             .logError()
             .catchErrorNoReturn()
     }
     
     private func saveDataToCacheObservable(_ data: DataType) -> Observable<DataType> {
-        return cacheStore.saveDataInBackground(cacheKey, data: data)
+        return cacheStore.storeData(key: cacheKey, data: data)
+            .subcribeOnBackgroundScheduler()
             .catchErrorNoReturn()
             .map({ () -> DataType in
                 return data
