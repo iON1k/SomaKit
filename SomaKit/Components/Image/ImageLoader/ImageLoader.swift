@@ -8,25 +8,23 @@
 
 import RxSwift
 
-open class ImageLoader<TKey: CustomStringConvertible> {
+public class ImageLoader<TKey: CustomStringConvertible> {
     private let imageSource: ImageSource<TKey>
     
     private let imageCache: Store<String, UIImage>
     private let processedImageCache: Store<String, UIImage>
     
-    open func loadImage(_ key: TKey, placeholder: UIImage? = nil, plugins: [ImagePluginType] = []) -> Observable<UIImage> {
+    public func loadImage(_ key: TKey, placeholder: UIImage? = nil, plugins: [ImagePluginType] = []) -> Observable<UIImage> {
         return Observable.deferred({ () -> Observable<UIImage> in
             let imageCacheKey = key.description
             let processedImageCacheKey = self.pluginsCachingKey(imageCacheKey, plugins: plugins)
             
             return self.processedImageCache.loadData(key: processedImageCacheKey)
-                .observeOnBackgroundScheduler()
                 .flatMap({ (processedImage) -> Observable<UIImage?> in
                     if let processedImage = processedImage {
                         return Observable.just(processedImage)
                     } else {
                         return self.imageCache.loadData(key: imageCacheKey)
-                            .observeOnBackgroundScheduler()
                     }
                 })
                 .flatMap({ (sourceImage) -> Observable<UIImage> in
@@ -51,7 +49,6 @@ open class ImageLoader<TKey: CustomStringConvertible> {
     private func sourceLoadingImageObservable(_ key: TKey, imageCacheKey: String,
                                               processedImageCacheKey: String, plugins: [ImagePluginType]) -> Observable<UIImage> {
         return imageSource.loadImage(key)
-            .observeOnBackgroundScheduler()
             .flatMap({ (image) -> Observable<UIImage> in
                 return self.imageCache.storeData(key: imageCacheKey, data: image)
                     .mapToJust(image)
@@ -62,16 +59,16 @@ open class ImageLoader<TKey: CustomStringConvertible> {
     }
     
     private func processAndCacheSourceImage(sourceImage: UIImage, plugins: [ImagePluginType], processedImageCacheKey: String) -> Observable<UIImage> {
-        return Observable.deferred({ () -> Observable<UIImage> in
-            let processedImage = try sourceImage.performPlugins(plugins: plugins)
-            if sourceImage !== processedImage {
-                return self.processedImageCache.storeData(key: processedImageCacheKey, data: processedImage)
-                    .observeOnBackgroundScheduler()
-                    .mapToJust(processedImage)
-            } else {
-                return Observable.just(processedImage)
-            }
-        })
+        return sourceImage.performPlugins(plugins: plugins)
+            .flatMap({ (processedImage) -> Observable<UIImage> in
+                if sourceImage !== processedImage {
+                    return self.processedImageCache.storeData(key: processedImageCacheKey, data: processedImage)
+                        .mapToJust(processedImage)
+                } else {
+                    return Observable.just(processedImage)
+                }
+            })
+            .subcribeOnBackgroundScheduler()
     }
     
     private func pluginsCachingKey(_ imageCacheKey: String, plugins: [ImagePluginType]) -> String {

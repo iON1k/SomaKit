@@ -17,7 +17,7 @@ public enum CacheableDataProviderBehavior {
     static let `default` = dataAfterCache
 }
 
-open class CacheableDataProvider<TKey, TData>: DataProviderType {
+public class CacheableDataProvider<TKey, TData>: DataProviderType {
     public typealias DataType = TData
     
     private let behavior: CacheableDataProviderBehavior
@@ -25,7 +25,7 @@ open class CacheableDataProvider<TKey, TData>: DataProviderType {
     private let cacheStore: Store<TKey, DataType>
     private let cacheKey: TKey
     
-    open func data() -> Observable<DataType> {
+    public func data() -> Observable<DataType> {
         return Observable.deferred({ () -> Observable<DataType> in
             switch self.behavior {
             case .dataOnly:
@@ -62,9 +62,7 @@ open class CacheableDataProvider<TKey, TData>: DataProviderType {
     
     private func sourceDataProviderObservable() -> Observable<DataType> {
         return dataSource
-            .flatMap({ (data) -> Observable<DataType> in
-                return self.saveDataToCacheObservable(data)
-            })
+            .flatMap(self.saveDataToCacheObservable)
     }
     
     private func loadDataFromCacheObservable() -> Observable<DataType> {

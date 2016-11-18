@@ -6,11 +6,11 @@
 //  Copyright © 2016 iON1k. All rights reserved.
 //
 
-open class ViewsProvider<TContext> {
+public class ViewsProvider<TContext> {
     public typealias ViewGenerator = (ViewModelType, TContext) -> UIView
     public typealias ViewData = (viewType: UIView.Type, viewGenerator: ViewGenerator)
     
-    open let context: TContext
+    public let context: TContext
     
     private var registeredViewsData = [String : ViewData]()
     private let syncLock = SyncLock()
@@ -34,11 +34,11 @@ open class ViewsProvider<TContext> {
         }
     }
     
-    open func viewForViewModel(_ viewModel: ViewModelType) -> UIView {
+    public func viewForViewModel(_ viewModel: ViewModelType) -> UIView {
         return viewDataForViewModel(viewModel).viewGenerator(viewModel, context)
     }
     
-    open func viewTypeForViewModel(_ viewModel: ViewModelType) -> UIView.Type {
+    public func viewTypeForViewModel(_ viewModel: ViewModelType) -> UIView.Type {
         return viewDataForViewModel(viewModel).viewType
     }
     

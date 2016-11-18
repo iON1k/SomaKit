@@ -7,6 +7,7 @@
 //
 
 import AlamofireImage
+import RxSwift
 
 public enum ImageRoundingMode {
     case cicrular
@@ -22,14 +23,20 @@ public enum ImageRoundingMode {
     }
 }
 
-open class ImageRounding: ImagePluginType {
+public class ImageRounding: ImagePluginType {
     private let mode: ImageRoundingMode
     
-    open var imagePluginKey: String {
+    public var imagePluginKey: String {
         return mode.imagePluginKey
     }
     
-    open func transform(image: UIImage) throws -> UIImage {
+    public func perform(image: UIImage) -> Observable<UIImage> {
+        return Observable.deferred({ () -> Observable<UIImage> in
+            return Observable.just(self.beginPerform(image: image))
+        })
+    }
+    
+    private func beginPerform(image: UIImage) -> UIImage {
         switch mode {
         case .cicrular:
             return image.af_imageRoundedIntoCircle()

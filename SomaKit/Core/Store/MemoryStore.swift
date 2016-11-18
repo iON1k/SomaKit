@@ -8,7 +8,7 @@
 
 import RxSwift
 
-open class MemoryStore<TKey: Hashable, TData>: StoreType {
+public class MemoryStore<TKey: Hashable, TData>: StoreType {
     public typealias KeyType = TKey
     public typealias DataType = TData
     
@@ -44,7 +44,7 @@ open class MemoryStore<TKey: Hashable, TData>: StoreType {
         }
     }
     
-    open func removeAllData() {
+    public func removeAllData() {
         syncLock.sync {
             return dictionaryStore.removeAll()
         }

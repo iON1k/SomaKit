@@ -8,10 +8,10 @@
 
 import RxSwift
 
-open class FileImageSource: ImageSourceType {
+public class FileImageSource: ImageSourceType {
     public typealias KeyType = String
     
-    open func loadImage(_ key: KeyType) -> Observable<UIImage> {
+    public func loadImage(_ key: KeyType) -> Observable<UIImage> {
         return Observable.deferred({ () -> Observable<UIImage> in
             guard let imageURL = URL(string: key) else {
                 throw SomaError("Image data loading failed with path \(key)")

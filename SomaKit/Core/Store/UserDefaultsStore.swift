@@ -8,7 +8,7 @@
 
 import RxSwift
 
-open class UserDefaultsStore<TData: Any>: StoreType {
+public class UserDefaultsStore<TData: Any>: StoreType {
     public typealias KeyType = String
     public typealias DataType = TData
     

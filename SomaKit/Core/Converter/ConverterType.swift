@@ -26,7 +26,7 @@ extension ConverterType {
     }
 }
 
-open class Converter<TValue1, TValue2>: ConverterType {
+public class Converter<TValue1, TValue2>: ConverterType {
     public typealias Type1 = TValue1
     public typealias Type2 = TValue2
     
@@ -36,11 +36,11 @@ open class Converter<TValue1, TValue2>: ConverterType {
     private let converterHandler1: ConverterHandler1Type
     private let converterHandler2: ConverterHandler2Type
     
-    open func convertValue(_ value: Type1) throws -> Type2 {
+    public func convertValue(_ value: Type1) throws -> Type2 {
         return try converterHandler1(value)
     }
     
-    open func convertValue(_ value: Type2) throws -> Type1 {
+    public func convertValue(_ value: Type2) throws -> Type1 {
         return try converterHandler2(value)
     }
     

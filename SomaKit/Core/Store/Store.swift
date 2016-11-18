@@ -8,7 +8,7 @@
 
 import RxSwift
 
-open class Store<TKey, TData>: StoreType {
+public class Store<TKey, TData>: StoreType {
     public typealias KeyType = TKey
     public typealias DataType = TData
     

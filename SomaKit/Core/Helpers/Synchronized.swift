@@ -28,20 +28,20 @@ public func synchronized<T>(lockObj: Any, block: () throws -> T) rethrows -> T {
     return result
 }
 
-open class SyncLock {
-    open func lock() {
+public class SyncLock {
+    public func lock() {
         beginSyncLock(self)
     }
     
-    open func unlock() {
+    public func unlock() {
         endSyncLock(self)
     }
     
-    open func sync(block: () throws -> Void) rethrows {
+    public func sync(block: () throws -> Void) rethrows {
         try synchronized(lockObj: self, block: block)
     }
     
-    open func sync<T>(block: () throws -> T) rethrows -> T {
+    public func sync<T>(block: () throws -> T) rethrows -> T {
         return try synchronized(lockObj: self, block: block)
     }
 }

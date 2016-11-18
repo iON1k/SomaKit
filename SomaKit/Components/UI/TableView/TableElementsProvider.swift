@@ -6,7 +6,7 @@
 //  Copyright © 2016 iON1k. All rights reserved.
 //
 
-open class TableElementsProvider: ViewsProvider<UITableView> {
+public class TableElementsProvider: ViewsProvider<UITableView> {
     public init(tableView: UITableView) {
         super.init(context: tableView)
     }

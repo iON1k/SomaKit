@@ -8,15 +8,15 @@
 
 import ObjectMapper
 
-open class UnsafeJsonMappingConverter<TValue>: ConverterType {
+public class UnsafeJsonMappingConverter<TValue>: ConverterType {
     public typealias Type1 = TValue
     public typealias Type2 = String
     
-    open func convertValue(_ value: Type1) throws -> Type2 {
+    public func convertValue(_ value: Type1) throws -> Type2 {
         return try castToJsonStringConvertibleType(Type1.self)._convertToJson(value)
     }
     
-    open func convertValue(_ value: Type2) throws -> Type1 {
+    public func convertValue(_ value: Type2) throws -> Type1 {
         let resultObject = try castToJsonStringConvertibleType(Type1.self)._convertToObject(value)
         
         guard let result = resultObject as? Type1 else {

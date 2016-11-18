@@ -8,7 +8,7 @@
 
 import CoreData
 
-open class DatabaseCacheStore<TData, TDatabase: CacheManagedObject>: AbstractDatabaseStore<String, CacheValue<TData>, TDatabase> {
+public class DatabaseCacheStore<TData, TDatabase: CacheManagedObject>: AbstractDatabaseStore<String, CacheValue<TData>, TDatabase> {
     public typealias GetterCacheHandlerType = (TDatabase) throws -> TData
     
     public init(dbContext: NSManagedObjectContext, setterHandler: @escaping SetterHandlerType, getterHandler: @escaping GetterCacheHandlerType) {

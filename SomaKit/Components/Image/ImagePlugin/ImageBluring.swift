@@ -6,7 +6,7 @@
 //  Copyright © 2016 iON1k. All rights reserved.
 //
 
-open class ImageBluring: ImageFiltering {
+public class ImageBluring: ImageFiltering {
     public init(radius: CGFloat) {
         super.init(name: "CIGaussianBlur", params: ["inputRadius": radius])
     }

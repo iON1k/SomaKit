@@ -33,9 +33,9 @@ open class AbstractApiRequest<TResponse, TManager: RequestManagerType>: RequestT
     public typealias ResponseType = TResponse
     public typealias ManagerType = TManager
     
-    open let _manager: ManagerType
+    public let _manager: ManagerType
     
-    open func response() -> Observable<ResponseType> {
+    public func response() -> Observable<ResponseType> {
         return self.execute()
             .do(onNext: { (response) in
                 self._manager.requestGetResponse(self, response: response)

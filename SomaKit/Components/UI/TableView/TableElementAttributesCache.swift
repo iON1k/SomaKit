@@ -14,13 +14,13 @@ public protocol TableElementAttributesCacheSource: class {
     func cellAttributes(_ tableElementAttributesCache: TableElementAttributesCache, indexPath: IndexPath) -> TableElementAttributesType
 }
 
-open class TableElementAttributesCache {
+public class TableElementAttributesCache {
     private typealias SectionsAttributesByIndexType = [Int : MutableTableSectionElementsAttributes]
     open weak var source: TableElementAttributesCacheSource?
     
     private var _sectionAttributesByIndex = SectionsAttributesByIndexType()
     
-    open func cellAttributes(_ indexPath: IndexPath) -> TableElementAttributesType {
+    public func cellAttributes(_ indexPath: IndexPath) -> TableElementAttributesType {
         Debug.ensureIsMainThread()
         
         let sectionAttributes = sectionAttributesByIndex((indexPath as NSIndexPath).section)
@@ -31,7 +31,7 @@ open class TableElementAttributesCache {
         return _reloadCellAttributes(indexPath)
     }
     
-    open func sectionHeaderAttributes(_ sectionIndex: Int) -> TableElementAttributesType {
+    public func sectionHeaderAttributes(_ sectionIndex: Int) -> TableElementAttributesType {
         Debug.ensureIsMainThread()
         
         let sectionAttributes = sectionAttributesByIndex(sectionIndex)
@@ -42,7 +42,7 @@ open class TableElementAttributesCache {
         return _reloadSectionHeaderAttributes(sectionIndex)
     }
     
-    open func sectionFooterAttributes(_ sectionIndex: Int) -> TableElementAttributesType {
+    public func sectionFooterAttributes(_ sectionIndex: Int) -> TableElementAttributesType {
         Debug.ensureIsMainThread()
         
         let sectionAttributes = sectionAttributesByIndex(sectionIndex)
@@ -53,13 +53,13 @@ open class TableElementAttributesCache {
         return _reloadSectionFooterAttributes(sectionIndex)
     }
     
-    open func sectionAttributes(_ sectionIndex: Int) -> TableSectionElementsAttributes {
+    public func sectionAttributes(_ sectionIndex: Int) -> TableSectionElementsAttributes {
         Debug.ensureIsMainThread()
         
         return sectionAttributesByIndex(sectionIndex).copy()
     }
     
-    open func resetCacheWithPreloadedData(_ preloadedData: [TableSectionElementsAttributes]) {
+    public func resetCacheWithPreloadedData(_ preloadedData: [TableSectionElementsAttributes]) {
         invalidateCache()
         
         for (index, sectionData) in preloadedData.enumerated() {
@@ -67,52 +67,52 @@ open class TableElementAttributesCache {
         }
     }
     
-    open func invalidateCache() {
+    public func invalidateCache() {
         Debug.ensureIsMainThread()
         
         _sectionAttributesByIndex.removeAll()
     }
     
-    open func invalidateSectionCache(_ sectionIndex: Int) {
+    public func invalidateSectionCache(_ sectionIndex: Int) {
         Debug.ensureIsMainThread()
         
         _sectionAttributesByIndex.removeValue(forKey: sectionIndex)
     }
     
-    open func invalidateCellCache(_ indexPath: IndexPath) {
+    public func invalidateCellCache(_ indexPath: IndexPath) {
         Debug.ensureIsMainThread()
         
         var sectionAttributes = sectionAttributesByIndex((indexPath as NSIndexPath).section)
         sectionAttributes.cellsAttributes.removeValue(forKey: (indexPath as NSIndexPath).row)
     }
     
-    open func invalidateSectionHeaderCache(_ sectionIndex: Int) {
+    public func invalidateSectionHeaderCache(_ sectionIndex: Int) {
         Debug.ensureIsMainThread()
         
         var sectionAttributes = sectionAttributesByIndex(sectionIndex)
         sectionAttributes.headerAttributes = nil
     }
     
-    open func invalidateSectionFooterCache(_ sectionIndex: Int) {
+    public func invalidateSectionFooterCache(_ sectionIndex: Int) {
         Debug.ensureIsMainThread()
         
         var sectionAttributes = sectionAttributesByIndex(sectionIndex)
         sectionAttributes.footerAttributes = nil
     }
     
-    open func reloadCellAttributes(_ indexPath: IndexPath) {
+    public func reloadCellAttributes(_ indexPath: IndexPath) {
         Debug.ensureIsMainThread()
         
         _ = _reloadCellAttributes(indexPath)
     }
     
-    open func reloadSectionHeaderAttributes(_ sectionIndex: Int) {
+    public func reloadSectionHeaderAttributes(_ sectionIndex: Int) {
         Debug.ensureIsMainThread()
         
         _ = _reloadSectionHeaderAttributes(sectionIndex)
     }
     
-    open func reloadSectionFooterAttributes(_ sectionIndex: Int) {
+    public func reloadSectionFooterAttributes(_ sectionIndex: Int) {
         Debug.ensureIsMainThread()
         
         _ = _reloadSectionFooterAttributes(sectionIndex)

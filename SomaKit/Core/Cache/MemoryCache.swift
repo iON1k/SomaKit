@@ -6,7 +6,7 @@
 //  Copyright © 2016 iON1k. All rights reserved.
 //
 
-open class MemoryCache<TKey: Hashable, TData>: CacheBase<TKey, TData> {
+public class MemoryCache<TKey: Hashable, TData>: CacheBase<TKey, TData> {
     private let memoryStore = MemoryStore<TKey, CacheDataType>()
     private let clearOnMemoryWarning: Bool
     

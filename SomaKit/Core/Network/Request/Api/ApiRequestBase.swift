@@ -43,7 +43,7 @@ open class ApiRequestBase<TResponse, TManager: ApiRequestManagerType>: AbstractA
         return nil
     }
     
-    open var stringCachingKey: String {
+    public var stringCachingKey: String {
         var resultString = ""
         
         resultString += methodType.rawValue

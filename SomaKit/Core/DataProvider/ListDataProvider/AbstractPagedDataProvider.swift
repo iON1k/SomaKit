@@ -34,23 +34,23 @@ open class AbstractPagedDataProvider<TPage: PageType>: ListDataProviderType {
         loadedPagesMemoryCache = memoryCache
     }
     
-    open var items: [ItemType?] {
+    public var items: [ItemType?] {
         return stateSyncLock.sync {
             return itemsValue
         }
     }
     
-    open func data() -> Observable<[ItemType?]> {
+    public func data() -> Observable<[ItemType?]> {
         return itemsValueSubject
     }
     
-    open var isAllItemsLoaded: Bool {
+    public var isAllItemsLoaded: Bool {
         return stateSyncLock.sync {
             return allItemsCount != nil
         }
     }
     
-    open func loadItem(_ index: Int) -> Observable<ItemType?> {
+    public func loadItem(_ index: Int) -> Observable<ItemType?> {
         return Observable.deferred { () -> Observable<ItemType?> in
             if self.validateItemIndex(index) {
                 return self.unsafeLoadItem(index)
@@ -61,7 +61,7 @@ open class AbstractPagedDataProvider<TPage: PageType>: ListDataProviderType {
         .subscribeOn(_workingScheduler)
     }
     
-    open func unsafeLoadItem(_ index: Int) -> Observable<ItemType?> {
+    public func unsafeLoadItem(_ index: Int) -> Observable<ItemType?> {
         return Observable.deferred({ () -> Observable<PageType> in
             let pageIndex = self.pageForIndex(index)
             return self.createLoadingPageObservable(pageIndex)

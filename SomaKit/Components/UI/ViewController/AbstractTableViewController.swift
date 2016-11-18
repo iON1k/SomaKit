@@ -11,7 +11,7 @@ import RxSwift
 public typealias TableBehaviorModuleViewModel = ModuleViewModel & TableViewBehaviorProvider
 
 open class AbstractTableViewController<TViewModel: TableBehaviorModuleViewModel>: ModuleViewController<TViewModel> {
-    open var _tableManager: TableViewManager!
+    public var _tableManager: TableViewManager!
     private var refreshControl: UIRefreshControl!
     
     open var _tableView: UITableView {

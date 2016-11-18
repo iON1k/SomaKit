@@ -10,12 +10,12 @@ import RxSwift
 import Alamofire
 import AlamofireImage
 
-open class NetworkImageSource: ImageSourceType {
+public class NetworkImageSource: ImageSourceType {
     public typealias KeyType = URL
     
     private let sessionManager: SessionManager
     
-    open func loadImage(_ key: KeyType) -> Observable<UIImage> {
+    public func loadImage(_ key: KeyType) -> Observable<UIImage> {
         return Observable.create({ (observer) -> Disposable in
             let request = self.sessionManager.request(key)
                 .responseImage(completionHandler: { (response) in

@@ -8,12 +8,12 @@
 
 import RxSwift
 
-open class BundleImageSource: ImageSourceType {
+public class BundleImageSource: ImageSourceType {
     public typealias KeyType = String
     
     private let bundle: Bundle
     
-    open func loadImage(_ key: KeyType) -> Observable<UIImage> {
+    public func loadImage(_ key: KeyType) -> Observable<UIImage> {
         return Observable.deferred({ () -> Observable<UIImage> in
             let bundle = self.bundle
             let image = UIImage(named: key, in: bundle, compatibleWith: nil)

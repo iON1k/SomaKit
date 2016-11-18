@@ -8,8 +8,8 @@
 
 import Foundation
 
-open class NativeLogProcessor: LogProcessor {
-    open func log(_ message: String, args: Any...) {
+public class NativeLogProcessor: LogProcessor {
+    public func log(_ message: String, args: Any...) {
         print(message, args)
     }
 }

@@ -15,7 +15,7 @@ public protocol PageType {
 open class Page<TItem>: PageType {
     public typealias ItemType = TItem
     
-    open let items: [ItemType]
+    public let items: [ItemType]
     
     public init(items: [ItemType]) {
         self.items = items
