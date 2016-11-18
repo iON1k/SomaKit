@@ -24,7 +24,7 @@ open class ModuleViewController<TViewModel: ModuleViewModel>: SomaViewController
         super.init(context: context)
     }
     
-    open func bindViewModel(_ viewModel: ViewModel?) {
+    public func bindViewModel(_ viewModel: ViewModel?) {
         let prevViewModel = self.viewModel
         guard prevViewModel != nil || viewModel != nil else {
             return
@@ -88,11 +88,11 @@ open class ModuleViewController<TViewModel: ModuleViewModel>: SomaViewController
         //Nothing
     }
     
-    open func whileBinded<T>(_ observable: Observable<T>) -> Observable<T> {
+    public func whileBinded<T>(_ observable: Observable<T>) -> Observable<T> {
         return uiBindable.whileBinded(observable)
     }
     
-    open func whileActive<T>(_ observable: Observable<T>) -> Observable<T> {
+    public func whileActive<T>(_ observable: Observable<T>) -> Observable<T> {
         return uiBindable.whileActive(observable)
     }
 }

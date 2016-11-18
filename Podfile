@@ -9,11 +9,19 @@ post_install do |installer|
     end
 end
 
-target 'SomaKit' do
+def shared_pods
     pod 'RxSwift', '3.0.0'
     pod 'RxCocoa', '3.0.0'
     pod 'RxAlamofire', '3.0.0'
     pod 'ObjectMapper', '~> 2.1'
     pod 'MagicalRecord', '~> 2.3'
     pod 'AlamofireImage', '~> 3.1'
+end
+
+target 'SomaKit' do
+    shared_pods
+end
+
+target 'SomaKitExample' do
+    shared_pods
 end

@@ -8,7 +8,7 @@
 
 import Foundation
 
-open class StoryboardFactory<ViewControllerType: RawRepresentable> where ViewControllerType.RawValue == String {
+public class StoryboardFactory<ViewControllerType: RawRepresentable> where ViewControllerType.RawValue == String {
     private let storyboard: UIStoryboard
     
     public init(storyboard: UIStoryboard) {

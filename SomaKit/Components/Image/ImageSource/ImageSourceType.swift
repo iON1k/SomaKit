@@ -22,13 +22,13 @@ extension ImageSourceType {
     }
 }
 
-open class ImageSource<TKey>: ImageSourceType {
+public class ImageSource<TKey>: ImageSourceType {
     public typealias KeyType = TKey
     public typealias ImageLoadingHandler = (KeyType) -> Observable<UIImage>
     
     private let sourceLoadImageHandler: ImageLoadingHandler
     
-    open func loadImage(_ key: KeyType) -> Observable<UIImage> {
+    public func loadImage(_ key: KeyType) -> Observable<UIImage> {
         return sourceLoadImageHandler(key)
     }
     

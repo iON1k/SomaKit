@@ -8,9 +8,9 @@
 
 public typealias CacheTimeType = Double
 
-open class CacheValue<TData> {
-    open let data: TData
-    open let creationTime: CacheTimeType
+public class CacheValue<TData> {
+    public let data: TData
+    public let creationTime: CacheTimeType
     
     public init(data: TData, creationTime: CacheTimeType) {
         self.data = data

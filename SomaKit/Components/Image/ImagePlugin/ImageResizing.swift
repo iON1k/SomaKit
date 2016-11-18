@@ -7,6 +7,7 @@
 //
 
 import AlamofireImage
+import RxSwift
 
 public enum ImageResizingMode: String {
     case Scale
@@ -14,15 +15,21 @@ public enum ImageResizingMode: String {
     case AspectFill
 }
 
-open class ImageResizing: ImagePluginType {
+public class ImageResizing: ImagePluginType {
     private let mode: ImageResizingMode
     private let size: CGSize
     
-    open var imagePluginKey: String {
+    public var imagePluginKey: String {
         return mode.rawValue + String(describing: size.width) + String(describing: size.height)
     }
     
-    open func transform(image: UIImage) throws -> UIImage {
+    public func perform(image: UIImage) -> Observable<UIImage> {
+        return Observable.deferred({ () -> Observable<UIImage> in
+            return Observable.just(self.beginPerform(image: image))
+        })
+    }
+    
+    private func beginPerform(image: UIImage) -> UIImage {
         switch mode {
         case .Scale:
             return image.af_imageScaled(to: size)

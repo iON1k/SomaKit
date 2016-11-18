@@ -8,7 +8,7 @@
 
 import RxSwift
 
-open class SomaUIBindable: UiBindableType {
+public class SomaUIBindable: UiBindableType {
     private let isBindedSubject: BehaviorSubject<Bool>
     private let isActiveSubject: BehaviorSubject<Bool>
     
@@ -20,7 +20,7 @@ open class SomaUIBindable: UiBindableType {
         self.scheduler = scheduler
     }
     
-    open func whileBinded<T>(_ observable: Observable<T>) -> Observable<T> {
+    public func whileBinded<T>(_ observable: Observable<T>) -> Observable<T> {
         return isBindedSubject
             .flatMapLatest({ (isBinded) -> Observable<T> in
                 return isBinded ? self.applyScheduler(observable) : Observable.never()
@@ -28,7 +28,7 @@ open class SomaUIBindable: UiBindableType {
             .takeUntil(isBindedSubject.filter(SomaFunc.negativePredicate))
     }
     
-    open func whileActive<T>(_ observable: Observable<T>) -> Observable<T> {
+    public func whileActive<T>(_ observable: Observable<T>) -> Observable<T> {
         return isActiveSubject
             .flatMapLatest({ (isActive) -> Observable<T> in
                 return isActive ? observable : Observable.never()

@@ -6,6 +6,8 @@
 //  Copyright © 2016 iON1k. All rights reserved.
 //
 
+import RxSwift
+
 public enum CacheLifeTimeBehavior {
     public typealias TimeGenerator = (Void) -> CacheTimeType
     
@@ -24,30 +26,36 @@ open class CacheBase<TKey, TData>: StoreType {
     private let sourceStore: Store<TKey, CacheDataType>
     private let lifeTimeBehavior: CacheLifeTimeBehavior
     
-    open func loadData(_ key: KeyType) throws -> DataType? {
-        if case .never = lifeTimeBehavior {
-            return nil
-        }
-        
-        guard let cacheData = try sourceStore.loadData(key) else {
-            return nil
-        }
-        
-        return isActualCache(cacheData) ? cacheData.data : nil
+    public func loadData(key: TKey) -> Observable<DataType?> {
+        return Observable.deferred({ () -> Observable<DataType?> in
+            if case .never = self.lifeTimeBehavior {
+                return Observable.just(nil)
+            } else {
+                return self.sourceStore.loadData(key: key)
+                    .map({ (cacheValue) -> DataType? in
+                        if let cacheData = cacheValue {
+                            return self.isActualCache(cacheData) ? cacheData.data : nil
+                        } else {
+                            return nil
+                        }
+                    })
+            }
+        })
     }
     
-    open func saveData(_ key: KeyType, data: DataType?) throws {
-        if case .never = lifeTimeBehavior {
-            return
-        }
-        
-        guard let data = data else {
-            try sourceStore.saveData(key, data: nil)
-            return
-        }
-        
-        let cacheValue = CacheValue(data: data, creationTime:currentTime())
-        try sourceStore.saveData(key, data: cacheValue)
+    public func storeData(key: TKey, data: TData?) -> Observable<Void> {
+        return Observable.deferred({ () -> Observable<Void> in
+            if case .never = self.lifeTimeBehavior {
+                return Observable.just()
+            }
+            
+            guard let data = data else {
+                return self.sourceStore.storeData(key: key, data: nil)
+            }
+            
+            let cacheValue = CacheValue(data: data, creationTime:self.currentTime())
+            return self.sourceStore.storeData(key: key, data: cacheValue)
+        })
     }
     
     public init<TStore: StoreType>(sourceStore: TStore, lifeTimeBehavior: CacheLifeTimeBehavior = .default) where TStore.KeyType == KeyType, TStore.DataType == CacheDataType {

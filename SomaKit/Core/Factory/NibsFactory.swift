@@ -8,7 +8,7 @@
 
 import Foundation
 
-open class NibsFactory<NibType: RawRepresentable> where NibType.RawValue == String {
+public class NibsFactory<NibType: RawRepresentable> where NibType.RawValue == String {
     private let nibBundle: Bundle?
     
     public init(nibBundle: Bundle? = nil) {

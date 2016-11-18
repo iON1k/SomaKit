@@ -6,33 +6,25 @@
 //  Copyright © 2016 iON1k. All rights reserved.
 //
 
+import RxSwift
+
 public protocol ImagePluginType {
-    func transform(image: UIImage) throws -> UIImage
+    func perform(image: UIImage) -> Observable<UIImage>
     var imagePluginKey: String { get }
 }
 
 extension UIImage {
-    public func performPlugins(plugins: [ImagePluginType]) throws -> UIImage {
-        var processedImage = self
+    public func performPlugins(plugins: [ImagePluginType]) -> Observable<UIImage> {
+        var observable = Observable.just(self)
         
         for plugin in plugins {
-            processedImage = try plugin.transform(image: processedImage)
+            observable = observable.flatMap(plugin.perform)
         }
         
-        return processedImage
+        return observable
     }
     
-    public func performPlugins(plugins: ImagePluginType ...) throws -> UIImage {
-        return try performPlugins(plugins: plugins)
-    }
-    
-    public func performPluginsSafe(plugins: [ImagePluginType]) -> UIImage? {
-        return Utils.safe {
-            return try self.performPlugins(plugins: plugins)
-        }
-    }
-    
-    public func performPluginsSafe(plugins: ImagePluginType ...) -> UIImage? {
-        return performPluginsSafe(plugins: plugins)
+    public func performPlugins(plugins: ImagePluginType ...) -> Observable<UIImage> {
+        return performPlugins(plugins: plugins)
     }
 }

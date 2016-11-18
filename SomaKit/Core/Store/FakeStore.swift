@@ -6,18 +6,20 @@
 //  Copyright © 2016 iON1k. All rights reserved.
 //
 
-open class FakeStore<TKey, TData>: StoreType {
+import RxSwift
+
+public class FakeStore<TKey, TData>: StoreType {
     public typealias KeyType = TKey
     public typealias DataType = TData
     
     private let defaultValue: DataType?
     
-    open func loadData(_ key: KeyType) throws -> DataType? {
-        return defaultValue
+    public func loadData(key: TKey) -> Observable<TData?> {
+        return Observable.just(defaultValue)
     }
     
-    open func saveData(_ key: KeyType, data: DataType?) throws {
-        //Nothing
+    public func storeData(key: TKey, data: TData?) -> Observable<Void> {
+        return Observable.just()
     }
     
     public init(defaultValue: DataType? = nil) {

@@ -7,14 +7,15 @@
 //
 
 import AlamofireImage
+import RxSwift
 
-open class ImageFiltering: ImagePluginType {
+public class ImageFiltering: ImagePluginType {
     public typealias FitlerParamsType = [String : Any]
 
     private let filterName: String
     private let filterParams: FitlerParamsType?
     
-    open var imagePluginKey: String {
+    public var imagePluginKey: String {
         var resultKey = filterName
         if let filterParams = filterParams {
             resultKey += filterParams.description
@@ -23,12 +24,14 @@ open class ImageFiltering: ImagePluginType {
         return resultKey
     }
     
-    open func transform(image: UIImage) throws -> UIImage {
-        guard let reusltImage = image.af_imageFiltered(withCoreImageFilter: filterName, parameters: filterParams) else {
-            throw SomaError("ImageFilterPlugin failed with filter named \(filterName)")
-        }
-        
-        return reusltImage
+    public func perform(image: UIImage) -> Observable<UIImage> {
+        return Observable.deferred({ () -> Observable<UIImage> in
+            guard let reusltImage = image.af_imageFiltered(withCoreImageFilter: self.filterName, parameters: self.filterParams) else {
+                throw SomaError("ImageFilterPlugin failed with filter named \(self.filterName)")
+            }
+            
+            return Observable.just(reusltImage)
+        })
     }
     
     public init(name: String, params: FitlerParamsType? = nil) {
