@@ -23,7 +23,7 @@ open class AnchoredPagedDataProvider<TPage: AnchoredPageType>: AbstractAnchoredP
         self.init(pageSize: pageSize, memoryCache: MemoryCacheType(), anchoredPageObservableFactory: anchoredPageObservableFactory)
     }
     
-    open override func _createLoadingAnchoredPageObservable(_ offset: Int, count: Int, anchoredPage: PageType?) -> Observable<PageType> {
+    open override func _createAnchoredPageLoadingObservable(_ offset: Int, count: Int, anchoredPage: PageType?) -> Observable<PageType> {
         return anchoredPageObservableFactory(offset, count, anchoredPage?.anchor)
     }
 }

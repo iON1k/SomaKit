@@ -7,5 +7,9 @@
 //
 
 public protocol RouterType {
-    func bindTransitionHandler(_ transitionHandler: ModuleTransitionHandler?)
+    
+}
+
+public final class EmptyRouter: RouterType {
+    
 }

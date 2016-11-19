@@ -16,17 +16,11 @@ open class AbstractAnchoredPagedDataProvider<TPage: AnchoredPageType>: AbstractP
         super.init(pageSize: pageSize, memoryCache: memoryCache)
     }
     
-    public final override func _createLoadingPageObservable(_ offset: Int, count: Int) -> Observable<PageType> {
-        return Observable.deferred({ () -> Observable<PageType> in
-            return self.beginPageLoading(offset, count: count)
-        })
-    }
-    
-    public final func beginPageLoading(_ offset: Int, count: Int) -> Observable<PageType> {
+    public final override func _createPageLoadingObservable(_ offset: Int, count: Int) -> Observable<PageType> {
         let isAnchoredPageLoading = isAnchoredPageLoadingVariable.value
         
         if let anchoredPage = anchoredPage, !isAnchoredPageLoading  {
-            return _createLoadingAnchoredPageObservable(offset, count: count, anchoredPage: anchoredPage)
+            return _createAnchoredPageLoadingObservable(offset, count: count, anchoredPage: anchoredPage)
         }
         
         if isAnchoredPageLoading {
@@ -34,12 +28,12 @@ open class AbstractAnchoredPagedDataProvider<TPage: AnchoredPageType>: AbstractP
                 .filter(SomaFunc.negativePredicate)
                 .take(1)
                 .flatMap({ (_) -> Observable<PageType> in
-                    return self._createLoadingPageObservable(offset, count: count)
+                    return self._createPageLoadingObservable(offset, count: count)
                 })
         }
         
         isAnchoredPageLoadingVariable <= true
-        return wrapAnchorLoadingPageObservable(_createLoadingAnchoredPageObservable(offset, count: count, anchoredPage: nil))
+        return wrapAnchorLoadingPageObservable(_createAnchoredPageLoadingObservable(offset, count: count, anchoredPage: nil))
     }
     
     private func wrapAnchorLoadingPageObservable(_ sourceObservable: Observable<PageType>) -> Observable<PageType> {
@@ -52,7 +46,7 @@ open class AbstractAnchoredPagedDataProvider<TPage: AnchoredPageType>: AbstractP
                 })
     }
     
-    open func _createLoadingAnchoredPageObservable(_ offset: Int, count: Int, anchoredPage: PageType?) -> Observable<PageType> {
+    open func _createAnchoredPageLoadingObservable(_ offset: Int, count: Int, anchoredPage: PageType?) -> Observable<PageType> {
         Debug.abstractMethod()
     }
 }

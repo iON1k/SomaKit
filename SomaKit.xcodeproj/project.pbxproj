@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2409BB5E1DDFD3D700575482 /* ModuleBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2409BB5D1DDFD3D700575482 /* ModuleBuilder.swift */; };
 		241AF7D31D6A14BA004A8114 /* ApiRequestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241AF7D21D6A14BA004A8114 /* ApiRequestBase.swift */; };
 		241B948D1D6932B00008D22F /* AlamoRequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241B948A1D6932B00008D22F /* AlamoRequestManager.swift */; };
 		24231EAF1D7C53BD00309D5B /* TableViewBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24231EAE1D7C53BD00309D5B /* TableViewBehavior.swift */; };
@@ -83,10 +84,7 @@
 		24E714E41D57C7B100B66ABD /* TableViewManager+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E714E31D57C7B100B66ABD /* TableViewManager+Extension.swift */; };
 		24E94A2F1D5B705C0045C4A5 /* Array+ListDataProviderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E94A2E1D5B705C0045C4A5 /* Array+ListDataProviderType.swift */; };
 		24EA99721D481F3C00AEF2B1 /* ViewsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EA99711D481F3C00AEF2B1 /* ViewsProvider.swift */; };
-		24EB57DB1D2C0E8A0062DDDB /* EmptyRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB57CD1D2C0E8A0062DDDB /* EmptyRouter.swift */; };
 		24EB57DC1D2C0E8A0062DDDB /* RouterType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB57CE1D2C0E8A0062DDDB /* RouterType.swift */; };
-		24EB57DD1D2C0E8A0062DDDB /* ModuleTransitionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB57D01D2C0E8A0062DDDB /* ModuleTransitionHandler.swift */; };
-		24EB57DE1D2C0E8A0062DDDB /* UIViewController+ModuleTransitionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB57D11D2C0E8A0062DDDB /* UIViewController+ModuleTransitionHandler.swift */; };
 		24EB57DF1D2C0E8A0062DDDB /* ModuleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB57D31D2C0E8A0062DDDB /* ModuleViewModel.swift */; };
 		24EB57E01D2C0E8A0062DDDB /* ViewModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB57D51D2C0E8A0062DDDB /* ViewModelType.swift */; };
 		24EB57E11D2C0E8A0062DDDB /* ViewPresenterType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB57D61D2C0E8A0062DDDB /* ViewPresenterType.swift */; };
@@ -109,6 +107,7 @@
 
 /* Begin PBXFileReference section */
 		008D453A55EA5EF32E22CE44 /* Pods_SomaKitExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SomaKitExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2409BB5D1DDFD3D700575482 /* ModuleBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModuleBuilder.swift; sourceTree = "<group>"; };
 		241AF7D21D6A14BA004A8114 /* ApiRequestBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiRequestBase.swift; sourceTree = "<group>"; };
 		241B948A1D6932B00008D22F /* AlamoRequestManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlamoRequestManager.swift; sourceTree = "<group>"; };
 		24231EAE1D7C53BD00309D5B /* TableViewBehavior.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewBehavior.swift; sourceTree = "<group>"; };
@@ -189,10 +188,7 @@
 		24E714E31D57C7B100B66ABD /* TableViewManager+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "TableViewManager+Extension.swift"; sourceTree = "<group>"; };
 		24E94A2E1D5B705C0045C4A5 /* Array+ListDataProviderType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+ListDataProviderType.swift"; sourceTree = "<group>"; };
 		24EA99711D481F3C00AEF2B1 /* ViewsProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewsProvider.swift; sourceTree = "<group>"; };
-		24EB57CD1D2C0E8A0062DDDB /* EmptyRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyRouter.swift; sourceTree = "<group>"; };
 		24EB57CE1D2C0E8A0062DDDB /* RouterType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouterType.swift; sourceTree = "<group>"; };
-		24EB57D01D2C0E8A0062DDDB /* ModuleTransitionHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModuleTransitionHandler.swift; sourceTree = "<group>"; };
-		24EB57D11D2C0E8A0062DDDB /* UIViewController+ModuleTransitionHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+ModuleTransitionHandler.swift"; sourceTree = "<group>"; };
 		24EB57D31D2C0E8A0062DDDB /* ModuleViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModuleViewModel.swift; sourceTree = "<group>"; };
 		24EB57D51D2C0E8A0062DDDB /* ViewModelType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewModelType.swift; sourceTree = "<group>"; };
 		24EB57D61D2C0E8A0062DDDB /* ViewPresenterType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewPresenterType.swift; sourceTree = "<group>"; };
@@ -236,6 +232,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2409BB5C1DDFD3C700575482 /* Builder */ = {
+			isa = PBXGroup;
+			children = (
+				2409BB5D1DDFD3D700575482 /* ModuleBuilder.swift */,
+			);
+			name = Builder;
+			sourceTree = "<group>";
+		};
 		241B94891D6932B00008D22F /* Api */ = {
 			isa = PBXGroup;
 			children = (
@@ -519,8 +523,8 @@
 		24EB57C51D2C0E8A0062DDDB /* Module */ = {
 			isa = PBXGroup;
 			children = (
+				2409BB5C1DDFD3C700575482 /* Builder */,
 				24EB57CC1D2C0E8A0062DDDB /* Router */,
-				24EB57CF1D2C0E8A0062DDDB /* TransitionHandler */,
 				24EB57D21D2C0E8A0062DDDB /* ViewModel */,
 			);
 			path = Module;
@@ -529,19 +533,9 @@
 		24EB57CC1D2C0E8A0062DDDB /* Router */ = {
 			isa = PBXGroup;
 			children = (
-				24EB57CD1D2C0E8A0062DDDB /* EmptyRouter.swift */,
 				24EB57CE1D2C0E8A0062DDDB /* RouterType.swift */,
 			);
 			path = Router;
-			sourceTree = "<group>";
-		};
-		24EB57CF1D2C0E8A0062DDDB /* TransitionHandler */ = {
-			isa = PBXGroup;
-			children = (
-				24EB57D01D2C0E8A0062DDDB /* ModuleTransitionHandler.swift */,
-				24EB57D11D2C0E8A0062DDDB /* UIViewController+ModuleTransitionHandler.swift */,
-			);
-			path = TransitionHandler;
 			sourceTree = "<group>";
 		};
 		24EB57D21D2C0E8A0062DDDB /* ViewModel */ = {
@@ -849,12 +843,12 @@
 				2432D0401D6F80280020844B /* AbstractAnchoredPagedDataProvider.swift in Sources */,
 				24E3CE0D1D1FE7B3001BCDB2 /* Log+Extension.swift in Sources */,
 				2457267F1D4A2B7600D9FC63 /* TableElementPresenter.swift in Sources */,
+				2409BB5E1DDFD3D700575482 /* ModuleBuilder.swift in Sources */,
 				242EE3251D47BB990024F9AE /* TableElementsProvider.swift in Sources */,
 				245726831D4A625100D9FC63 /* TableViewSection.swift in Sources */,
 				24FFC0221DCC9E9B0026CA83 /* StoryboardFactory.swift in Sources */,
 				244DCC491DAD22E00051F832 /* Disposable.swift in Sources */,
 				24E714E41D57C7B100B66ABD /* TableViewManager+Extension.swift in Sources */,
-				24EB57DB1D2C0E8A0062DDDB /* EmptyRouter.swift in Sources */,
 				24EB57DF1D2C0E8A0062DDDB /* ModuleViewModel.swift in Sources */,
 				24E2CFAF1D21163D00967097 /* BundleImageSource.swift in Sources */,
 				24468C0E1D455AE4003E1344 /* TableElementAttributesType.swift in Sources */,
@@ -889,10 +883,8 @@
 				24E3CE041D1FE7B3001BCDB2 /* Collection+Extension.swift in Sources */,
 				24E1C0D51D22ED3300533D4E /* ImageRounding.swift in Sources */,
 				24E1C0D91D22F48C00533D4E /* ImageBluring.swift in Sources */,
-				24EB57DD1D2C0E8A0062DDDB /* ModuleTransitionHandler.swift in Sources */,
 				242B3FFE1D4BD1350010C3CB /* TableElementPresenterType.swift in Sources */,
 				24E3CE101D1FE7B3001BCDB2 /* Observable+Log.swift in Sources */,
-				24EB57DE1D2C0E8A0062DDDB /* UIViewController+ModuleTransitionHandler.swift in Sources */,
 				24E3CE221D1FE7B3001BCDB2 /* UserDefaultsStore.swift in Sources */,
 				24E3CE201D1FE7B3001BCDB2 /* StoreType.swift in Sources */,
 				24E3CE061D1FE7B3001BCDB2 /* Rx+Extensions.swift in Sources */,

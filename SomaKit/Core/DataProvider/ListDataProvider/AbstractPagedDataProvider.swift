@@ -24,7 +24,7 @@ open class AbstractPagedDataProvider<TPage: PageType>: ListDataProviderType {
     public let _workingScheduler = SerialDispatchQueueScheduler(internalSerialQueueName: AbstractPagedDataProviderQueueName)
     private let stateSyncLock = SyncLock()
     
-    private var loadingPagesObservables = [Int : Observable<PageType>]()
+    private var cachedPageLoadingObservables = [Int : Observable<PageType>]()
     private let loadedPagesMemoryCache: MemoryCacheType
     
     private let pageSize: Int
@@ -64,7 +64,7 @@ open class AbstractPagedDataProvider<TPage: PageType>: ListDataProviderType {
     public func unsafeLoadItem(_ index: Int) -> Observable<ItemType?> {
         return Observable.deferred({ () -> Observable<PageType> in
             let pageIndex = self.pageForIndex(index)
-            return self.createLoadingPageObservable(pageIndex)
+            return self.getPageLoadingObservable(pageIndex)
         })
         .map({ (page) -> ItemType? in
             let pageIems = page.items
@@ -78,22 +78,22 @@ open class AbstractPagedDataProvider<TPage: PageType>: ListDataProviderType {
         })
     }
     
-    private func createLoadingPageObservable(_ pageIndex: Int) -> Observable<PageType> {
+    private func getPageLoadingObservable(_ pageIndex: Int) -> Observable<PageType> {
         return loadedPagesMemoryCache.loadData(key: pageIndex)
             .observeOn(_workingScheduler)
             .flatMap { (loadedPage) -> Observable<PageType> in
                 if let loadedPage = loadedPage {
                     return Observable.just(loadedPage)
-                } else if let loadingPage = self.loadingPagesObservables[pageIndex] {
+                } else if let loadingPage = self.cachedPageLoadingObservables[pageIndex] {
                     return loadingPage
                 } else {
-                    return self.startLoadingPage(pageIndex)
+                    return self.createPageLoadingObservable(pageIndex)
                 }
             }
     }
     
-    private func startLoadingPage(_ pageIndex: Int) -> Observable<PageType> {
-        let newPageLoadingObservable = _createLoadingPageObservable(pageIndex * pageSize, count: pageSize)
+    private func createPageLoadingObservable(_ pageIndex: Int) -> Observable<PageType> {
+        let newPageLoadingObservable = _createPageLoadingObservable(pageIndex * pageSize, count: pageSize)
             .flatMap { (page) -> Observable<PageType> in
                 return self.loadedPagesMemoryCache.storeData(key: pageIndex, data: page)
                     .mapWith(page)
@@ -104,14 +104,12 @@ open class AbstractPagedDataProvider<TPage: PageType>: ListDataProviderType {
             })
             .shareReplay(1)
         
-        loadingPagesObservables[pageIndex] = newPageLoadingObservable
+        cachedPageLoadingObservables[pageIndex] = newPageLoadingObservable
         
         return newPageLoadingObservable
     }
     
     private func onPageDidLoaded(_ page: PageType, pageIndex: Int) {
-        self.loadingPagesObservables.removeValue(forKey: pageIndex)
-        
         guard self.validatePageIndex(pageIndex) else {
             return
         }
@@ -190,7 +188,7 @@ open class AbstractPagedDataProvider<TPage: PageType>: ListDataProviderType {
         return page.items.count < pageSize
     }
     
-    open func _createLoadingPageObservable(_ offset: Int, count: Int) -> Observable<PageType> {
+    open func _createPageLoadingObservable(_ offset: Int, count: Int) -> Observable<PageType> {
         Debug.abstractMethod()
     }
 }

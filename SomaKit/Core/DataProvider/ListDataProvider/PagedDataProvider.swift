@@ -22,7 +22,7 @@ open class PagedDataProvider<TPage: PageType>: AbstractPagedDataProvider<TPage> 
         self.init(pageSize: pageSize, memoryCache: MemoryCacheType(), pageObservableFactory: pageObservableFactory)
     }
     
-    open override func _createLoadingPageObservable(_ offset: Int, count: Int) -> Observable<PageType> {
+    open override func _createPageLoadingObservable(_ offset: Int, count: Int) -> Observable<PageType> {
         return pageObservableFactory(offset, count)
     }
 }
