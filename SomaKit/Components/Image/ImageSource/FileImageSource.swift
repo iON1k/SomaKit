@@ -25,12 +25,6 @@ public class FileImageSource: ImageSourceType {
             
             return Observable.just(image)
         })
-    }
-}
-
-extension FileImageSource {
-    public func loadImageInBackground(_ key: KeyType) -> Observable<UIImage> {
-        return loadImage(key)
-            .subcribeOnBackgroundScheduler()
+        .subcribeOnBackgroundScheduler()
     }
 }

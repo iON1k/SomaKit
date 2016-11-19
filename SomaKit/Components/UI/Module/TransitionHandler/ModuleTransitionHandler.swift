@@ -13,7 +13,6 @@ public protocol ModuleTransitionHandler {
     func closeModule(_ transition: (UIViewController) -> Void)
 }
 
-
 extension ModuleTransitionHandler {
     func pushModule(_ module: UIViewController, animated: Bool) {
         openModule(module) { (sourceModule, destinationModule) in

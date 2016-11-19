@@ -27,6 +27,7 @@ public class ImageResizing: ImagePluginType {
         return Observable.deferred({ () -> Observable<UIImage> in
             return Observable.just(self.beginPerform(image: image))
         })
+        .subcribeOnBackgroundScheduler()
     }
     
     private func beginPerform(image: UIImage) -> UIImage {

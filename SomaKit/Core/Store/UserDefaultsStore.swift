@@ -18,6 +18,7 @@ public class UserDefaultsStore<TData: Any>: StoreType {
         return Observable.deferred({ () -> Observable<DataType?> in
             return Observable.just(try self.beginLoadData(key: key))
         })
+        .subcribeOnBackgroundScheduler()
     }
     
     private func beginLoadData(key: KeyType) throws -> DataType? {
@@ -38,6 +39,7 @@ public class UserDefaultsStore<TData: Any>: StoreType {
         return Observable.deferred({ () -> Observable<Void> in
             return Observable.just(try self.beginStoreData(key: key, data: data))
         })
+        .subcribeOnBackgroundScheduler()
     }
     
     private func beginStoreData(key: String, data: TData?) throws {

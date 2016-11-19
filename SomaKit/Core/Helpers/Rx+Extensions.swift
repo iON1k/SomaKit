@@ -51,7 +51,7 @@ func <= <TResult>(variable: Variable<TResult>, newValue: TResult) -> Void {
 }
 
 public extension Observable {
-    public func mapToJust<TElement>(_ element: TElement) -> Observable<TElement> {
+    public func mapWith<TElement>(_ element: TElement) -> Observable<TElement> {
         return self.map({ (_) -> TElement in
             return element
         })

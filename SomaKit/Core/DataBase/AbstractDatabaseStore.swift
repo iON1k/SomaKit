@@ -26,6 +26,7 @@ open class AbstractDatabaseStore<TKey, TData, TDatabase: NSManagedObject>: Store
         return Observable.deferred({ () -> Observable<DataType?> in
             return Observable.just(try self.beginLoadData(key: key))
         })
+        .observeOnBackgroundScheduler()
     }
     
     private func beginLoadData(key: TKey) throws -> DataType? {
@@ -46,6 +47,7 @@ open class AbstractDatabaseStore<TKey, TData, TDatabase: NSManagedObject>: Store
             
             return Disposables.create()
         })
+        .observeOnBackgroundScheduler()
     }
     
     private func beginStoreData(key: TKey, data: TData?, observer: AnyObserver<Void>) {

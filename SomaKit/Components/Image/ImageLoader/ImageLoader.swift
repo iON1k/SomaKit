@@ -51,7 +51,7 @@ public class ImageLoader<TKey: CustomStringConvertible> {
         return imageSource.loadImage(key)
             .flatMap({ (image) -> Observable<UIImage> in
                 return self.imageCache.storeData(key: imageCacheKey, data: image)
-                    .mapToJust(image)
+                    .mapWith(image)
             })
             .flatMap({ (image) -> Observable<UIImage> in
                 return self.processAndCacheSourceImage(sourceImage: image, plugins: plugins, processedImageCacheKey: processedImageCacheKey)
@@ -63,7 +63,7 @@ public class ImageLoader<TKey: CustomStringConvertible> {
             .flatMap({ (processedImage) -> Observable<UIImage> in
                 if sourceImage !== processedImage {
                     return self.processedImageCache.storeData(key: processedImageCacheKey, data: processedImage)
-                        .mapToJust(processedImage)
+                        .mapWith(processedImage)
                 } else {
                     return Observable.just(processedImage)
                 }

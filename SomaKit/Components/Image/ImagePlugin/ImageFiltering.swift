@@ -32,6 +32,7 @@ public class ImageFiltering: ImagePluginType {
             
             return Observable.just(reusltImage)
         })
+        .subcribeOnBackgroundScheduler()
     }
     
     public init(name: String, params: FitlerParamsType? = nil) {

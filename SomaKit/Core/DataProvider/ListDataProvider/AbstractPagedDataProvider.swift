@@ -94,11 +94,11 @@ open class AbstractPagedDataProvider<TPage: PageType>: ListDataProviderType {
     
     private func startLoadingPage(_ pageIndex: Int) -> Observable<PageType> {
         let newPageLoadingObservable = _createLoadingPageObservable(pageIndex * pageSize, count: pageSize)
-            .observeOn(_workingScheduler)
             .flatMap { (page) -> Observable<PageType> in
                 return self.loadedPagesMemoryCache.storeData(key: pageIndex, data: page)
-                    .mapToJust(page)
+                    .mapWith(page)
             }
+            .observeOn(_workingScheduler)
             .do(onNext: { (page) in
                 self.onPageDidLoaded(page, pageIndex: pageIndex)
             })
