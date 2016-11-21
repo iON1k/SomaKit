@@ -97,7 +97,6 @@
 		24FFC0261DCCA2B20026CA83 /* SomaProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = 24FFC0241DCCA2B20026CA83 /* SomaProxy.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		24FFC0271DCCA2B20026CA83 /* SomaProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 24FFC0251DCCA2B20026CA83 /* SomaProxy.m */; };
 		6AF3BA1EDD5E1C849FA7035A /* Pods_SomaKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42956B8F15DB5942D9E3CAB4 /* Pods_SomaKit.framework */; };
-		ACD7AF239BC42F307CE8B6A8 /* Pods_SomaKitExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 008D453A55EA5EF32E22CE44 /* Pods_SomaKitExample.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -197,8 +196,6 @@
 		42956B8F15DB5942D9E3CAB4 /* Pods_SomaKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SomaKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		52251226EA2BC454904777B7 /* Pods-SomaKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SomaKit.release.xcconfig"; path = "Pods/Target Support Files/Pods-SomaKit/Pods-SomaKit.release.xcconfig"; sourceTree = "<group>"; };
 		7A0120809CF5D00DCB32AAA7 /* Pods-SomaKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SomaKit.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SomaKit/Pods-SomaKit.debug.xcconfig"; sourceTree = "<group>"; };
-		C61A820FADFA297526E5FF12 /* Pods-SomaKitExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SomaKitExample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SomaKitExample/Pods-SomaKitExample.debug.xcconfig"; sourceTree = "<group>"; };
-		D7657BC4A05DE4CC55A9C130 /* Pods-SomaKitExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SomaKitExample.release.xcconfig"; path = "Pods/Target Support Files/Pods-SomaKitExample/Pods-SomaKitExample.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -206,7 +203,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ACD7AF239BC42F307CE8B6A8 /* Pods_SomaKitExample.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -583,8 +579,6 @@
 			children = (
 				7A0120809CF5D00DCB32AAA7 /* Pods-SomaKit.debug.xcconfig */,
 				52251226EA2BC454904777B7 /* Pods-SomaKit.release.xcconfig */,
-				C61A820FADFA297526E5FF12 /* Pods-SomaKitExample.debug.xcconfig */,
-				D7657BC4A05DE4CC55A9C130 /* Pods-SomaKitExample.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -608,12 +602,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 247506C71DDCA9C3005CC9D5 /* Build configuration list for PBXNativeTarget "SomaKitExample" */;
 			buildPhases = (
-				590ADA1970E23DCD2308AFAA /* [CP] Check Pods Manifest.lock */,
 				247506B21DDCA9C2005CC9D5 /* Sources */,
 				247506B31DDCA9C2005CC9D5 /* Frameworks */,
 				247506B41DDCA9C2005CC9D5 /* Resources */,
-				CB5BBE53F762B1C63678A121 /* [CP] Embed Pods Frameworks */,
-				4DCC40D303B76BA07D6683FC /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -731,51 +722,6 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		4DCC40D303B76BA07D6683FC /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SomaKitExample/Pods-SomaKitExample-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		590ADA1970E23DCD2308AFAA /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		CB5BBE53F762B1C63678A121 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SomaKitExample/Pods-SomaKitExample-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -885,7 +831,6 @@
 /* Begin XCBuildConfiguration section */
 		247506C51DDCA9C3005CC9D5 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C61A820FADFA297526E5FF12 /* Pods-SomaKitExample.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -902,7 +847,6 @@
 		};
 		247506C61DDCA9C3005CC9D5 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D7657BC4A05DE4CC55A9C130 /* Pods-SomaKitExample.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
