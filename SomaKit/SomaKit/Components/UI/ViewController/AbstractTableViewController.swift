@@ -18,8 +18,8 @@ open class AbstractTableViewController<TViewModel: TableBehaviorModuleViewModel>
         Debug.abstractMethod()
     }
     
-    open override func _onViewModelBind(_ viewModel: ViewModel) {
-        super._onViewModelBind(viewModel)
+    open override func _onBindUI(_ viewModel: ViewModel) {
+        super._onBindUI(viewModel)
         
         let tableManager = TableViewManager(tableView: _tableView)
         let tableBehavior = viewModel.tableBehavior

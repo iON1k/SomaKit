@@ -21,11 +21,18 @@ public class SomaUIBindable: UiBindableType {
     }
     
     public func whileBinded<T>(_ observable: Observable<T>) -> Observable<T> {
+        let unbindingObservable = isBindedSubject.scan((false, false)) { (prevValues, curValue) -> (Bool, Bool) in
+                return (prevValues.1, curValue)
+            }
+            .filter { (values) -> Bool in
+                return values.0 && !values.1
+            }
+        
         return isBindedSubject
             .flatMapLatest({ (isBinded) -> Observable<T> in
                 return isBinded ? self.applyScheduler(observable) : Observable.never()
             })
-            .takeUntil(isBindedSubject.filter(SomaFunc.negativePredicate))
+            .takeUntil(unbindingObservable)
     }
     
     public func whileActive<T>(_ observable: Observable<T>) -> Observable<T> {

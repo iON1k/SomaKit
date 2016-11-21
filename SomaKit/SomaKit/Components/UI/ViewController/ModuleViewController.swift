@@ -25,37 +25,33 @@ open class ModuleViewController<TViewModel: ModuleViewModel>: SomaViewController
     }
     
     public func bindViewModel(_ viewModel: ViewModel?) {
-        let prevViewModel = self.viewModel
-        guard prevViewModel != nil || viewModel != nil else {
-            return
-        }
-        
-        if prevViewModel != nil {
-            _onViewModelWillReseted()
+        if self.viewModel != nil {
             isBindedSubject.onNext(false)
         }
         
         self.viewModel = viewModel
+        tryToBindUI()
         
-        if let viewModel = viewModel {
-            _onViewModelDidUpdated(viewModel)
-            tryToBindViewModel()
+        if viewModel != nil {
+            isBindedSubject.onNext(true)
         }
     }
     
     open override func viewDidLoad() {
         super.viewDidLoad()
         
-        tryToBindViewModel()
+        tryToBindUI()
     }
     
     open override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
         isActiveSubject.onNext(true)
     }
     
     open override func viewDidDisappear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
         isActiveSubject.onNext(false)
     }
     
@@ -63,7 +59,7 @@ open class ModuleViewController<TViewModel: ModuleViewModel>: SomaViewController
         bindViewModel(nil)
     }
     
-    private func tryToBindViewModel() {
+    private func tryToBindUI() {
         guard isViewLoaded else {
             return
         }
@@ -72,19 +68,10 @@ open class ModuleViewController<TViewModel: ModuleViewModel>: SomaViewController
             return
         }
         
-        _onViewModelBind(viewModel)
-        isBindedSubject.onNext(true)
+        _onBindUI(viewModel)
     }
     
-    open func _onViewModelDidUpdated(_ viewModel: ViewModel) {
-        //Nothing
-    }
-    
-    open func _onViewModelWillReseted() {
-        //Nothing
-    }
-    
-    open func _onViewModelBind(_ viewModel: ViewModel) {
+    open func _onBindUI(_ viewModel: ViewModel) {
         //Nothing
     }
     
