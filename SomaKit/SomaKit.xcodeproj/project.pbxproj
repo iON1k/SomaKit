@@ -127,7 +127,6 @@
 		245726821D4A625100D9FC63 /* TableViewSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewSection.swift; sourceTree = "<group>"; };
 		246F72631D593B74004FF101 /* AbstractPagedDataProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AbstractPagedDataProvider.swift; sourceTree = "<group>"; };
 		246F72651D593B8C004FF101 /* ListDataProviderType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListDataProviderType.swift; sourceTree = "<group>"; };
-		247506B61DDCA9C2005CC9D5 /* SomaKitExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SomaKitExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		247C0DF91D64B4AD00EF8808 /* TimeHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeHelper.swift; sourceTree = "<group>"; };
 		24E1C0D21D22EB5600533D4E /* ImageResizing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageResizing.swift; sourceTree = "<group>"; };
 		24E1C0D41D22ED3300533D4E /* ImageRounding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageRounding.swift; sourceTree = "<group>"; };
@@ -199,13 +198,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		247506B31DDCA9C2005CC9D5 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		24E3CDA51D1FE753001BCDB2 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -282,7 +274,6 @@
 			isa = PBXGroup;
 			children = (
 				24E3CDA91D1FE753001BCDB2 /* SomaKit.framework */,
-				247506B61DDCA9C2005CC9D5 /* SomaKitExample.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -598,23 +589,6 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		247506B51DDCA9C2005CC9D5 /* SomaKitExample */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 247506C71DDCA9C3005CC9D5 /* Build configuration list for PBXNativeTarget "SomaKitExample" */;
-			buildPhases = (
-				247506B21DDCA9C2005CC9D5 /* Sources */,
-				247506B31DDCA9C2005CC9D5 /* Frameworks */,
-				247506B41DDCA9C2005CC9D5 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = SomaKitExample;
-			productName = SomaKitExample;
-			productReference = 247506B61DDCA9C2005CC9D5 /* SomaKitExample.app */;
-			productType = "com.apple.product-type.application";
-		};
 		24E3CDA81D1FE753001BCDB2 /* SomaKit */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 24E3CDB11D1FE753001BCDB2 /* Build configuration list for PBXNativeTarget "SomaKit" */;
@@ -645,10 +619,6 @@
 				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = iON1k;
 				TargetAttributes = {
-					247506B51DDCA9C2005CC9D5 = {
-						CreatedOnToolsVersion = 8.0;
-						ProvisioningStyle = Automatic;
-					};
 					24E3CDA81D1FE753001BCDB2 = {
 						CreatedOnToolsVersion = 7.3.1;
 						LastSwiftMigration = 0800;
@@ -669,19 +639,11 @@
 			projectRoot = "";
 			targets = (
 				24E3CDA81D1FE753001BCDB2 /* SomaKit */,
-				247506B51DDCA9C2005CC9D5 /* SomaKitExample */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		247506B41DDCA9C2005CC9D5 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		24E3CDA71D1FE753001BCDB2 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -725,13 +687,6 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		247506B21DDCA9C2005CC9D5 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		24E3CDA41D1FE753001BCDB2 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -829,37 +784,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		247506C51DDCA9C3005CC9D5 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_SUSPICIOUS_MOVES = YES;
-				INFOPLIST_FILE = SomaKitExample/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.iON1k.SomaKitExample;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_VERSION = 3.0;
-			};
-			name = Debug;
-		};
-		247506C61DDCA9C3005CC9D5 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_SUSPICIOUS_MOVES = YES;
-				INFOPLIST_FILE = SomaKitExample/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.iON1k.SomaKitExample;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
-			};
-			name = Release;
-		};
 		24E3CDAF1D1FE753001BCDB2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1002,15 +926,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		247506C71DDCA9C3005CC9D5 /* Build configuration list for PBXNativeTarget "SomaKitExample" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				247506C51DDCA9C3005CC9D5 /* Debug */,
-				247506C61DDCA9C3005CC9D5 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		24E3CDA31D1FE753001BCDB2 /* Build configuration list for PBXProject "SomaKit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

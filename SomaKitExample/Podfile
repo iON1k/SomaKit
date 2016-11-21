@@ -9,6 +9,6 @@ post_install do |installer|
     end
 end
 
-target 'SomaKitExample’ do
-    pod ‘SomaKit’, :path => ‘../SomaKit’
+target 'SomaKitExample' do
+    pod 'SomaKit', :path => '../SomaKit'
 end
