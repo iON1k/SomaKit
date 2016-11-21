@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'SomaKit'
-  s.version          = '0.1.0'
+  s.version          = '0.2.1'
   s.summary          = 'SomaKit is a architectural framework for iOS app development'
 
 # This description is used to generate tags and improve search results.
@@ -22,7 +22,7 @@ TODO: Add long description of the pod here.
 
   s.ios.deployment_target = '8.0'
 
-  s.source_files = ['SomaKit/Core/**/*', 'SomaKit/Components/**/*'', 'SomaKit/SomaKit.h']
+  s.source_files = ['SomaKit/Core/**/*', 'SomaKit/Components/**/*', 'SomaKit/SomaKit.h']
 
   # s.resource_bundles = {
   #   'SomaKit' => ['SomaKit/Assets/*.png']

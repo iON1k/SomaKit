@@ -33,11 +33,6 @@
 		245726831D4A625100D9FC63 /* TableViewSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245726821D4A625100D9FC63 /* TableViewSection.swift */; };
 		246F72641D593B74004FF101 /* AbstractPagedDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246F72631D593B74004FF101 /* AbstractPagedDataProvider.swift */; };
 		246F72661D593B8C004FF101 /* ListDataProviderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246F72651D593B8C004FF101 /* ListDataProviderType.swift */; };
-		247506B91DDCA9C2005CC9D5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 247506B81DDCA9C2005CC9D5 /* AppDelegate.swift */; };
-		247506BB1DDCA9C2005CC9D5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 247506BA1DDCA9C2005CC9D5 /* ViewController.swift */; };
-		247506BE1DDCA9C2005CC9D5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 247506BC1DDCA9C2005CC9D5 /* Main.storyboard */; };
-		247506C01DDCA9C2005CC9D5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 247506BF1DDCA9C2005CC9D5 /* Assets.xcassets */; };
-		247506C31DDCA9C2005CC9D5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 247506C11DDCA9C2005CC9D5 /* LaunchScreen.storyboard */; };
 		247C0DFA1D64B4AD00EF8808 /* TimeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 247C0DF91D64B4AD00EF8808 /* TimeHelper.swift */; };
 		24E1C0D31D22EB5600533D4E /* ImageResizing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E1C0D21D22EB5600533D4E /* ImageResizing.swift */; };
 		24E1C0D51D22ED3300533D4E /* ImageRounding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E1C0D41D22ED3300533D4E /* ImageRounding.swift */; };
@@ -134,12 +129,6 @@
 		246F72631D593B74004FF101 /* AbstractPagedDataProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AbstractPagedDataProvider.swift; sourceTree = "<group>"; };
 		246F72651D593B8C004FF101 /* ListDataProviderType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListDataProviderType.swift; sourceTree = "<group>"; };
 		247506B61DDCA9C2005CC9D5 /* SomaKitExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SomaKitExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		247506B81DDCA9C2005CC9D5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		247506BA1DDCA9C2005CC9D5 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		247506BD1DDCA9C2005CC9D5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		247506BF1DDCA9C2005CC9D5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		247506C21DDCA9C2005CC9D5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		247506C41DDCA9C3005CC9D5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		247C0DF91D64B4AD00EF8808 /* TimeHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeHelper.swift; sourceTree = "<group>"; };
 		24E1C0D21D22EB5600533D4E /* ImageResizing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageResizing.swift; sourceTree = "<group>"; };
 		24E1C0D41D22ED3300533D4E /* ImageRounding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageRounding.swift; sourceTree = "<group>"; };
@@ -283,24 +272,10 @@
 			path = ListDataProvider;
 			sourceTree = "<group>";
 		};
-		247506B71DDCA9C2005CC9D5 /* SomaKitExample */ = {
-			isa = PBXGroup;
-			children = (
-				247506B81DDCA9C2005CC9D5 /* AppDelegate.swift */,
-				247506BA1DDCA9C2005CC9D5 /* ViewController.swift */,
-				247506BC1DDCA9C2005CC9D5 /* Main.storyboard */,
-				247506BF1DDCA9C2005CC9D5 /* Assets.xcassets */,
-				247506C11DDCA9C2005CC9D5 /* LaunchScreen.storyboard */,
-				247506C41DDCA9C3005CC9D5 /* Info.plist */,
-			);
-			path = SomaKitExample;
-			sourceTree = "<group>";
-		};
 		24E3CD9F1D1FE753001BCDB2 = {
 			isa = PBXGroup;
 			children = (
 				24E3CDAB1D1FE753001BCDB2 /* SomaKit */,
-				247506B71DDCA9C2005CC9D5 /* SomaKitExample */,
 				24E3CDAA1D1FE753001BCDB2 /* Products */,
 				F11808E2BFAD191206C1ADBC /* Pods */,
 				4FA14D6864D75A2735BDA133 /* Frameworks */,
@@ -713,9 +688,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				247506C31DDCA9C2005CC9D5 /* LaunchScreen.storyboard in Resources */,
-				247506C01DDCA9C2005CC9D5 /* Assets.xcassets in Resources */,
-				247506BE1DDCA9C2005CC9D5 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -811,8 +783,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				247506BB1DDCA9C2005CC9D5 /* ViewController.swift in Sources */,
-				247506B91DDCA9C2005CC9D5 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -911,25 +881,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXVariantGroup section */
-		247506BC1DDCA9C2005CC9D5 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				247506BD1DDCA9C2005CC9D5 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		247506C11DDCA9C2005CC9D5 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				247506C21DDCA9C2005CC9D5 /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		247506C51DDCA9C3005CC9D5 /* Debug */ = {

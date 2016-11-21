@@ -2,7 +2,7 @@
 //  AppDelegate.swift
 //  SomaKitExample
 //
-//  Created by Anton on 09.11.16.
+//  Created by Anton on 21.11.16.
 //  Copyright © 2016 iON1k. All rights reserved.
 //
 
