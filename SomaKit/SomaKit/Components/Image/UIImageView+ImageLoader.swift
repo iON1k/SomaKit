@@ -10,7 +10,7 @@ import UIKit
 import RxSwift
 
 
-extension ImageResizingMode {
+public extension ImageResizingMode {
     public static func fromUIContentMode(contentMode: UIViewContentMode) -> ImageResizingMode {
         switch contentMode {
         case .scaleAspectFill:
@@ -23,7 +23,7 @@ extension ImageResizingMode {
     }
 }
 
-extension UIImageView {
+public extension UIImageView {
     public func loadImage<TKey: CustomStringConvertible>(_ key: TKey, loader: ImageLoader<TKey>,
                           placeholder: UIImage? = nil, plugins: ImagePluginType ...) -> Observable<UIImage> {
         var resultObservable = loader.loadImage(key, plugins: [
