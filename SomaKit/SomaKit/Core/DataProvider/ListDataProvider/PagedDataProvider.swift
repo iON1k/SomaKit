@@ -13,13 +13,9 @@ open class PagedDataProvider<TPage: PageType>: AbstractPagedDataProvider<TPage> 
     
     private let pageObservableFactory: PageObservableFactory
     
-    public init(pageSize: Int, memoryCache: MemoryCacheType, pageObservableFactory: @escaping PageObservableFactory) {
+    public init(pageSize: Int = PagedDataProviderDefaultPageSize, pageObservableFactory: @escaping PageObservableFactory) {
         self.pageObservableFactory = pageObservableFactory
-        super.init(pageSize: pageSize, memoryCache: memoryCache)
-    }
-    
-    public convenience init(pageSize: Int = PagedDataProviderDefaultPageSize, pageObservableFactory: @escaping PageObservableFactory) {
-        self.init(pageSize: pageSize, memoryCache: MemoryCacheType(), pageObservableFactory: pageObservableFactory)
+        super.init(pageSize: pageSize)
     }
     
     open override func _createPageLoadingObservable(_ offset: Int, count: Int) -> Observable<PageType> {
@@ -33,7 +29,7 @@ extension PagedDataProvider {
                                     dataSourceFactory: @escaping (_ offset: Int, _ count: Int) -> TDataSource)
         where TDataSource: CachingKeyProvider, TCacheStore.KeyType == TDataSource.CachingKeyType,
         TCacheStore.DataType == TDataSource.E, TDataSource.E == PageType {
-        self.init(pageSize: pageSize, memoryCache: MemoryCacheType()) { (offset, count) -> Observable<PageType> in
+        self.init(pageSize: pageSize) { (offset, count) -> Observable<PageType> in
             return dataSourceFactory(offset, count)
                 .asCacheableProvider(cacheStore, behavior: cacheBehavior)
                 .data()

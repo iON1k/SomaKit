@@ -12,10 +12,6 @@ open class AbstractAnchoredPagedDataProvider<TPage: AnchoredPageType>: AbstractP
     private var anchoredPage: PageType?
     private var isAnchoredPageLoadingVariable = Variable<Bool>(false)
     
-    public override init(pageSize: Int, memoryCache: MemoryCacheType) {
-        super.init(pageSize: pageSize, memoryCache: memoryCache)
-    }
-    
     public final override func _createPageLoadingObservable(_ offset: Int, count: Int) -> Observable<PageType> {
         let isAnchoredPageLoading = isAnchoredPageLoadingVariable.value
         

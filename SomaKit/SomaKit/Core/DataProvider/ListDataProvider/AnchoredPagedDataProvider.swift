@@ -14,13 +14,9 @@ open class AnchoredPagedDataProvider<TPage: AnchoredPageType>: AbstractAnchoredP
     
     private let anchoredPageObservableFactory: AnchoredPageObservableFactory
     
-    public init(pageSize: Int, memoryCache: MemoryCacheType, anchoredPageObservableFactory: @escaping AnchoredPageObservableFactory) {
+    public init(pageSize: Int = PagedDataProviderDefaultPageSize, anchoredPageObservableFactory: @escaping AnchoredPageObservableFactory) {
         self.anchoredPageObservableFactory = anchoredPageObservableFactory
-        super.init(pageSize: pageSize, memoryCache: memoryCache)
-    }
-    
-    public convenience init(pageSize: Int = PagedDataProviderDefaultPageSize, anchoredPageObservableFactory: @escaping AnchoredPageObservableFactory) {
-        self.init(pageSize: pageSize, memoryCache: MemoryCacheType(), anchoredPageObservableFactory: anchoredPageObservableFactory)
+        super.init(pageSize: pageSize)
     }
     
     open override func _createAnchoredPageLoadingObservable(_ offset: Int, count: Int, anchoredPage: PageType?) -> Observable<PageType> {
@@ -35,7 +31,7 @@ extension AnchoredPagedDataProvider {
                                                                                             dataSourceFactory: @escaping (_ offset: Int, _ count: Int, _ anchor: AnchorType?) -> TDataSource)
         where TDataSource: CachingKeyProvider, TCacheStore.KeyType == TDataSource.CachingKeyType,
         TCacheStore.DataType == TDataSource.E, TDataSource.E == PageType {
-        self.init(pageSize: pageSize, memoryCache: MemoryCacheType()) { (offset, count, anchor) -> Observable<PageType> in
+        self.init(pageSize: pageSize) { (offset, count, anchor) -> Observable<PageType> in
             return dataSourceFactory(offset, count, anchor)
                 .asCacheableProvider(cacheStore, behavior: cacheBehavior)
                 .data()
