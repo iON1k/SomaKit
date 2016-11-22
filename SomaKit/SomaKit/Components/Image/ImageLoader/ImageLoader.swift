@@ -10,9 +10,10 @@ import RxSwift
 
 public class ImageLoader<TKey: CustomStringConvertible> {
     private let imageSource: ImageSource<TKey>
+    public typealias ProcessedCacheType = MemoryCache<String, UIImage>
     
     private let imageCache: Store<String, UIImage>
-    private let processedImageCache: Store<String, UIImage>
+    private let processedImageCache: ProcessedCacheType
     
     public func loadImage(_ key: TKey, plugins: [ImagePluginType] = []) -> Observable<UIImage> {
         return Observable.deferred({ () -> Observable<UIImage> in
@@ -74,13 +75,12 @@ public class ImageLoader<TKey: CustomStringConvertible> {
         return cachingKey
     }
     
-    public init<TSource: ImageSourceType, TImageCache: StoreType, TProcessedImageCache: StoreType>
-        (imageSource: TSource, imageCache: TImageCache, processedImageCache: TProcessedImageCache)
-        where TSource.KeyType == TKey, TImageCache.KeyType == String, TImageCache.DataType == UIImage,
-        TProcessedImageCache.KeyType == String, TProcessedImageCache.DataType == UIImage {
+    public init<TSource: ImageSourceType, TImageCache: StoreType>
+        (imageSource: TSource, imageCache: TImageCache, processedImageCache: ProcessedCacheType = MemoryCache())
+        where TSource.KeyType == TKey, TImageCache.KeyType == String, TImageCache.DataType == UIImage {
         self.imageSource = imageSource.asImageSource()
         self.imageCache = imageCache.asStore()
-        self.processedImageCache = processedImageCache.asStore()
+        self.processedImageCache = processedImageCache
     }
 }
 
