@@ -14,7 +14,7 @@ public class ImageLoader<TKey: CustomStringConvertible> {
     private let imageCache: Store<String, UIImage>
     private let processedImageCache: Store<String, UIImage>
     
-    public func loadImage(_ key: TKey, placeholder: UIImage? = nil, plugins: [ImagePluginType] = []) -> Observable<UIImage> {
+    public func loadImage(_ key: TKey, plugins: [ImagePluginType] = []) -> Observable<UIImage> {
         return Observable.deferred({ () -> Observable<UIImage> in
             let imageCacheKey = key.description
             let processedImageCacheKey = self.pluginsCachingKey(imageCacheKey, plugins: plugins)
@@ -31,15 +31,8 @@ public class ImageLoader<TKey: CustomStringConvertible> {
                     if let sourceImage = sourceImage {
                         return self.processAndCacheSourceImage(sourceImage: sourceImage, plugins: plugins, processedImageCacheKey: processedImageCacheKey)
                     } else {
-                        var sourceLoading = self.sourceLoadingImageObservable(key, imageCacheKey: imageCacheKey,
+                        return self.sourceLoadingImageObservable(key, imageCacheKey: imageCacheKey,
                                                                               processedImageCacheKey: processedImageCacheKey, plugins: plugins)
-                        
-                        if let placeholder = placeholder {
-                            sourceLoading = sourceLoading
-                                .startWith(placeholder)
-                        }
-                        
-                        return sourceLoading
                     }
                 })
         })
@@ -92,11 +85,7 @@ public class ImageLoader<TKey: CustomStringConvertible> {
 }
 
 extension ImageLoader {
-    public func loadImage(_ key: TKey, placeholder: UIImage?, plugins: ImagePluginType ...) -> Observable<UIImage> {
-        return self.loadImage(key, placeholder:placeholder, plugins: plugins)
-    }
-    
     public func loadImage(_ key: TKey, plugins: ImagePluginType ...) -> Observable<UIImage> {
-        return self.loadImage(key, placeholder:nil, plugins: plugins)
+        return self.loadImage(key, plugins: plugins)
     }
 }

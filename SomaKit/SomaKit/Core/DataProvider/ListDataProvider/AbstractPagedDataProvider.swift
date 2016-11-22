@@ -21,7 +21,7 @@ open class AbstractPagedDataProvider<TPage: PageType>: ListDataProviderType {
     private let itemsValueSubject = BehaviorSubject(value: [ItemType?]())
     
     public let _workingScheduler = SerialDispatchQueueScheduler(internalSerialQueueName: AbstractPagedDataProviderQueueName)
-    private let stateSyncLock = SyncLock()
+    private let stateSyncLock = Sync.Lock()
     
     private let pageSize: Int
     

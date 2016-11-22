@@ -12,7 +12,7 @@ public class MemoryStore<TKey: Hashable, TData>: StoreType {
     public typealias KeyType = TKey
     public typealias DataType = TData
     
-    private var syncLock = SyncLock()
+    private var syncLock = Sync.Lock()
     private var dictionaryStore: [KeyType : DataType] = [:]
     
     public func loadData(key: KeyType) -> Observable<DataType?> {

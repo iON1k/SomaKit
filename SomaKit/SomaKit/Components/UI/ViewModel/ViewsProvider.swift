@@ -13,7 +13,7 @@ public class ViewsProvider<TContext> {
     public let context: TContext
     
     private var registeredViewsData = [String : ViewData]()
-    private let syncLock = SyncLock()
+    private let syncLock = Sync.Lock()
     
     private let emptyViewData = ViewData(UIView.self) { (viewModel, context) -> UIView in
         return UIView()
