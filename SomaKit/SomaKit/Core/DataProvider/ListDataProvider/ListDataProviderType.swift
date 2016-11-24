@@ -8,13 +8,20 @@
 
 import RxSwift
 
+public struct ListDataProviderState<ItemType> {
+    let items: [ItemType?]
+    let isAllItemsLoaded: Bool
+}
+
 public protocol ListDataProviderType: DataProviderType {
     associatedtype ItemType
     associatedtype DataType = [ItemType?]
     
-    var items: DataType { get }
-    var isAllItemsLoaded: Bool { get }
+    typealias State = ListDataProviderState<ItemType>
     
+    var currentState: State { get }
+    
+    func state() -> Observable<State>
     func loadItem(_ index: Int) -> Observable<ItemType?>
 }
 
@@ -26,6 +33,13 @@ extension ListDataProviderType {
             })
             .concat()
             .toArray()
+    }
+    
+    public func data() -> Observable<[ItemType?]> {
+        return state()
+            .map({ (state) -> [ItemType?] in
+                return state.items
+            })
     }
 }
 

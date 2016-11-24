@@ -11,19 +11,15 @@ import RxSwift
 extension Array: ListDataProviderType {
     public typealias ItemType = Element
     
-    public var items: [ItemType?] {
-        return self
-    }
-    
-    public var isAllItemsLoaded: Bool {
-        return true
+    public var currentState: ListDataProviderState<Element> {
+        return ListDataProviderState(items: self, isAllItemsLoaded: true)
     }
     
     public func loadItem(_ index: Int) -> Observable<ItemType?> {
         return Observable.just(index < count ? self[index] : nil)
     }
     
-    public func data() -> Observable<[ItemType?]> {
-        return Observable.just(self)
+    public func state() -> Observable<ListDataProviderState<Element>> {
+        return Observable.just(currentState)
     }
 }

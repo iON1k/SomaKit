@@ -14,11 +14,9 @@ open class AbstractPagedDataProvider<TPage: PageType>: ListDataProviderType {
     
     private var allItemsCount: Int?
     
-    private var itemsValue = [ItemType?]()
-    private let itemsValueSubject = BehaviorSubject(value: [ItemType?]())
+    private let stateVariable = Variable(ListDataProviderState<ItemType>(items: [], isAllItemsLoaded: false))
     
     public let _workingScheduler = SerialDispatchQueueScheduler(internalSerialQueueName: "com.somaKit.pageDataProvider")
-    private let stateSyncLock = Sync.Lock()
     
     private let pageSize: Int
     
@@ -26,20 +24,12 @@ open class AbstractPagedDataProvider<TPage: PageType>: ListDataProviderType {
         self.pageSize = pageSize
     }
     
-    public var items: [ItemType?] {
-        return stateSyncLock.sync {
-            return itemsValue
-        }
+    public func state() -> Observable<ListDataProviderState<ItemType>> {
+        return stateVariable.asObservable()
     }
     
-    public func data() -> Observable<[ItemType?]> {
-        return itemsValueSubject
-    }
-    
-    public var isAllItemsLoaded: Bool {
-        return stateSyncLock.sync {
-            return allItemsCount != nil
-        }
+    public var currentState: ListDataProviderState<TPage.ItemType> {
+        return stateVariable.value
     }
     
     public func loadItem(_ index: Int) -> Observable<ItemType?> {
@@ -84,29 +74,27 @@ open class AbstractPagedDataProvider<TPage: PageType>: ListDataProviderType {
         }
         
         let newItems = mergePage(page, pageIndex: pageIndex)
-        let isLasPageType = _isLasPageType(page)
+        let isLastPage = _isLastPage(page)
         
-        self.stateSyncLock.sync {
-            if isLasPageType {
-                allItemsCount = newItems.count
-            }
-            
-            itemsValueSubject.onNext(newItems)
+        if isLastPage {
+            allItemsCount = newItems.count
         }
+        
+        stateVariable <= ListDataProviderState(items: newItems, isAllItemsLoaded: isLastPage)
     }
     
     private func mergePage(_ page: PageType, pageIndex: Int) -> [ItemType?] {
         let itemsOffset = pageFirstItemIndex(pageIndex)
         let pageItems = page.items
-        let isLasPageType = _isLasPageType(page)
-        let newItemsCount = isLasPageType ? pageItems.count : pageSize
+        let isLastPage = _isLastPage(page)
+        let newItemsCount = isLastPage ? pageItems.count : pageSize
         
         return mergePageItems(pageItems, offset: itemsOffset, count: newItemsCount)
     }
     
     private func mergePageItems(_ newItems: [ItemType], offset: Int, count: Int) -> [ItemType?] {
         let maxIndex = offset + count
-        var allItems = itemsValue
+        var allItems = stateVariable.value.items
         
         while allItems.count < offset {
             allItems.append(nil)
@@ -153,7 +141,7 @@ open class AbstractPagedDataProvider<TPage: PageType>: ListDataProviderType {
         return validateItemIndex(pageFirstItemIndex)
     }
     
-    open func _isLasPageType(_ page: PageType) -> Bool {
+    open func _isLastPage(_ page: PageType) -> Bool {
         return page.items.count < pageSize
     }
     
