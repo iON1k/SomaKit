@@ -28,3 +28,7 @@ extension UIImage {
         return performPlugins(plugins: plugins)
     }
 }
+
+public enum ImagePlugins {
+    //Nothing
+}

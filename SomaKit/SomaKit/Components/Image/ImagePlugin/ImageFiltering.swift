@@ -9,34 +9,36 @@
 import AlamofireImage
 import RxSwift
 
-public class ImageFiltering: ImagePluginType {
-    public typealias FitlerParamsType = [String : Any]
-
-    private let filterName: String
-    private let filterParams: FitlerParamsType?
-    
-    public var imagePluginKey: String {
-        var resultKey = filterName
-        if let filterParams = filterParams {
-            resultKey += filterParams.description
-        }
+public extension ImagePlugins {
+    public class Filtering: ImagePluginType {
+        public typealias FitlerParamsType = [String : Any]
         
-        return resultKey
-    }
-    
-    public func perform(image: UIImage) -> Observable<UIImage> {
-        return Observable.deferred({ () -> Observable<UIImage> in
-            guard let reusltImage = image.af_imageFiltered(withCoreImageFilter: self.filterName, parameters: self.filterParams) else {
-                throw SomaError("ImageFilterPlugin failed with filter named \(self.filterName)")
+        private let filterName: String
+        private let filterParams: FitlerParamsType?
+        
+        public var imagePluginKey: String {
+            var resultKey = filterName
+            if let filterParams = filterParams {
+                resultKey += filterParams.description
             }
             
-            return Observable.just(reusltImage)
-        })
-        .subcribeOnBackgroundScheduler()
-    }
-    
-    public init(name: String, params: FitlerParamsType? = nil) {
-        filterName = name
-        filterParams = params
+            return resultKey
+        }
+        
+        public func perform(image: UIImage) -> Observable<UIImage> {
+            return Observable.deferred({ () -> Observable<UIImage> in
+                guard let reusltImage = image.af_imageFiltered(withCoreImageFilter: self.filterName, parameters: self.filterParams) else {
+                    throw SomaError("ImageFilterPlugin failed with filter named \(self.filterName)")
+                }
+                
+                return Observable.just(reusltImage)
+            })
+                .subcribeOnBackgroundScheduler()
+        }
+        
+        public init(name: String, params: FitlerParamsType? = nil) {
+            filterName = name
+            filterParams = params
+        }
     }
 }

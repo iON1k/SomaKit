@@ -9,8 +9,8 @@
 import UIKit
 import RxSwift
 
-public extension ImageResizingMode {
-    public static func fromUIContentMode(contentMode: UIViewContentMode) -> ImageResizingMode {
+public extension ImagePlugins.Resizing.Mode {
+    public static func fromUIContentMode(contentMode: UIViewContentMode) -> ImagePlugins.Resizing.Mode {
         switch contentMode {
         case .scaleAspectFill:
             return .AspectFill
@@ -24,14 +24,18 @@ public extension ImageResizingMode {
 
 public extension UIImageView {
     public func loadImage<TKey: CustomStringConvertible>(key: TKey, loader: ImageLoader<TKey>, resizeImage: Bool = true,
-                          placeholder: UIImage? = nil, plugins: ImagePluginType ...) -> Observable<UIImage> {
+                          placeholder: UIImage? = nil, plugins: [ImagePluginType] = []) -> Observable<UIImage> {
         
-        var resultPlugins = plugins
+        var resultPlugins = [ImagePluginType]()
+        
         if resizeImage {
-            resultPlugins.append(ImageResizing(size: frame.size, mode: ImageResizingMode.fromUIContentMode(contentMode: contentMode)))
+            resultPlugins.append(ImagePlugins.Resizing(size: frame.size, mode: ImagePlugins.Resizing.Mode.fromUIContentMode(contentMode: contentMode)))
         }
         
+        resultPlugins += plugins
+        
         var resultObservable = loader.loadImage(key: key, plugins: resultPlugins)
+            .observeOnMainScheduler()
             .do(onNext: { [weak self] (image) in
                 self?.image = image
             })
@@ -42,5 +46,10 @@ public extension UIImageView {
         }
         
         return resultObservable
+    }
+    
+    public func loadImage<TKey: CustomStringConvertible>(key: TKey, loader: ImageLoader<TKey>, resizeImage: Bool = true,
+                          placeholder: UIImage? = nil, plugins: ImagePluginType ...) -> Observable<UIImage> {
+        return loadImage(key: key, loader: loader, resizeImage: resizeImage, placeholder: placeholder, plugins: plugins)
     }
 }
