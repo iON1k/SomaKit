@@ -14,19 +14,14 @@ TODO: Add long description of the pod here.
                        DESC
 
   s.homepage         = 'https://github.com/iON1k/SomaKit'
-  # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'Anton Popkov' => 'ion1k88@gmail.com' }
   s.source           = { :git => 'https://github.com/iON1k/SomaKit.git', :tag => s.version.to_s }
-  # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
+  s.requires_arc          = true
 
   s.ios.deployment_target = '9.0'
 
   s.source_files = ['SomaKit/Core/**/*', 'SomaKit/Components/**/*', 'SomaKit/SomaKit.h']
-
-  # s.resource_bundles = {
-  #   'SomaKit' => ['SomaKit/Assets/*.png']
-  # }
 
   s.public_header_files = 'SomaKit/**/*.h'
   s.frameworks = 'UIKit'
