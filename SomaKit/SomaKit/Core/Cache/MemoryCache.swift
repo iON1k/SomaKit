@@ -10,7 +10,7 @@ public class MemoryCache<TKey: Hashable, TData>: CacheBase<TKey, TData> {
     private let memoryStore = MemoryStore<TKey, CacheDataType>()
     private let clearOnMemoryWarning: Bool
     
-    public init(lifeTimeBehavior: CacheLifeTimeBehavior = .default, clearOnMemoryWarning: Bool = false) {
+    public init(lifeTimeBehavior: CacheLifeTimeBehavior = .default, clearOnMemoryWarning: Bool = true) {
         self.clearOnMemoryWarning = clearOnMemoryWarning
         
         super.init(sourceStore: memoryStore, lifeTimeBehavior: lifeTimeBehavior)

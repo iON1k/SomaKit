@@ -14,7 +14,7 @@ open class AnchoredPagedDataProvider<TPage: AnchoredPageType>: AbstractAnchoredP
     
     private let anchoredPageObservableFactory: AnchoredPageObservableFactory
     
-    public init(pageSize: Int = PagedDataProviderDefaultPageSize, anchoredPageObservableFactory: @escaping AnchoredPageObservableFactory) {
+    public init(pageSize: Int = PagedDataProviderConstants.DefaultPageSize, anchoredPageObservableFactory: @escaping AnchoredPageObservableFactory) {
         self.anchoredPageObservableFactory = anchoredPageObservableFactory
         super.init(pageSize: pageSize)
     }
@@ -25,7 +25,7 @@ open class AnchoredPagedDataProvider<TPage: AnchoredPageType>: AbstractAnchoredP
 }
 
 extension AnchoredPagedDataProvider {
-    public convenience init<TDataSource: ObservableConvertibleType, TCacheStore: StoreType>(pageSize: Int = PagedDataProviderDefaultPageSize,
+    public convenience init<TDataSource: ObservableConvertibleType, TCacheStore: StoreType>(pageSize: Int = PagedDataProviderConstants.DefaultPageSize,
                                                                                             cacheStore: TCacheStore,
                                                                                             cacheBehavior: CacheableDataProviderBehavior = .default,
                                                                                             dataSourceFactory: @escaping (_ offset: Int, _ count: Int, _ anchor: AnchorType?) -> TDataSource)

@@ -8,9 +8,6 @@
 
 import RxSwift
 
-public let PagedDataProviderDefaultPageSize = 100
-private let AbstractPagedDataProviderQueueName = "AbstractPagedDataProvider_Queue"
-
 open class AbstractPagedDataProvider<TPage: PageType>: ListDataProviderType {
     public typealias PageType = TPage
     public typealias ItemType = PageType.ItemType
@@ -20,7 +17,7 @@ open class AbstractPagedDataProvider<TPage: PageType>: ListDataProviderType {
     private var itemsValue = [ItemType?]()
     private let itemsValueSubject = BehaviorSubject(value: [ItemType?]())
     
-    public let _workingScheduler = SerialDispatchQueueScheduler(internalSerialQueueName: AbstractPagedDataProviderQueueName)
+    public let _workingScheduler = SerialDispatchQueueScheduler(internalSerialQueueName: "com.somaKit.pageDataProvider")
     private let stateSyncLock = Sync.Lock()
     
     private let pageSize: Int

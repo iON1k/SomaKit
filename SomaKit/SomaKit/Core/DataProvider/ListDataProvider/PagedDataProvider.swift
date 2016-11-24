@@ -13,7 +13,7 @@ open class PagedDataProvider<TPage: PageType>: AbstractPagedDataProvider<TPage> 
     
     private let pageObservableFactory: PageObservableFactory
     
-    public init(pageSize: Int = PagedDataProviderDefaultPageSize, pageObservableFactory: @escaping PageObservableFactory) {
+    public init(pageSize: Int = PagedDataProviderConstants.DefaultPageSize, pageObservableFactory: @escaping PageObservableFactory) {
         self.pageObservableFactory = pageObservableFactory
         super.init(pageSize: pageSize)
     }
@@ -24,7 +24,7 @@ open class PagedDataProvider<TPage: PageType>: AbstractPagedDataProvider<TPage> 
 }
 
 extension PagedDataProvider {
-    public convenience init<TDataSource: ObservableConvertibleType, TCacheStore: StoreType>(pageSize: Int = PagedDataProviderDefaultPageSize,
+    public convenience init<TDataSource: ObservableConvertibleType, TCacheStore: StoreType>(pageSize: Int = PagedDataProviderConstants.DefaultPageSize,
                                     cacheStore: TCacheStore, cacheBehavior: CacheableDataProviderBehavior = .default,
                                     dataSourceFactory: @escaping (_ offset: Int, _ count: Int) -> TDataSource)
         where TDataSource: CachingKeyProvider, TCacheStore.KeyType == TDataSource.CachingKeyType,

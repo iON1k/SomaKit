@@ -9,7 +9,6 @@
 import UIKit
 import RxSwift
 
-
 public extension ImageResizingMode {
     public static func fromUIContentMode(contentMode: UIViewContentMode) -> ImageResizingMode {
         switch contentMode {
@@ -24,11 +23,15 @@ public extension ImageResizingMode {
 }
 
 public extension UIImageView {
-    public func loadImage<TKey: CustomStringConvertible>(_ key: TKey, loader: ImageLoader<TKey>,
+    public func loadImage<TKey: CustomStringConvertible>(key: TKey, loader: ImageLoader<TKey>, resizeImage: Bool = true,
                           placeholder: UIImage? = nil, plugins: ImagePluginType ...) -> Observable<UIImage> {
-        var resultObservable = loader.loadImage(key, plugins: [
-                ImageResizing(size: frame.size, mode: ImageResizingMode.fromUIContentMode(contentMode: contentMode))
-            ] + plugins)
+        
+        var resultPlugins = plugins
+        if resizeImage {
+            resultPlugins.append(ImageResizing(size: frame.size, mode: ImageResizingMode.fromUIContentMode(contentMode: contentMode)))
+        }
+        
+        var resultObservable = loader.loadImage(key: key, plugins: resultPlugins)
             .do(onNext: { [weak self] (image) in
                 self?.image = image
             })
