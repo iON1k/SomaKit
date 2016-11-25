@@ -8,9 +8,16 @@
 
 import RxSwift
 
-public struct ListDataProviderState<ItemType> {
-    let items: [ItemType?]
-    let isAllItemsLoaded: Bool
+public class ListDataProviderState<ItemType> {
+    public typealias ItemsType = [ItemType?]
+    
+    public let items: ItemsType
+    public let isAllItemsLoaded: Bool
+    
+    public init(items: ItemsType, isAllItemsLoaded: Bool) {
+        self.items = items
+        self.isAllItemsLoaded = isAllItemsLoaded
+    }
 }
 
 public protocol ListDataProviderType: DataProviderType {

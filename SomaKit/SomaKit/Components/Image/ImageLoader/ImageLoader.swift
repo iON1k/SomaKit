@@ -10,12 +10,10 @@ import RxSwift
 
 public class ImageLoader<TKey: CustomStringConvertible> {
     private let imageSource: ImageSource<TKey>
-    public typealias ProcessedCacheType = MemoryCache<String, UIImage>
-    public typealias LoadingObservableCacheType = [String : Observable<UIImage>]
     
     private let imageCache: Store<String, UIImage>
-    private let processedImageCache: ProcessedCacheType
-    private var loadingObservableCache = LoadingObservableCacheType()
+    private let processedImageCache = MemoryCache<String, UIImage>()
+    private var loadingObservablesCache = [String : Observable<UIImage>]()
     
     private let loadingSyncLock = Sync.Lock()
     
@@ -47,7 +45,7 @@ public class ImageLoader<TKey: CustomStringConvertible> {
     private func sourceLoadingImageObservable(key: TKey, imageCacheKey: String,
                                               processedImageCacheKey: String, plugins: [ImagePluginType]) -> Observable<UIImage> {
         return loadingSyncLock.sync {
-            if let loadingObservable = loadingObservableCache[imageCacheKey] {
+            if let loadingObservable = loadingObservablesCache[imageCacheKey] {
                 return loadingObservable
             }
             
@@ -62,9 +60,9 @@ public class ImageLoader<TKey: CustomStringConvertible> {
                 .do(onDispose: { 
                     self.removeLoadingObservable(cacheKey: imageCacheKey)
                 })
-                .share()
+                .shareReplay(1)
             
-            loadingObservableCache[imageCacheKey] = loadingObservable
+            loadingObservablesCache[imageCacheKey] = loadingObservable
             
             return loadingObservable
         }
@@ -72,7 +70,7 @@ public class ImageLoader<TKey: CustomStringConvertible> {
     
     private func removeLoadingObservable(cacheKey: String) {
         loadingSyncLock.sync {
-            loadingObservableCache.removeValue(forKey: cacheKey)
+            loadingObservablesCache.removeValue(forKey: cacheKey)
             return
         }
     }
@@ -100,11 +98,10 @@ public class ImageLoader<TKey: CustomStringConvertible> {
     }
     
     public init<TSource: ImageSourceType, TImageCache: StoreType>
-        (imageSource: TSource, imageCache: TImageCache, processedImageCache: ProcessedCacheType = MemoryCache())
+        (imageSource: TSource, imageCache: TImageCache)
         where TSource.KeyType == TKey, TImageCache.KeyType == String, TImageCache.DataType == UIImage {
         self.imageSource = imageSource.asImageSource()
         self.imageCache = imageCache.asStore()
-        self.processedImageCache = processedImageCache
     }
 }
 

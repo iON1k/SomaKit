@@ -18,6 +18,7 @@ open class AbstractPagedDataProvider<TPage: PageType>: ListDataProviderType {
     
     public let _workingScheduler = SerialDispatchQueueScheduler(internalSerialQueueName: "com.somaKit.pageDataProvider")
     
+    private var loadingObservablesCache = [Int : Observable<PageType>]()
     private let pageSize: Int
     
     public init(pageSize: Int) {
@@ -61,11 +62,24 @@ open class AbstractPagedDataProvider<TPage: PageType>: ListDataProviderType {
     }
     
     private func createPageLoadingObservable(_ pageIndex: Int) -> Observable<PageType> {
-        return _createPageLoadingObservable(pageIndex * pageSize, count: pageSize)
+        if let loadingObservable = loadingObservablesCache[pageIndex] {
+            return loadingObservable
+        } else {
+            
+        }
+        
+        let loadingObservable = _createPageLoadingObservable(pageIndex * pageSize, count: pageSize)
             .observeOn(_workingScheduler)
             .do(onNext: { (page) in
                 self.onPageDidLoaded(page, pageIndex: pageIndex)
+            }, onDispose: {
+                self.loadingObservablesCache.removeValue(forKey: pageIndex)
             })
+            .shareReplay(1)
+        
+        loadingObservablesCache[pageIndex] = loadingObservable
+        
+        return loadingObservable
     }
     
     private func onPageDidLoaded(_ page: PageType, pageIndex: Int) {
