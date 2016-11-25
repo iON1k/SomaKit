@@ -65,21 +65,19 @@ open class AbstractPagedDataProvider<TPage: PageType>: ListDataProviderType {
         if let loadingObservable = loadingObservablesCache[pageIndex] {
             return loadingObservable
         } else {
+            let loadingObservable = _createPageLoadingObservable(pageIndex * pageSize, count: pageSize)
+                .observeOn(_workingScheduler)
+                .do(onNext: { (page) in
+                    self.onPageDidLoaded(page, pageIndex: pageIndex)
+                }, onDispose: {
+                    self.loadingObservablesCache.removeValue(forKey: pageIndex)
+                })
+                .shareReplay(1)
             
+            loadingObservablesCache[pageIndex] = loadingObservable
+            
+            return loadingObservable
         }
-        
-        let loadingObservable = _createPageLoadingObservable(pageIndex * pageSize, count: pageSize)
-            .observeOn(_workingScheduler)
-            .do(onNext: { (page) in
-                self.onPageDidLoaded(page, pageIndex: pageIndex)
-            }, onDispose: {
-                self.loadingObservablesCache.removeValue(forKey: pageIndex)
-            })
-            .shareReplay(1)
-        
-        loadingObservablesCache[pageIndex] = loadingObservable
-        
-        return loadingObservable
     }
     
     private func onPageDidLoaded(_ page: PageType, pageIndex: Int) {

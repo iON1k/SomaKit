@@ -10,7 +10,7 @@ import RxSwift
 
 public protocol ImagePluginType {
     func perform(image: UIImage) -> Observable<UIImage>
-    var imagePluginKey: String { get }
+    var pluginKey: String { get }
 }
 
 extension UIImage {
@@ -27,8 +27,4 @@ extension UIImage {
     public func performPlugins(plugins: ImagePluginType ...) -> Observable<UIImage> {
         return performPlugins(plugins: plugins)
     }
-}
-
-public enum ImagePlugins {
-    //Nothing
 }

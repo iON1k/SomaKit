@@ -8,7 +8,7 @@
 
 import RxSwift
 
-public extension Observable where Element: OptionalType {
+public extension ObservableType where E: OptionalType {
     public func ignoreNil() -> Observable<E.Wrapped> {
         return self.filter({ (element) -> Bool in
                 return element.hasValue
@@ -19,7 +19,7 @@ public extension Observable where Element: OptionalType {
     }
 }
 
-public extension Observable {
+public extension ObservableType {
     public func subcribeOnBackgroundScheduler() -> Observable<E> {
         return self.subscribeOn(ConcurrentDispatchQueueScheduler(qos: .default))
     }
@@ -37,7 +37,7 @@ public extension Observable {
     }
 }
 
-public extension Observable {
+public extension ObservableType {
     public func catchErrorNoReturn() -> Observable<E> {
         return self.catchError({ (error) -> Observable<E> in
             return Observable.empty()
@@ -50,7 +50,7 @@ func <= <TResult>(variable: Variable<TResult>, newValue: TResult) -> Void {
     variable.value = newValue
 }
 
-public extension Observable {
+public extension ObservableType {
     public func mapWith<TElement>(_ element: TElement) -> Observable<TElement> {
         return self.map({ (_) -> TElement in
             return element

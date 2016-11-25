@@ -8,7 +8,7 @@
 
 import RxSwift
 
-public extension Observable {
+public extension ObservableType {
     public func logError(_ text: String = "Error", logLevel: LogLevel = .error) -> Observable<E> {
         return self.do(onError: { (error) in
             Log.log(logLevel, message: text + "\n\(error)")

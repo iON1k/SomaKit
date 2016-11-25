@@ -75,11 +75,11 @@ open class ModuleViewController<TViewModel: ModuleViewModel>: SomaViewController
         //Nothing
     }
     
-    public func whileBinded<T>(_ observable: Observable<T>) -> Observable<T> {
+    public func whileBinded<TObservable : ObservableType>(_ observable: TObservable) -> Observable<TObservable.E> {
         return uiBindable.whileBinded(observable)
     }
     
-    public func whileActive<T>(_ observable: Observable<T>) -> Observable<T> {
+    public func whileActive<TObservable : ObservableType>(_ observable: TObservable) -> Observable<TObservable.E> {
         return uiBindable.whileActive(observable)
     }
 }
