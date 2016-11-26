@@ -9,12 +9,8 @@
 import RxSwift
 
 public class ImageStartOperation: ImageOperation, ImageOperationPerformer {
-    private enum Constants {
-        static let defaultKey = "UnknownImage"
-    }
-    
-    public override var _workingObservable: Observable<UIImage> {
-        return Observable.just(image)
+    public override var _imageSource: Observable<UIImage> {
+        return source
     }
     
     public override var _performer: ImageOperationPerformer {
@@ -26,20 +22,32 @@ public class ImageStartOperation: ImageOperation, ImageOperationPerformer {
     }
     
     public func performImageOperation(operation: ImageOperation) -> Observable<UIImage> {
-        return operation._workingObservable
+        return operation._imageSource
     }
     
-    private let image: UIImage
+    private let source: Observable<UIImage>
     private let key: String
     
-    public init(image: UIImage, key: String? = nil) {
-        self.key = key ?? Constants.defaultKey
-        self.image = image
+    public init(source: Observable<UIImage>, key: String? = nil) {
+        self.key = key ?? String()
+        self.source = source
     }
 }
 
 public extension UIImage {
-    public func startOperation(key: String? = nil) -> ImageStartOperation {
-        return ImageStartOperation(image: self, key: key)
+    public func startOperation(key: String? = nil) -> ImageOperation {
+        return Observable.just(self).asImageOperation()
+    }
+}
+
+public extension ImageOperation {
+    public func asImageOperation(key: String? = nil) -> ImageOperation {
+        return self
+    }
+}
+
+public extension ObservableConvertibleType where E == UIImage {
+    public func asImageOperation(key: String? = nil) -> ImageOperation {
+        return ImageStartOperation(source: self.asObservable(), key: key)
     }
 }

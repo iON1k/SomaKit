@@ -32,18 +32,18 @@ public extension UIImageView {
             resultOperation = resultOperation.resize(size: frame.size, mode: ImageResizingPlugin.Mode.fromUIContentMode(contentMode: contentMode))
         }
         
-        resultOperation = ImageFakeOperation(originalOperation: resultOperation, performerObservableHandler: { (observable) -> Observable<UIImage> in
-            var setImageObservable = observable.observeOnMainScheduler()
+        resultOperation = resultOperation.performWith({ (observable) -> Observable<UIImage> in
+            var resultObservable = observable.observeOnMainScheduler()
                 .do(onNext: { [weak self] (image) in
                     self?.image = image
                 })
                 .takeUntil(self.rx.deallocated)
             
             if let placeholder = placeholder {
-                setImageObservable = setImageObservable.startWith(placeholder)
+                resultObservable = resultObservable.startWith(placeholder)
             }
             
-            return setImageObservable
+            return resultObservable
         })
         
         return resultOperation

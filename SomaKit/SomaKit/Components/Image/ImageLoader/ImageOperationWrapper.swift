@@ -9,8 +9,8 @@
 import RxSwift
 
 public class ImageOperationWrapper: ImageOperation {
-    open override var _workingObservable: Observable<UIImage> {
-        return _prepareWorkingObservable(workingObservable: originalOperation._workingObservable)
+    open override var _imageSource: Observable<UIImage> {
+        return _prepareWorkingObservable(workingObservable: originalOperation._imageSource)
     }
     
     open override var _performer: ImageOperationPerformer {
@@ -25,9 +25,9 @@ public class ImageOperationWrapper: ImageOperation {
         return workingObservable
     }
     
-    open override func internalPreparePerformerObservable(performObservable: Observable<UIImage>) -> Observable<UIImage> {
-        return super.internalPreparePerformerObservable(performObservable:
-            originalOperation.internalPreparePerformerObservable(performObservable: performObservable))
+    open override func _preparePerformerObservable(performObservable: Observable<UIImage>) -> Observable<UIImage> {
+        return super._preparePerformerObservable(performObservable:
+            originalOperation._preparePerformerObservable(performObservable: performObservable))
     }
     
     open func _prepareCachingKey(cachingKey: String) -> String {

@@ -11,7 +11,6 @@ import RxSwift
 public class ImageLoader<TKey: CustomStringConvertible> {
     private let imageSource: ImageSource<TKey>
     
-    private let imageCache: Store<String, UIImage>
     private let processedImageCache = MemoryCache<String, UIImage>()
     private var loadingObservablesCache = [String : Observable<UIImage>]()
     
@@ -20,15 +19,7 @@ public class ImageLoader<TKey: CustomStringConvertible> {
     public func loadImage(key: TKey) -> ImageOperation {
         let loadingObservable = Observable.deferred({ () -> Observable<UIImage> in
             let imageCacheKey = key.description
-            
-            return self.imageCache.loadData(key: imageCacheKey)
-                .flatMap({ (image) -> Observable<UIImage> in
-                    if let image = image {
-                        return Observable.just(image)
-                    } else {
-                        return self.loadingImageObservable(key: key, imageCacheKey: imageCacheKey)
-                    }
-                })
+            return self.beginLoadingImage(key: key, imageCacheKey: imageCacheKey)
         })
         .subcribeOnBackgroundScheduler()
         
@@ -45,7 +36,7 @@ public class ImageLoader<TKey: CustomStringConvertible> {
                     if let cachedImage = cachedImage {
                         return Observable.just(cachedImage)
                     } else {
-                        return operation._workingObservable
+                        return operation._imageSource
                             .flatMap({ (processedImage) -> Observable<UIImage> in
                                 return self.processedImageCache.storeData(key: operationCachingKey, data: processedImage)
                                     .observeOnBackgroundScheduler()
@@ -57,7 +48,7 @@ public class ImageLoader<TKey: CustomStringConvertible> {
             .subcribeOnBackgroundScheduler()
     }
     
-    private func loadingImageObservable(key: TKey, imageCacheKey: String) -> Observable<UIImage> {
+    private func beginLoadingImage(key: TKey, imageCacheKey: String) -> Observable<UIImage> {
         return loadingSyncLock.sync {
             if let loadingObservable = loadingObservablesCache[imageCacheKey] {
                 return loadingObservable
@@ -83,10 +74,7 @@ public class ImageLoader<TKey: CustomStringConvertible> {
         }
     }
     
-    public init<TSource: ImageSourceType, TImageCache: StoreType>
-        (imageSource: TSource, imageCache: TImageCache)
-        where TSource.KeyType == TKey, TImageCache.KeyType == String, TImageCache.DataType == UIImage {
+    public init<TSource: ImageSourceType>(imageSource: TSource) where TSource.KeyType == TKey {
         self.imageSource = imageSource.asImageSource()
-        self.imageCache = imageCache.asStore()
     }
 }

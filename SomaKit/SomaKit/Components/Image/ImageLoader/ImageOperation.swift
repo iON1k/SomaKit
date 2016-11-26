@@ -11,7 +11,7 @@ import RxSwift
 public class ImageOperation: ObservableType {
     public typealias E = UIImage
     
-    open var _workingObservable: Observable<UIImage> {
+    open var _imageSource: Observable<UIImage> {
         Debug.abstractMethod()
     }
     
@@ -23,12 +23,12 @@ public class ImageOperation: ObservableType {
         Debug.abstractMethod()
     }
     
-    open func internalPreparePerformerObservable(performObservable: Observable<UIImage>) -> Observable<UIImage> {
+    open func _preparePerformerObservable(performObservable: Observable<UIImage>) -> Observable<UIImage> {
         return performObservable
     }
     
     public func subscribe<O: ObserverType>(_ observer: O) -> Disposable where O.E == UIImage {
-        return internalPreparePerformerObservable(performObservable: _performer.performImageOperation(operation: self))
+        return _preparePerformerObservable(performObservable: _performer.performImageOperation(operation: self))
             .subscribe(observer)
     }
 }

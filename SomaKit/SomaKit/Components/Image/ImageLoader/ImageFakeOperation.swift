@@ -13,12 +13,19 @@ public class ImageFakeOperation: ImageOperationWrapper {
     
     private let performerObservableHandler: PerformerObservableHandler
     
-    public override func internalPreparePerformerObservable(performObservable: Observable<UIImage>) -> Observable<UIImage> {
-        return super.internalPreparePerformerObservable(performObservable: performerObservableHandler(performObservable))
+    public override func _preparePerformerObservable(performObservable: Observable<UIImage>) -> Observable<UIImage> {
+        return super._preparePerformerObservable(performObservable: performerObservableHandler(performObservable))
     }
     
     public init(originalOperation: ImageOperation, performerObservableHandler: @escaping PerformerObservableHandler) {
         self.performerObservableHandler = performerObservableHandler
         super.init(originalOperation: originalOperation)
+    }
+}
+
+
+public extension ImageOperation {
+    public func performWith(_ perfrormHandler: @escaping ImageFakeOperation.PerformerObservableHandler) -> ImageOperation {
+        return ImageFakeOperation(originalOperation: self, performerObservableHandler: perfrormHandler)
     }
 }

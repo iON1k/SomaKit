@@ -9,7 +9,7 @@
 import RxSwift
 
 public class ImageLoadingOperation<TKey: CustomStringConvertible>: ImageOperation, ImageOperationPerformer {
-    public override var _workingObservable: Observable<UIImage> {
+    public override var _imageSource: Observable<UIImage> {
         return loadingObservable
     }
     
