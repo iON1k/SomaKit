@@ -35,7 +35,7 @@ public class ImageStartOperation: ImageOperation, ImageOperationPerformer {
 }
 
 public extension UIImage {
-    public func startOperation(key: String? = nil) -> ImageOperation {
+    public func asImageOperation(key: String? = nil) -> ImageOperation {
         return Observable.just(self).asImageOperation()
     }
 }

@@ -17,17 +17,12 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-//        let imageStore = UserDefaultsStore().transform(SomaFunc.sameTransform, transformDataHandler: { (image) -> Data in
-//            return UIImagePNGRepresentation(image)!
-//        }, revertTransformDataHandler: { (data) -> UIImage in
-//            return UIImage(data: data)!
-//        })
-//        
-//        let imageLoader = ImageLoader(imageSource: NetworkImageSource(), imageCache: imageStore)
-//        
-//        _ = imageView.loadImage(key: URL(string: "ImageURL.jpg")!, loader: imageLoader)
-//            .blur(blurType: .box(radius: 10))
-//            .subscribe()
+        let imageLoader = ImageLoader(imageSource: NetworkImageSource<String>())
+        
+        _ = imageView.loadImage(key: "YourImageURL.jpg", loader: imageLoader)
+            .round()
+            .blur(blurType: .gaussian(radius: 10))
+            .subscribe()
         
     }
 

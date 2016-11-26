@@ -1,5 +1,5 @@
 //
-//  Synchronized.swift
+//  Sync.swift
 //  SomaKit
 //
 //  Created by Anton on 15.06.16.
