@@ -17,7 +17,7 @@ public class ImageStartOperation: ImageOperation, ImageOperationPerformer {
         return Observable.just(image)
     }
     
-    public override var _operationPerformer: ImageOperationPerformer {
+    public override var _performer: ImageOperationPerformer {
         return self
     }
     
@@ -25,7 +25,7 @@ public class ImageStartOperation: ImageOperation, ImageOperationPerformer {
         return key
     }
     
-    public func perform(operation: ImageOperation) -> Observable<UIImage> {
+    public func performImageOperation(operation: ImageOperation) -> Observable<UIImage> {
         return operation._workingObservable
     }
     

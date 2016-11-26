@@ -35,7 +35,7 @@ public class ImageLoader<TKey: CustomStringConvertible> {
         return ImageLoadingOperation(imageLoader: self, key: key, loadingObservable: loadingObservable)
     }
     
-    internal func perform(operation: ImageOperation) -> Observable<UIImage> {
+    internal func performImageOperation(operation: ImageOperation) -> Observable<UIImage> {
         return Observable.deferred({ () -> Observable<UIImage> in
             let operationCachingKey = operation._cachingKey
             

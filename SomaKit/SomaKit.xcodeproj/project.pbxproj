@@ -497,10 +497,10 @@
 			children = (
 				24E5C2E31D20A28F0098AB3A /* ImageLoader.swift */,
 				24FE944B1DE8358A00A1FED5 /* ImageOperation.swift */,
-				24FE94571DE85F6E00A1FED5 /* ImageOperationWrapper.swift */,
-				24FE94551DE85DF300A1FED5 /* ImageFakeOperation.swift */,
 				24FE944D1DE835D900A1FED5 /* ImageOperationPerformer.swift */,
+				24FE94571DE85F6E00A1FED5 /* ImageOperationWrapper.swift */,
 				24FE944F1DE83A2D00A1FED5 /* ImageLoadingOperation.swift */,
+				24FE94551DE85DF300A1FED5 /* ImageFakeOperation.swift */,
 			);
 			path = ImageLoader;
 			sourceTree = "<group>";

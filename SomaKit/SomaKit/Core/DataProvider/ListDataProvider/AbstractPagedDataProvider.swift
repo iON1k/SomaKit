@@ -36,7 +36,7 @@ open class AbstractPagedDataProvider<TPage: PageType>: ListDataProviderType {
     public func loadItem(_ index: Int) -> Observable<ItemType?> {
         return Observable.deferred { () -> Observable<ItemType?> in
             if self.validateItemIndex(index) {
-                return self.unsafeLoadItem(index)
+                return self.beginLoadItem(index)
             } else {
                 return Observable.just(nil)
             }
@@ -44,21 +44,20 @@ open class AbstractPagedDataProvider<TPage: PageType>: ListDataProviderType {
         .subscribeOn(_workingScheduler)
     }
     
-    public func unsafeLoadItem(_ index: Int) -> Observable<ItemType?> {
-        return Observable.deferred({ () -> Observable<PageType> in
-            let pageIndex = self.pageForIndex(index)
-            return self.createPageLoadingObservable(pageIndex)
-        })
-        .map({ (page) -> ItemType? in
-            let pageIems = page.items
-            let indexOnPage = self.indexOnPage(index)
-            
-            if indexOnPage < pageIems.count {
-                return pageIems[indexOnPage]
-            }
-            
-            return nil
-        })
+    public func beginLoadItem(_ index: Int) -> Observable<ItemType?> {
+        let pageIndex = self.pageForIndex(index)
+        
+        return createPageLoadingObservable(pageIndex)
+            .map({ (page) -> ItemType? in
+                let pageIems = page.items
+                let indexOnPage = self.indexOnPage(index)
+                
+                if indexOnPage < pageIems.count {
+                    return pageIems[indexOnPage]
+                }
+                
+                return nil
+            })
     }
     
     private func createPageLoadingObservable(_ pageIndex: Int) -> Observable<PageType> {
@@ -141,6 +140,11 @@ open class AbstractPagedDataProvider<TPage: PageType>: ListDataProviderType {
     }
     
     private func validateItemIndex(_ itemIndex: Int) -> Bool {
+        //prev index loading not supported yet
+        guard itemIndex >= 0 else {
+            return false
+        }
+        
         guard let allItemsCount = allItemsCount else {
             return true
         }

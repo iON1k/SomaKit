@@ -9,16 +9,16 @@
 import RxSwift
 
 public class ImageFakeOperation: ImageOperationWrapper {
-    public typealias PerformObservableHandler = (Observable<UIImage>) -> Observable<UIImage>
+    public typealias PerformerObservableHandler = (Observable<UIImage>) -> Observable<UIImage>
     
-    private let performObservableHandler: PerformObservableHandler
+    private let performerObservableHandler: PerformerObservableHandler
     
-    public override func _preparePerformObservable(performObservable: Observable<UIImage>) -> Observable<UIImage> {
-        return super._preparePerformObservable(performObservable: performObservableHandler(performObservable))
+    public override func internalPreparePerformerObservable(performObservable: Observable<UIImage>) -> Observable<UIImage> {
+        return super.internalPreparePerformerObservable(performObservable: performerObservableHandler(performObservable))
     }
     
-    public init(originalOperation: ImageOperation, performObservableHandler: @escaping PerformObservableHandler) {
-        self.performObservableHandler = performObservableHandler
+    public init(originalOperation: ImageOperation, performerObservableHandler: @escaping PerformerObservableHandler) {
+        self.performerObservableHandler = performerObservableHandler
         super.init(originalOperation: originalOperation)
     }
 }

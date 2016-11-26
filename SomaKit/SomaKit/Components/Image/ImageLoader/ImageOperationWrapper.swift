@@ -13,8 +13,8 @@ public class ImageOperationWrapper: ImageOperation {
         return _prepareWorkingObservable(workingObservable: originalOperation._workingObservable)
     }
     
-    open override var _operationPerformer: ImageOperationPerformer {
-        return originalOperation._operationPerformer
+    open override var _performer: ImageOperationPerformer {
+        return originalOperation._performer
     }
     
     open override var _cachingKey: String {
@@ -25,9 +25,9 @@ public class ImageOperationWrapper: ImageOperation {
         return workingObservable
     }
     
-    open override func _preparePerformObservable(performObservable: Observable<UIImage>) -> Observable<UIImage> {
-        return super._preparePerformObservable(performObservable:
-            originalOperation._preparePerformObservable(performObservable: performObservable))
+    open override func internalPreparePerformerObservable(performObservable: Observable<UIImage>) -> Observable<UIImage> {
+        return super.internalPreparePerformerObservable(performObservable:
+            originalOperation.internalPreparePerformerObservable(performObservable: performObservable))
     }
     
     open func _prepareCachingKey(cachingKey: String) -> String {

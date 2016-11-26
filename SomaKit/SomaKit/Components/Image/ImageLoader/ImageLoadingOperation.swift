@@ -13,7 +13,7 @@ public class ImageLoadingOperation<TKey: CustomStringConvertible>: ImageOperatio
         return loadingObservable
     }
     
-    public override var _operationPerformer: ImageOperationPerformer {
+    public override var _performer: ImageOperationPerformer {
         return self
     }
     
@@ -21,8 +21,8 @@ public class ImageLoadingOperation<TKey: CustomStringConvertible>: ImageOperatio
         return key.description
     }
     
-    public func perform(operation: ImageOperation) -> Observable<UIImage> {
-        return imageLoader.perform(operation: operation)
+    public func performImageOperation(operation: ImageOperation) -> Observable<UIImage> {
+        return imageLoader.performImageOperation(operation: operation)
     }
 
     private let loadingObservable: Observable<UIImage>

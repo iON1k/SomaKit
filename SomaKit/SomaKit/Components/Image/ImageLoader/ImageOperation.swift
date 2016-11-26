@@ -15,7 +15,7 @@ public class ImageOperation: ObservableType {
         Debug.abstractMethod()
     }
     
-    open var _operationPerformer: ImageOperationPerformer {
+    open var _performer: ImageOperationPerformer {
         Debug.abstractMethod()
     }
     
@@ -23,12 +23,12 @@ public class ImageOperation: ObservableType {
         Debug.abstractMethod()
     }
     
-    open func _preparePerformObservable(performObservable: Observable<UIImage>) -> Observable<UIImage> {
+    open func internalPreparePerformerObservable(performObservable: Observable<UIImage>) -> Observable<UIImage> {
         return performObservable
     }
     
     public func subscribe<O: ObserverType>(_ observer: O) -> Disposable where O.E == UIImage {
-        return _preparePerformObservable(performObservable: _operationPerformer.perform(operation: self))
+        return internalPreparePerformerObservable(performObservable: _performer.performImageOperation(operation: self))
             .subscribe(observer)
     }
 }
