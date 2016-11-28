@@ -10,8 +10,8 @@ import RxSwift
 
 public class ImageLoader<TKey: CustomStringConvertible> {
     private let imageSource: ImageSource<TKey>
+    private let imageCache: MemoryStore<String, UIImage>
     
-    private let processedImageCache = MemoryCache<String, UIImage>()
     private var loadingObservablesCache = [String : Observable<UIImage>]()
     
     private let loadingSyncLock = Sync.Lock()
@@ -30,7 +30,7 @@ public class ImageLoader<TKey: CustomStringConvertible> {
         return Observable.deferred({ () -> Observable<UIImage> in
             let operationCachingKey = operation._cachingKey
             
-            return self.processedImageCache.loadData(key: operationCachingKey)
+            return self.imageCache.loadData(key: operationCachingKey)
                 .observeOnBackgroundScheduler()
                 .flatMap({ (cachedImage) -> Observable<UIImage> in
                     if let cachedImage = cachedImage {
@@ -38,7 +38,7 @@ public class ImageLoader<TKey: CustomStringConvertible> {
                     } else {
                         return operation._imageSource
                             .flatMap({ (processedImage) -> Observable<UIImage> in
-                                return self.processedImageCache.storeData(key: operationCachingKey, data: processedImage)
+                                return self.imageCache.storeData(key: operationCachingKey, data: processedImage)
                                     .observeOnBackgroundScheduler()
                                     .mapWith(processedImage)
                             })
@@ -74,7 +74,9 @@ public class ImageLoader<TKey: CustomStringConvertible> {
         }
     }
     
-    public init<TSource: ImageSourceType>(imageSource: TSource) where TSource.KeyType == TKey {
+    public init<TSource: ImageSourceType>(imageSource: TSource,
+                imageCache: MemoryStore<String, UIImage> = MemoryStore()) where TSource.KeyType == TKey {
         self.imageSource = imageSource.asImageSource()
+        self.imageCache = imageCache
     }
 }
