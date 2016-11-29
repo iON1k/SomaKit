@@ -9,7 +9,7 @@
 import RxSwift
 
 public class ImageOperationWrapper: ImageOperation {
-    open override var _imageSource: Observable<UIImage> {
+    open override var _imageSource: Observable<ImageData> {
         return _prepareWorkingObservable(workingObservable: originalOperation._imageSource)
     }
     
@@ -21,7 +21,7 @@ public class ImageOperationWrapper: ImageOperation {
         return _prepareCachingKey(cachingKey: originalOperation._cachingKey)
     }
     
-    open func _prepareWorkingObservable(workingObservable: Observable<UIImage>) -> Observable<UIImage> {
+    open func _prepareWorkingObservable(workingObservable: Observable<ImageData>) -> Observable<ImageData> {
         return workingObservable
     }
     

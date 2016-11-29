@@ -12,16 +12,12 @@ public class ImageLoader<TKey: CustomStringConvertible> {
     private let imageSource: ImageSource<TKey>
     private let imageCache: MemoryStore<String, UIImage>
     
-    private var loadingObservablesCache = [String : Observable<UIImage>]()
-    
     private let loadingSyncLock = Sync.Lock()
     
     public func loadImage(key: TKey) -> ImageOperation {
-        let loadingObservable = Observable.deferred({ () -> Observable<UIImage> in
-            let imageCacheKey = key.description
-            return self.beginLoadingImage(key: key, imageCacheKey: imageCacheKey)
-        })
-        .subcribeOnBackgroundScheduler()
+        let loadingObservable = self.imageSource
+            .loadImage(key)
+            .subcribeOnBackgroundScheduler()
         
         return ImageLoadingOperation(imageLoader: self, key: key, loadingObservable: loadingObservable)
     }
@@ -37,41 +33,22 @@ public class ImageLoader<TKey: CustomStringConvertible> {
                         return Observable.just(cachedImage)
                     } else {
                         return operation._imageSource
-                            .flatMap({ (processedImage) -> Observable<UIImage> in
-                                return self.imageCache.storeData(key: operationCachingKey, data: processedImage)
-                                    .observeOnBackgroundScheduler()
-                                    .mapWith(processedImage)
+                            .flatMap({ (imageData) -> Observable<UIImage> in
+                                let operationImage = imageData.operationImage
+                                if operationImage == imageData.sourceImage {
+                                    return Observable.just(operationImage)
+                                } else {
+                                    return self.imageCache.storeData(key: operationCachingKey, data: operationImage)
+                                        .observeOnBackgroundScheduler()
+                                        .mapWith(operationImage)
+                                }
+                                
+                                
                             })
                     }
                 })
             })
             .subcribeOnBackgroundScheduler()
-    }
-    
-    private func beginLoadingImage(key: TKey, imageCacheKey: String) -> Observable<UIImage> {
-        return loadingSyncLock.sync {
-            if let loadingObservable = loadingObservablesCache[imageCacheKey] {
-                return loadingObservable
-            }
-            
-            let loadingObservable = imageSource.loadImage(key)
-                .observeOnBackgroundScheduler()
-                .do(onDispose: {
-                    self.removeLoadingObservable(cacheKey: imageCacheKey)
-                })
-                .shareReplay(1)
-            
-            loadingObservablesCache[imageCacheKey] = loadingObservable
-            
-            return loadingObservable
-        }
-    }
-    
-    private func removeLoadingObservable(cacheKey: String) {
-        loadingSyncLock.sync {
-            loadingObservablesCache.removeValue(forKey: cacheKey)
-            return
-        }
     }
     
     public init<TSource: ImageSourceType>(imageSource: TSource,

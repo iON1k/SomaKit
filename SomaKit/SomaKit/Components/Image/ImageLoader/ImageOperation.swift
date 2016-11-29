@@ -10,8 +10,9 @@ import RxSwift
 
 public class ImageOperation: ObservableType {
     public typealias E = UIImage
+    public typealias ImageData = (sourceImage: UIImage, operationImage: UIImage)
     
-    open var _imageSource: Observable<UIImage> {
+    open var _imageSource: Observable<ImageData> {
         Debug.abstractMethod()
     }
     

@@ -9,8 +9,11 @@
 import RxSwift
 
 public class ImageStartOperation: ImageOperation, ImageOperationPerformer {
-    public override var _imageSource: Observable<UIImage> {
+    public override var _imageSource: Observable<ImageData> {
         return source
+            .map({ (image) -> ImageData in
+                return ImageData(sourceImage: image, operationImage: image)
+            })
     }
     
     public override var _performer: ImageOperationPerformer {
@@ -23,6 +26,9 @@ public class ImageStartOperation: ImageOperation, ImageOperationPerformer {
     
     public func performImageOperation(operation: ImageOperation) -> Observable<UIImage> {
         return operation._imageSource
+            .map({ (imageData) -> UIImage in
+                return imageData.operationImage
+            })
     }
     
     private let source: Observable<UIImage>

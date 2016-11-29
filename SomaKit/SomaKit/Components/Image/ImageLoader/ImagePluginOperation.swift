@@ -13,10 +13,13 @@ public class ImagePluginOperation: ImageOperationWrapper {
         return cachingKey + plugin.pluginKey
     }
     
-    public override func _prepareWorkingObservable(workingObservable: Observable<UIImage>) -> Observable<UIImage> {
+    public override func _prepareWorkingObservable(workingObservable: Observable<ImageData>) -> Observable<ImageData> {
         return workingObservable
-            .flatMap({ (image) -> Observable<UIImage> in
-                return self.plugin.perform(image: image)
+            .flatMap({ (imageData) -> Observable<ImageData> in
+                self.plugin.perform(image: imageData.operationImage)
+                    .map({ (pluginImage) -> ImageData in
+                        return ImageData(sourceImage: imageData.sourceImage, operationImage: pluginImage)
+                    })
             })
     }
 
