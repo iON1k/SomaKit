@@ -9,5 +9,5 @@
 import RxSwift
 
 public protocol ImageOperationPerformer {
-    func performImageOperation(operation: ImageOperation) -> Observable<UIImage>
+    func _performImageOperation(operation: ImageOperation) -> Observable<UIImage>
 }

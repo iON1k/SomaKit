@@ -8,7 +8,7 @@
 
 import RxSwift
 
-public class SomaUIBindable: UiBindableType {
+public class SomaUIBindable: UIBindableType {
     private let isBindedSubject: BehaviorSubject<Bool>
     private let isActiveSubject: BehaviorSubject<Bool>
     

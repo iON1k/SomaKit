@@ -10,8 +10,7 @@
 		2409BB5E1DDFD3D700575482 /* ModuleBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2409BB5D1DDFD3D700575482 /* ModuleBuilder.swift */; };
 		241AF7D31D6A14BA004A8114 /* ApiRequestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241AF7D21D6A14BA004A8114 /* ApiRequestBase.swift */; };
 		241B948D1D6932B00008D22F /* AlamoRequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241B948A1D6932B00008D22F /* AlamoRequestManager.swift */; };
-		24231EAF1D7C53BD00309D5B /* TableViewBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24231EAE1D7C53BD00309D5B /* TableViewBehavior.swift */; };
-		24231EB11D7C54D800309D5B /* AbstractTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24231EB01D7C54D800309D5B /* AbstractTableViewController.swift */; };
+		24231EB11D7C54D800309D5B /* SomaTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24231EB01D7C54D800309D5B /* SomaTableViewController.swift */; };
 		24243F0B1D6C9D2400DB2584 /* SomaJsonMappable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24243F0A1D6C9D2400DB2584 /* SomaJsonMappable.swift */; };
 		24243F0D1D6CA63F00DB2584 /* UnsafeJsonMappingConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24243F0C1D6CA63F00DB2584 /* UnsafeJsonMappingConverter.swift */; };
 		242B23761DD23359007EC07D /* JsonMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 242B23731DD23359007EC07D /* JsonMapper.swift */; };
@@ -83,8 +82,7 @@
 		24EB57DF1D2C0E8A0062DDDB /* ModuleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB57D31D2C0E8A0062DDDB /* ModuleViewModel.swift */; };
 		24EB57E01D2C0E8A0062DDDB /* ViewModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB57D51D2C0E8A0062DDDB /* ViewModelType.swift */; };
 		24EB57E11D2C0E8A0062DDDB /* ViewPresenterType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB57D61D2C0E8A0062DDDB /* ViewPresenterType.swift */; };
-		24EB57E81D2C229C0062DDDB /* SomaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB57E71D2C229C0062DDDB /* SomaViewController.swift */; };
-		24EB57EA1D2C25920062DDDB /* ModuleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB57E91D2C25920062DDDB /* ModuleViewController.swift */; };
+		24EB57EA1D2C25920062DDDB /* SomaModuleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB57E91D2C25920062DDDB /* SomaModuleViewController.swift */; };
 		24EB57ED1D2C2C0F0062DDDB /* UiBindable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB57EC1D2C2C0F0062DDDB /* UiBindable.swift */; };
 		24EB57EF1D2C2DC40062DDDB /* SomaUIBindable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB57EE1D2C2DC40062DDDB /* SomaUIBindable.swift */; };
 		24F3CF561D6BA5D8004C0AAF /* AbstractApiRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F3CF551D6BA5D8004C0AAF /* AbstractApiRequest.swift */; };
@@ -111,8 +109,7 @@
 		2409BB5D1DDFD3D700575482 /* ModuleBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModuleBuilder.swift; sourceTree = "<group>"; };
 		241AF7D21D6A14BA004A8114 /* ApiRequestBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiRequestBase.swift; sourceTree = "<group>"; };
 		241B948A1D6932B00008D22F /* AlamoRequestManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlamoRequestManager.swift; sourceTree = "<group>"; };
-		24231EAE1D7C53BD00309D5B /* TableViewBehavior.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewBehavior.swift; sourceTree = "<group>"; };
-		24231EB01D7C54D800309D5B /* AbstractTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AbstractTableViewController.swift; sourceTree = "<group>"; };
+		24231EB01D7C54D800309D5B /* SomaTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SomaTableViewController.swift; sourceTree = "<group>"; };
 		24243F0A1D6C9D2400DB2584 /* SomaJsonMappable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SomaJsonMappable.swift; sourceTree = "<group>"; };
 		24243F0C1D6CA63F00DB2584 /* UnsafeJsonMappingConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnsafeJsonMappingConverter.swift; sourceTree = "<group>"; };
 		242B23731DD23359007EC07D /* JsonMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JsonMapper.swift; sourceTree = "<group>"; };
@@ -186,8 +183,7 @@
 		24EB57D31D2C0E8A0062DDDB /* ModuleViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModuleViewModel.swift; sourceTree = "<group>"; };
 		24EB57D51D2C0E8A0062DDDB /* ViewModelType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewModelType.swift; sourceTree = "<group>"; };
 		24EB57D61D2C0E8A0062DDDB /* ViewPresenterType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewPresenterType.swift; sourceTree = "<group>"; };
-		24EB57E71D2C229C0062DDDB /* SomaViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SomaViewController.swift; sourceTree = "<group>"; };
-		24EB57E91D2C25920062DDDB /* ModuleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModuleViewController.swift; sourceTree = "<group>"; };
+		24EB57E91D2C25920062DDDB /* SomaModuleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SomaModuleViewController.swift; sourceTree = "<group>"; };
 		24EB57EC1D2C2C0F0062DDDB /* UiBindable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UiBindable.swift; sourceTree = "<group>"; };
 		24EB57EE1D2C2DC40062DDDB /* SomaUIBindable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SomaUIBindable.swift; sourceTree = "<group>"; };
 		24F3CF551D6BA5D8004C0AAF /* AbstractApiRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AbstractApiRequest.swift; sourceTree = "<group>"; };
@@ -538,10 +534,8 @@
 		24EB57E21D2C187D0062DDDB /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
-				24EB57E71D2C229C0062DDDB /* SomaViewController.swift */,
-				24EB57E91D2C25920062DDDB /* ModuleViewController.swift */,
-				24231EAE1D7C53BD00309D5B /* TableViewBehavior.swift */,
-				24231EB01D7C54D800309D5B /* AbstractTableViewController.swift */,
+				24EB57E91D2C25920062DDDB /* SomaModuleViewController.swift */,
+				24231EB01D7C54D800309D5B /* SomaTableViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -726,8 +720,7 @@
 				24E3CE0C1D1FE7B3001BCDB2 /* Utils.swift in Sources */,
 				24E3CE071D1FE7B3001BCDB2 /* OptionalType.swift in Sources */,
 				24E3CDF61D1FE7B3001BCDB2 /* DatabaseCacheStore.swift in Sources */,
-				24EB57E81D2C229C0062DDDB /* SomaViewController.swift in Sources */,
-				24EB57EA1D2C25920062DDDB /* ModuleViewController.swift in Sources */,
+				24EB57EA1D2C25920062DDDB /* SomaModuleViewController.swift in Sources */,
 				24EB57ED1D2C2C0F0062DDDB /* UiBindable.swift in Sources */,
 				24E3CE211D1FE7B3001BCDB2 /* Store+Transform.swift in Sources */,
 				247C0DFA1D64B4AD00EF8808 /* TimeHelper.swift in Sources */,
@@ -776,7 +769,6 @@
 				24468C101D455B42003E1344 /* TableElementAttributesCache.swift in Sources */,
 				24E1C0D71D22F14200533D4E /* ImageFilteringPlugin.swift in Sources */,
 				24EB57E11D2C0E8A0062DDDB /* ViewPresenterType.swift in Sources */,
-				24231EAF1D7C53BD00309D5B /* TableViewBehavior.swift in Sources */,
 				24E5C2E41D20A28F0098AB3A /* ImageLoader.swift in Sources */,
 				24E94A2F1D5B705C0045C4A5 /* Array+ListDataProviderType.swift in Sources */,
 				24E3CE081D1FE7B3001BCDB2 /* SomaError.swift in Sources */,
@@ -802,7 +794,7 @@
 				24E3CE1B1D1FE7B3001BCDB2 /* MemoryStore.swift in Sources */,
 				24FFC01D1DCC9B450026CA83 /* StringCachingKeyProvider.swift in Sources */,
 				24EB57E01D2C0E8A0062DDDB /* ViewModelType.swift in Sources */,
-				24231EB11D7C54D800309D5B /* AbstractTableViewController.swift in Sources */,
+				24231EB11D7C54D800309D5B /* SomaTableViewController.swift in Sources */,
 				24E3CE001D1FE7B3001BCDB2 /* DataProviderType.swift in Sources */,
 				246F72661D593B8C004FF101 /* ListDataProviderType.swift in Sources */,
 				245726811D4A550A00D9FC63 /* TableViewManager.swift in Sources */,

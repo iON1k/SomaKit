@@ -9,32 +9,50 @@
 import RxSwift
 
 public class ImageLoadingOperation<TKey: CustomStringConvertible>: ImageOperation, ImageOperationPerformer {
-    public override var _imageSource: Observable<ImageData> {
-        return loadingObservable
-            .map({ (image) -> ImageData in
-                return ImageData(sourceImage: image, operationImage: image)
-            })
-    }
-    
     public override var _performer: ImageOperationPerformer {
         return self
     }
     
-    public override var _cachingKey: String {
-        return key.description
+    public func _performImageOperation(operation: ImageOperation) -> Observable<UIImage> {
+        return Observable.deferred({ () -> Observable<UIImage> in
+            let cachingKey = self.key.description + operation._cachingKey
+            
+            return self.cache.loadData(key: cachingKey)
+                .observeOnBackgroundScheduler()
+                .flatMap({ (cachedImage) -> Observable<UIImage> in
+                    if let cachedImage = cachedImage {
+                        return Observable.just(cachedImage)
+                    } else {
+                        return self.beginLoadImage(operation: operation, cachingKey: cachingKey)
+                    }
+                })
+        })
+        .subcribeOnBackgroundScheduler()
     }
     
-    public func performImageOperation(operation: ImageOperation) -> Observable<UIImage> {
-        return imageLoader.performImageOperation(operation: operation)
+    private func beginLoadImage(operation: ImageOperation, cachingKey: String) -> Observable<UIImage> {
+        return self.imageSource
+            .flatMap({ (originalImage) -> Observable<UIImage> in
+                return operation._begin(image: originalImage)
+                    .flatMap({ (image) -> Observable<UIImage> in
+                        if image == originalImage {
+                            return Observable.just(image)
+                        } else {
+                            return self.cache.storeData(key: cachingKey, data: image)
+                                .observeOnBackgroundScheduler()
+                                .mapWith(image)
+                        }
+                    })
+            })
     }
 
-    private let loadingObservable: Observable<UIImage>
-    private let imageLoader: ImageLoader<TKey>
+    private let imageSource: Observable<UIImage>
     private let key: TKey
+    private let cache: Store<String, UIImage>
     
-    public init(imageLoader: ImageLoader<TKey>, key: TKey, loadingObservable: Observable<UIImage>) {
-        self.imageLoader = imageLoader
+    public init<TCache: StoreType>(key: TKey, imageSource: Observable<UIImage>, cache: TCache) where TCache.KeyType == String, TCache.DataType == UIImage {
         self.key = key
-        self.loadingObservable = loadingObservable
+        self.imageSource = imageSource
+        self.cache = cache.asStore()
     }
 }

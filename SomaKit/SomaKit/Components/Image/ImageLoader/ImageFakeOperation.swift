@@ -8,24 +8,28 @@
 
 import RxSwift
 
-public class ImageFakeOperation: ImageOperationWrapper {
-    public typealias PerformerObservableHandler = (Observable<UIImage>) -> Observable<UIImage>
+public class ImageFakeOperation: ImageOperationWrapper, ImageOperationPerformer {
+    public typealias PerformerHandler = (Observable<UIImage>) -> Observable<UIImage>
     
-    private let performerObservableHandler: PerformerObservableHandler
+    private let performerHandler: PerformerHandler
     
-    public override func _preparePerformerObservable(performObservable: Observable<UIImage>) -> Observable<UIImage> {
-        return super._preparePerformerObservable(performObservable: performerObservableHandler(performObservable))
+    public override var _performer: ImageOperationPerformer {
+        return self
     }
     
-    public init(originalOperation: ImageOperation, performerObservableHandler: @escaping PerformerObservableHandler) {
-        self.performerObservableHandler = performerObservableHandler
+    public func _performImageOperation(operation: ImageOperation) -> Observable<UIImage> {
+        return performerHandler(super._performer._performImageOperation(operation: operation))
+    }
+    
+    public init(originalOperation: ImageOperation, performerHandler: @escaping PerformerHandler) {
+        self.performerHandler = performerHandler
         super.init(originalOperation: originalOperation)
     }
 }
 
 
 public extension ImageOperation {
-    public func performWith(_ perfrormHandler: @escaping ImageFakeOperation.PerformerObservableHandler) -> ImageOperation {
-        return ImageFakeOperation(originalOperation: self, performerObservableHandler: perfrormHandler)
+    public func performWith(_ performerHandler: @escaping ImageFakeOperation.PerformerHandler) -> ImageOperation {
+        return ImageFakeOperation(originalOperation: self, performerHandler: performerHandler)
     }
 }

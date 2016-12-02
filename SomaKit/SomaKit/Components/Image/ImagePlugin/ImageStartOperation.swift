@@ -9,13 +9,6 @@
 import RxSwift
 
 public class ImageStartOperation: ImageOperation, ImageOperationPerformer {
-    public override var _imageSource: Observable<ImageData> {
-        return source
-            .map({ (image) -> ImageData in
-                return ImageData(sourceImage: image, operationImage: image)
-            })
-    }
-    
     public override var _performer: ImageOperationPerformer {
         return self
     }
@@ -24,10 +17,10 @@ public class ImageStartOperation: ImageOperation, ImageOperationPerformer {
         return key
     }
     
-    public func performImageOperation(operation: ImageOperation) -> Observable<UIImage> {
-        return operation._imageSource
-            .map({ (imageData) -> UIImage in
-                return imageData.operationImage
+    public func _performImageOperation(operation: ImageOperation) -> Observable<UIImage> {
+        return source
+            .flatMap({ (image) -> Observable<UIImage> in
+                return operation._begin(image: image)
             })
     }
     

@@ -19,7 +19,7 @@ class ViewController: UIViewController {
         
         let imageLoader = ImageLoader(imageSource: NetworkImageSource<String>())
         
-        _ = imageView.loadImage(key: "YourImageURL.jpg", loader: imageLoader)
+        _ = imageView.loadImage(key: "YourImageURL", loader: imageLoader)
             .round()
             .blur(blurType: .gaussian(radius: 10))
             .subscribe()
@@ -30,7 +30,5 @@ class ViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-
 }
 

@@ -1,5 +1,5 @@
 //
-//  ModuleViewController.swift
+//  SomaModuleViewController.swift
 //  SomaKit
 //
 //  Created by Anton on 05.07.16.
@@ -8,7 +8,7 @@
 
 import RxSwift
 
-open class ModuleViewController<TViewModel: ModuleViewModel>: SomaViewController, ViewPresenterType, UiBindableType {
+open class SomaModuleViewController<TViewModel: ModuleViewModel>: UIViewController, ViewPresenterType, UIBindableType {
     public typealias ViewModel = TViewModel
     
     open private(set) var viewModel: ViewModel?
@@ -18,10 +18,14 @@ open class ModuleViewController<TViewModel: ModuleViewModel>: SomaViewController
     
     private let uiBindable: SomaUIBindable
     
-    public required init(context: InitContext) {
+    public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         uiBindable = SomaUIBindable(isBindedSubject: isBindedSubject, isActiveSubject: isActiveSubject, scheduler: MainScheduler.instance)
-
-        super.init(context: context)
+        
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    }
+    
+    public required init?(coder aDecoder: NSCoder) {
+        Debug.abstractMethod(#function)
     }
     
     public func bindViewModel(_ viewModel: ViewModel?) {

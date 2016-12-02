@@ -8,52 +8,21 @@
 
 import RxSwift
 
-public class ImageLoader<TKey: CustomStringConvertible> {
+public final class ImageLoader<TKey: CustomStringConvertible> {
     private let imageSource: ImageSource<TKey>
-    private let imageCache: MemoryStore<String, UIImage>
-    
-    private let loadingSyncLock = Sync.Lock()
+    private let imageCache: Store<String, UIImage>
     
     public func loadImage(key: TKey) -> ImageOperation {
-        let loadingObservable = self.imageSource
-            .loadImage(key)
-            .subcribeOnBackgroundScheduler()
-        
-        return ImageLoadingOperation(imageLoader: self, key: key, loadingObservable: loadingObservable)
+        return ImageLoadingOperation(key: key, imageSource: imageSource.loadImage(key), cache: imageCache)
     }
     
-    internal func performImageOperation(operation: ImageOperation) -> Observable<UIImage> {
-        return Observable.deferred({ () -> Observable<UIImage> in
-            let operationCachingKey = operation._cachingKey
-            
-            return self.imageCache.loadData(key: operationCachingKey)
-                .observeOnBackgroundScheduler()
-                .flatMap({ (cachedImage) -> Observable<UIImage> in
-                    if let cachedImage = cachedImage {
-                        return Observable.just(cachedImage)
-                    } else {
-                        return operation._imageSource
-                            .flatMap({ (imageData) -> Observable<UIImage> in
-                                let operationImage = imageData.operationImage
-                                if operationImage == imageData.sourceImage {
-                                    return Observable.just(operationImage)
-                                } else {
-                                    return self.imageCache.storeData(key: operationCachingKey, data: operationImage)
-                                        .observeOnBackgroundScheduler()
-                                        .mapWith(operationImage)
-                                }
-                                
-                                
-                            })
-                    }
-                })
-            })
-            .subcribeOnBackgroundScheduler()
-    }
-    
-    public init<TSource: ImageSourceType>(imageSource: TSource,
-                imageCache: MemoryStore<String, UIImage> = MemoryStore()) where TSource.KeyType == TKey {
+    public init<TSource: ImageSourceType, TCache: StoreType>(imageSource: TSource,
+                imageCache: TCache) where TSource.KeyType == TKey, TCache.KeyType == String, TCache.DataType == UIImage {
         self.imageSource = imageSource.asImageSource()
-        self.imageCache = imageCache
+        self.imageCache = imageCache.asStore()
+    }
+    
+    public convenience init<TSource: ImageSourceType>(imageSource: TSource) where TSource.KeyType == TKey {
+        self.init(imageSource: imageSource, imageCache: MemoryCache())
     }
 }
