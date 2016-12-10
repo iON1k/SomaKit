@@ -6,13 +6,13 @@
 //  Copyright © 2016 iON1k. All rights reserved.
 //
 
-public protocol TableViewSectionModelType {
+public protocol TableViewSectionType {
     var cellsViewModels: [ViewModelType] { get }
     var headerViewModel: ViewModelType? { get }
     var footerViewModel: ViewModelType? { get }
 }
 
-public struct TableViewSectionModel: TableViewSectionModelType {
+public struct TableViewSection: TableViewSectionType {
     public let cellsViewModels: [ViewModelType]
     public let headerViewModel: ViewModelType?
     public let footerViewModel: ViewModelType?

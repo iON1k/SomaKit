@@ -9,10 +9,12 @@
 import RxSwift
 import RxCocoa
 
+public typealias TableElementType = ViewModelPresenter & TableElementBehavior
+
 public class TableViewManager: SomaProxy, UITableViewDataSource, UITableViewDelegate, TableElementAttributesCacheSource {
     public let tableView: UITableView
     
-    public typealias SectionsModels = [TableViewSectionModelType]
+    public typealias SectionsModels = [TableViewSectionType]
     public typealias SectionsAttributes = [TableSectionElementsAttributes]
     public typealias UpdatingHandler = (_ tableView: UITableView, _ updatingData: UpdatingData) -> Void
     
@@ -34,9 +36,9 @@ public class TableViewManager: SomaProxy, UITableViewDataSource, UITableViewDele
     private weak var forwardDelegate: UITableViewDelegate?
     private weak var forwardDataSource: UITableViewDataSource?
     
-    public init(tableView: UITableView) {
+    public init(tableView: UITableView, elementsGenerators: [ViewGenerator]) {
         self.tableView = tableView
-        elementsProvider = TableElementsProvider(tableView: tableView)
+        self.elementsProvider = TableElementsProvider(elementsGenerators: elementsGenerators)
         
         super.init()
         
@@ -110,7 +112,7 @@ public class TableViewManager: SomaProxy, UITableViewDataSource, UITableViewDele
         
         let viewModel = cellViewModel(indexPath)
         
-        let cell = elementsProvider.cellForViewModel(viewModel)
+        let cell = cellForViewModel(viewModel)
         bindAttributes(elementsAttributesCache.cellAttributes(indexPath), view: cell)
         
         return cell
@@ -141,7 +143,7 @@ public class TableViewManager: SomaProxy, UITableViewDataSource, UITableViewDele
             return nil
         }
         
-        let headerView = elementsProvider.viewForViewModel(headerViewModel)
+        let headerView = viewForViewModel(headerViewModel)
         bindAttributes(elementsAttributesCache.sectionHeaderAttributes(section), view: headerView)
         
         return headerView
@@ -172,7 +174,7 @@ public class TableViewManager: SomaProxy, UITableViewDataSource, UITableViewDele
             return nil
         }
         
-        let footerView = elementsProvider.viewForViewModel(footerViewModel)
+        let footerView = viewForViewModel(footerViewModel)
         bindAttributes(elementsAttributesCache.sectionHeaderAttributes(section), view: footerView)
         
         return footerView
@@ -192,7 +194,7 @@ public class TableViewManager: SomaProxy, UITableViewDataSource, UITableViewDele
         return sectionModel((indexPath as NSIndexPath).section).cellsViewModels[(indexPath as NSIndexPath).row]
     }
     
-    private func sectionModel(_ sectionIndex: Int) -> TableViewSectionModelType {
+    private func sectionModel(_ sectionIndex: Int) -> TableViewSectionType {
         return showingSectionsData[sectionIndex]
     }
     
@@ -203,7 +205,25 @@ public class TableViewManager: SomaProxy, UITableViewDataSource, UITableViewDele
     private func sectionsCount() -> Int {
         return showingSectionsData.count
     }
-    
+
+    private func viewForViewModel(_ viewModel: ViewModelType) -> UIView {
+        guard let view = elementsProvider.viewForViewModel(viewModel, with: tableView) else {
+            Log.error("View for view model type \(type(of: viewModel)) not registered")
+            return UIView()
+        }
+
+        return view
+    }
+
+    private func cellForViewModel(_ viewModel: ViewModelType) -> UITableViewCell {
+        guard let cell = elementsProvider.cellForViewModel(viewModel, with: tableView) else {
+            Log.error("Cell for view model type \(type(of: viewModel)) not registered")
+            return UITableViewCell()
+        }
+
+        return cell
+    }
+
     private func beginUpdating(_ updatingEvent: UpdatingEvent, updatingData: UpdatingData) {
         Debug.ensureIsMainThread()
         
@@ -262,10 +282,10 @@ public class TableViewManager: SomaProxy, UITableViewDataSource, UITableViewDele
     }
     
     private func generateTableElementAttributes(_ viewModel: ViewModelType) -> TableElementAttributesType {
-        let viewType = elementsProvider.viewTypeForViewModel(viewModel)
+        let viewType = elementsProvider.viewGenerator(for: viewModel)?.viewType
         
-        guard let elementBehaviorType = viewType as? TableElementLogic.Type else {
-            Debug.error("View type \(viewType) for view model \(type(of: viewModel)) has no implementation for TableElementPresenterType protocol")
+        guard let elementBehaviorType = viewType as? TableElementBehavior.Type else {
+            Debug.error("View type \(viewType) for view model \(type(of: viewModel)) has no implementation for TableElementType protocol")
             return defaultElementsAttributes
         }
         
@@ -273,20 +293,20 @@ public class TableViewManager: SomaProxy, UITableViewDataSource, UITableViewDele
     }
     
     private func onViewDidEndDisplaying(_ view: UIView) {
-        tableElementLogic(view)?.tableElementReset()
+        TableElementBehavior(view)?.tableElementReset()
     }
     
     private func bindAttributes(_ attributes: TableElementAttributesType, view: UIView) {
-        tableElementLogic(view)?.bindTableElementAttributes(attributes)
+        TableElementBehavior(view)?.bindTableElementAttributes(attributes)
     }
     
-    private func tableElementLogic(_ view: UIView) -> TableElementLogic? {
-        guard let tableElementLogic = view as? TableElementLogic else {
-            Debug.error("View type \(type(of: view)) not implemented TableElementLogic protocol")
+    private func TableElementBehavior(_ view: UIView) -> TableElementBehavior? {
+        guard let TableElementBehavior = view as? TableElementBehavior else {
+            Debug.error("View type \(type(of: view)) not implemented TableElementBehavior protocol")
             return nil
         }
         
-        return tableElementLogic
+        return TableElementBehavior
     }
     
     private func startObserveUpdatingEvents() {
@@ -327,7 +347,7 @@ public class TableViewManager: SomaProxy, UITableViewDataSource, UITableViewDele
         public let updatingHandler: UpdatingHandler
         public let disposable = BooleanDisposable()
         
-        init(sectionsData: [TableViewSectionModelType], needPrepareData: Bool = true, updatingHandler: @escaping UpdatingHandler = UpdatingEvent.defaultUpdatingHandler) {
+        init(sectionsData: [TableViewSectionType], needPrepareData: Bool = true, updatingHandler: @escaping UpdatingHandler = UpdatingEvent.defaultUpdatingHandler) {
             self.sectionsData = sectionsData
             self.needPrepareData = needPrepareData
             self.updatingHandler = updatingHandler
