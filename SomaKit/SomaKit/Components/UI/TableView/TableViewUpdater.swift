@@ -44,7 +44,6 @@ public class TableViewUpdater {
 
     private func startObserveUpdatingEvents() {
         _ = updateEvents.asObservable()
-            .skip(1)
             .map({ (event) -> Observable<UpdatingData> in
                 return Observable.deferred({ [weak self] () -> Observable<UpdatingData> in
                     guard let strongSelf = self else {

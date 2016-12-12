@@ -7,7 +7,7 @@
 //
 
 public class TableViewDataSource: TableViewDataSourceType, TableElementsAttributesCalculatorEngineType {
-    public let sectionsModels: [TableViewSectionModel]
+    private let sectionsModels: [TableViewSectionModel]
     private let elementsProvider: TableElementsProvider
 
     public init(sectionsModels: [TableViewSectionModel], elementsProvider: TableElementsProvider) {
