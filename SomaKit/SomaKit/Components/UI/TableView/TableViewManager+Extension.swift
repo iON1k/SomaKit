@@ -8,68 +8,25 @@
 
 import RxSwift
 
-extension Array where Element: ViewModelType {
-    public func asTableViewSectionsModels() -> TableViewManager.SectionsModels {
-        let sectionsModels = TableViewSection(cellsViewModels: self)
-        return [sectionsModels]
-    }
-}
-
 extension TableViewManager {
-    public func updateDataObservable(_ sectionsData: SectionsModels, updatingHandler: @escaping UpdatingHandler = UpdatingEvent.defaultUpdatingHandler) -> Observable<Void> {
+    public func update(sectionsModels: [TableViewSectionModel],
+                       updatingHandler: @escaping TableViewUpdatingEvent.UpdatingHandler = TableViewUpdatingEvent.defaultUpdatingHandler) -> Observable<Void> {
         return Observable.create({ (observer) -> Disposable in
-            let eventUpdatingHandler: UpdatingHandler = { (tableView, updatingData) in
-                updatingHandler(tableView, updatingData)
+            self.update(with: TableViewUpdatingEvent(sectionsModels: sectionsModels, updatingHandler: { (tableView) in
+                updatingHandler(tableView)
                 observer.onNext()
                 observer.onCompleted()
-            }
+            }))
             
-            let updatingEvent = UpdatingEvent(sectionsData: sectionsData, needPrepareData: false, updatingHandler: eventUpdatingHandler)
-            
-            self.updateData(updatingEvent)
-            
-            return updatingEvent.disposable
+            return Disposables.create()
         })
     }
     
-    public func updateData(_ sectionsData: SectionsModels, updatingHandler: @escaping UpdatingHandler = UpdatingEvent.defaultUpdatingHandler) {
-        _ = updateDataObservable(sectionsData, updatingHandler: updatingHandler)
-            .subscribe()
-    }
-    
-    public func updateDataAsyncObservable(_ sectionsData: SectionsModels, updatingHandler: @escaping UpdatingHandler = UpdatingEvent.defaultUpdatingHandler) -> Observable<Void> {
-        return updateDataObservable(sectionsData, updatingHandler: updatingHandler)
-            .subcribeOnBackgroundScheduler()
-    }
-    
-    public func updateDataInBackground(_ sectionsData: SectionsModels, updatingHandler: @escaping UpdatingHandler = UpdatingEvent.defaultUpdatingHandler) {
-        _ = updateDataAsyncObservable(sectionsData, updatingHandler: updatingHandler)
-            .subscribe()
-    }
-    
-    public func reloadDataObservable(_ updatingHandler: @escaping UpdatingHandler = UpdatingEvent.defaultUpdatingHandler) -> Observable<Void> {
-        return updateDataObservable(actualSectionsData, updatingHandler: updatingHandler)
-    }
-    
-    public func reloadDataAsyncObservable(_ updatingHandler: @escaping UpdatingHandler = UpdatingEvent.defaultUpdatingHandler) -> Observable<Void> {
-        return updateDataAsyncObservable(actualSectionsData, updatingHandler: updatingHandler)
-    }
-    
-    public func reloadData(_ updatingHandler: @escaping UpdatingHandler = UpdatingEvent.defaultUpdatingHandler) -> Disposable {
-        return reloadDataObservable(updatingHandler)
-            .subscribe()
-    }
-    
-    public func reloadDataInBackground(_ updatingHandler: @escaping UpdatingHandler = UpdatingEvent.defaultUpdatingHandler) -> Disposable {
-        return reloadDataAsyncObservable(updatingHandler)
-            .subscribe()
-    }
-    
-    public func bindDataSource<TDataSource: ObservableConvertibleType>(_ dataSource: TDataSource, updatingHandler: @escaping UpdatingHandler = UpdatingEvent.defaultUpdatingHandler) -> Disposable
-        where TDataSource.E == SectionsModels {
-        return dataSource.asObservable()
-            .do(onNext: { (sectionsData) in
-                self.updateDataInBackground(sectionsData, updatingHandler: updatingHandler)
+    public func bind<TEventsSource: ObservableConvertibleType>(with eventsSource: TEventsSource) -> Disposable
+        where TEventsSource.E == TableViewUpdatingEvent {
+        return eventsSource.asObservable()
+            .do(onNext: { (event) in
+                self.update(with: event)
             })
             .subscribe()
     }

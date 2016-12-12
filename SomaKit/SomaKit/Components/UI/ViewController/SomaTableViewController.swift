@@ -22,6 +22,6 @@ open class SomaTableViewController<TViewModel: ContentViewModelType>: SomaConten
     open override func _onBindUI(viewModel: TViewModel) {
         super._onBindUI(viewModel: viewModel)
         
-        _tableManager = TableViewManager(tableView: _tableView, elementsGenerators: [])
+        _tableManager = TableViewManager(tableView: _tableView, elementsFactories: [])
     }
 }

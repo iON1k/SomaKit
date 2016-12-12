@@ -10,6 +10,8 @@
 
 @interface SomaProxy : NSObject
 
-- (void)_bindForwardObject:(id)forwardObject withRetain:(BOOL)retain;
+- (void)setForwardObject:(id)forwardObject withRetain:(BOOL)retain;
+
+@property (weak, nonatomic, readonly) id forwardObject;
 
 @end

@@ -10,16 +10,18 @@
 
 @interface SomaProxy ()
 
-@property (weak, nonatomic) id forwardObject;
-
 @property (strong, nonatomic) id retainForwardObject;
 
 @end
 
 @implementation SomaProxy
 
-- (void)_bindForwardObject:(id)forwardObject withRetain:(BOOL)retain {
-    self.forwardObject = forwardObject;
+- (void)setForwardObject:(id)forwardObject {
+    [self setForwardObject:forwardObject withRetain:false];
+}
+
+- (void)setForwardObject:(id)forwardObject withRetain:(BOOL)retain {
+    _forwardObject = forwardObject;
     self.retainForwardObject = retain ? forwardObject : nil;
 }
 
