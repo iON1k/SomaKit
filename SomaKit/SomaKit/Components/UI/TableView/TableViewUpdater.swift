@@ -9,25 +9,21 @@
 import RxSwift
 
 public class TableViewUpdater {
-    public let tableViewProxy: TableViewProxy
+    private let tableViewProxy: TableViewProxy
     private let elementsProvider: TableElementsProvider
-
-    private let tableView: UITableView
     private let updateEvents: Variable<TableViewUpdatingEvent>
 
     public private(set) var attributesCalculator: TableElementsAttributesCalculator
     public private(set) var sectionsModels: [TableViewSectionModel]
 
-    public init(tableView: UITableView, sectionsModels: [TableViewSectionModel], elementsProvider: TableElementsProvider) {
-        self.tableView = tableView
-        self.sectionsModels = sectionsModels
+    public init(tableViewProxy: TableViewProxy, initialSectionsModels: [TableViewSectionModel],
+                initialAttributesCalculator: TableElementsAttributesCalculator, elementsProvider: TableElementsProvider) {
+        self.tableViewProxy = tableViewProxy
+        self.sectionsModels = initialSectionsModels
+        self.attributesCalculator = initialAttributesCalculator
         self.elementsProvider = elementsProvider
         
         updateEvents = Variable(TableViewUpdatingEvent(sectionsModels: sectionsModels))
-
-        let dataSource = TableViewDataSource(sectionsModels: sectionsModels, elementsProvider: elementsProvider)
-        attributesCalculator = TableElementsAttributesCalculator(engine: dataSource)
-        tableViewProxy = TableViewProxy(dataSource: dataSource, attributesCalculator: attributesCalculator)
 
         startObserveUpdatingEvents()
     }
@@ -40,13 +36,15 @@ public class TableViewUpdater {
         Debug.ensureIsMainThread()
 
         sectionsModels = updatingData.event.sectionsModels
-        attributesCalculator = updatingData.attributesCalcualtor
+        attributesCalculator = updatingData.attributesCalculator
 
-        updatingData.event.updatingHandler(tableView)
+        tableViewProxy.update(dataSource: updatingData.dataSource, attributesCalculator: updatingData.attributesCalculator,
+                              updatingHandler: updatingData.event.updatingHandler)
     }
 
     private func startObserveUpdatingEvents() {
         _ = updateEvents.asObservable()
+            .skip(1)
             .map({ (event) -> Observable<UpdatingData> in
                 return Observable.deferred({ [weak self] () -> Observable<UpdatingData> in
                     guard let strongSelf = self else {
@@ -56,7 +54,7 @@ public class TableViewUpdater {
                     let dataSource = TableViewDataSource(sectionsModels: event.sectionsModels, elementsProvider: strongSelf.elementsProvider)
                     let attributesCalculator = TableElementsAttributesCalculator(engine: dataSource)
                     TableViewUpdater.prepareAttributesCalculator(attributesCalculator: attributesCalculator, sectionsModels: event.sectionsModels)
-                    let updatingData = UpdatingData(event: event, dataSource: dataSource, attributesCalcualtor: attributesCalculator)
+                    let updatingData = UpdatingData(event: event, dataSource: dataSource, attributesCalculator: attributesCalculator)
                     return Observable.just(updatingData)
                 })
             })
@@ -82,12 +80,12 @@ public class TableViewUpdater {
     private struct UpdatingData {
         public let event: TableViewUpdatingEvent
         public let dataSource: TableViewDataSource
-        public let attributesCalcualtor: TableElementsAttributesCalculator
+        public let attributesCalculator: TableElementsAttributesCalculator
 
-        public init(event: TableViewUpdatingEvent, dataSource: TableViewDataSource, attributesCalcualtor: TableElementsAttributesCalculator) {
+        public init(event: TableViewUpdatingEvent, dataSource: TableViewDataSource, attributesCalculator: TableElementsAttributesCalculator) {
             self.event = event
             self.dataSource = dataSource
-            self.attributesCalcualtor = attributesCalcualtor
+            self.attributesCalculator = attributesCalculator
         }
     }
 }

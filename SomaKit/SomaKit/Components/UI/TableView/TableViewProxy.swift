@@ -6,6 +6,9 @@
 //  Copyright © 2016 iON1k. All rights reserved.
 //
 
+import RxSwift
+import RxCocoa
+
 public protocol TableViewDataSourceType {
     func headerViewModel(sectionIndex: Int) -> ViewModelType?
 
@@ -21,15 +24,26 @@ public protocol TableViewDataSourceType {
 }
 
 public class TableViewProxy: SomaProxy, UITableViewDataSource, UITableViewDelegate {
-    public private(set) var attributesCalculator: TableElementsAttributesCalculatorType
-    public private(set) var dataSource: TableViewDataSourceType
+    private var attributesCalculator: TableElementsAttributesCalculatorType
+    private var dataSource: TableViewDataSourceType
+
+    private let tableView: UITableView
 
     private weak var forwardDelegate: UITableViewDelegate?
     private weak var forwardDataSource: UITableViewDataSource?
 
-    public init(dataSource: TableViewDataSourceType, attributesCalculator: TableElementsAttributesCalculatorType) {
+    public init(tableView: UITableView, dataSource: TableViewDataSourceType, attributesCalculator: TableElementsAttributesCalculatorType) {
+        self.tableView = tableView
         self.dataSource = dataSource
         self.attributesCalculator = attributesCalculator
+
+        super.init()
+
+        tableView.rx.setDataSource(self)
+            .dispose(whenDeallocated: self)
+
+        tableView.rx.setDelegate(self)
+            .dispose(whenDeallocated: self)
     }
 
     public override func setForwardObject(_ forwardObject: Any!, withRetain retain: Bool) {
@@ -39,9 +53,12 @@ public class TableViewProxy: SomaProxy, UITableViewDataSource, UITableViewDelega
         forwardDataSource = forwardObject as? UITableViewDataSource
     }
 
-    public func updateWith(dataSource: TableViewDataSourceType, attributesCalculator: TableElementsAttributesCalculatorType) {
+    public func update(dataSource: TableViewDataSourceType, attributesCalculator: TableElementsAttributesCalculatorType, updatingHandler: (UITableView) -> Void) {
+        Debug.ensureIsMainThread()
+
         self.dataSource = dataSource
         self.attributesCalculator = attributesCalculator
+        updatingHandler(tableView)
     }
 
     //UITableViewDataSource
