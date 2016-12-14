@@ -8,22 +8,21 @@
 
 import RxSwift
 
+public protocol TableViewUpdaterDelegate: class {
+    func tableViewUpdaterDidUpdated(tableViewUpdater: TableViewUpdater, updatingData: TableViewUpdater.UpdatingData)
+}
+
 public class TableViewUpdater {
     private let tableViewProxy: TableViewProxy
     private let elementsProvider: TableElementsProvider
     private let updateEvents: Variable<TableViewUpdatingEvent>
 
-    public private(set) var attributesCalculator: TableElementsAttributesCalculator
-    public private(set) var sectionsModels: [TableViewSectionModel]
+    public weak var delegate: TableViewUpdaterDelegate?
 
-    public init(tableViewProxy: TableViewProxy, initialSectionsModels: [TableViewSectionModel],
-                initialAttributesCalculator: TableElementsAttributesCalculator, elementsProvider: TableElementsProvider) {
+    public init(tableViewProxy: TableViewProxy, elementsProvider: TableElementsProvider) {
         self.tableViewProxy = tableViewProxy
-        self.sectionsModels = initialSectionsModels
-        self.attributesCalculator = initialAttributesCalculator
         self.elementsProvider = elementsProvider
-        
-        updateEvents = Variable(TableViewUpdatingEvent(sectionsModels: sectionsModels))
+        updateEvents = Variable(TableViewUpdatingEvent(sectionsModels: []))
 
         startObserveUpdatingEvents()
     }
@@ -35,15 +34,15 @@ public class TableViewUpdater {
     private func updateTableView(withData updatingData: UpdatingData) {
         Debug.ensureIsMainThread()
 
-        sectionsModels = updatingData.event.sectionsModels
-        attributesCalculator = updatingData.attributesCalculator
-
         tableViewProxy.update(dataSource: updatingData.dataSource, attributesCalculator: updatingData.attributesCalculator,
                               updatingHandler: updatingData.event.updatingHandler)
+
+        delegate?.tableViewUpdaterDidUpdated(tableViewUpdater: self, updatingData: updatingData)
     }
 
     private func startObserveUpdatingEvents() {
         _ = updateEvents.asObservable()
+            .skip(1)
             .map({ (event) -> Observable<UpdatingData> in
                 return Observable.deferred({ [weak self] () -> Observable<UpdatingData> in
                     guard let strongSelf = self else {
@@ -76,7 +75,7 @@ public class TableViewUpdater {
         }
     }
 
-    private struct UpdatingData {
+    public struct UpdatingData {
         public let event: TableViewUpdatingEvent
         public let dataSource: TableViewDataSource
         public let attributesCalculator: TableElementsAttributesCalculator

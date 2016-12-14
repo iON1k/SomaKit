@@ -9,24 +9,22 @@
 import RxSwift
 import RxCocoa
 
-public class TableViewManager {
+public class TableViewManager: TableViewUpdaterDelegate {
     public let tableViewProxy: TableViewProxy
     private let tableViewUpdater: TableViewUpdater
 
-    public var sectionsModels: [TableViewSectionModel] {
-        return tableViewUpdater.sectionsModels
-    }
+    public private(set) var sectionsModels: [TableViewSectionModel]
+    public private(set) var attributesCalculator: TableElementsAttributesCalculator
 
     public init(tableView: UITableView, elementsFactories: [TableElementFactrory]) {
         Debug.ensureIsMainThread()
 
-        let initialSectionsModels = [TableViewSectionModel]()
+        sectionsModels = [TableViewSectionModel]()
         let elementsProvider = TableElementsProvider(tableView: tableView, elementsFactories: elementsFactories)
-        let dataSource = TableViewDataSource(sectionsModels: initialSectionsModels, elementsProvider: elementsProvider)
-        let attributesCalculator = TableElementsAttributesCalculator(engine: dataSource)
+        let dataSource = TableViewDataSource(sectionsModels: sectionsModels, elementsProvider: elementsProvider)
+        attributesCalculator = TableElementsAttributesCalculator(engine: dataSource)
         tableViewProxy = TableViewProxy(tableView: tableView, dataSource: dataSource, attributesCalculator: attributesCalculator)
-        tableViewUpdater = TableViewUpdater(tableViewProxy: tableViewProxy, initialSectionsModels: initialSectionsModels,
-                                            initialAttributesCalculator: attributesCalculator, elementsProvider: elementsProvider)
+        tableViewUpdater = TableViewUpdater(tableViewProxy: tableViewProxy, elementsProvider: elementsProvider)
     }
 
     public func update(with event: TableViewUpdatingEvent) {
@@ -43,5 +41,10 @@ public class TableViewManager {
     public func setForwardObject(_ forwardObject: Any!, withRetain retain: Bool) {
         Debug.ensureIsMainThread()
         tableViewProxy.setForwardObject(forwardObject, withRetain: retain)
+    }
+
+    public func tableViewUpdaterDidUpdated(tableViewUpdater: TableViewUpdater, updatingData: TableViewUpdater.UpdatingData) {
+        sectionsModels = updatingData.event.sectionsModels
+        attributesCalculator = updatingData.attributesCalculator
     }
 }
