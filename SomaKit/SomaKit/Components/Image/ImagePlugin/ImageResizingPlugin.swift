@@ -27,14 +27,7 @@ public class ImageResizingPlugin: ImagePluginType {
         return mode.rawValue + String(describing: size.width) + String(describing: size.height)
     }
     
-    public func perform(image: UIImage) -> Observable<UIImage> {
-        return Observable.deferred({ () -> Observable<UIImage> in
-            return Observable.just(self.beginPerform(image: image))
-        })
-            .subcribeOnBackgroundScheduler()
-    }
-    
-    private func beginPerform(image: UIImage) -> UIImage {
+    public func perform(image: UIImage) throws -> UIImage {
         switch mode {
         case .scale:
             return image.af_imageScaled(to: size)

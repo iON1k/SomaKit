@@ -7,7 +7,6 @@
 //
 
 import MagicalRecord
-import RxSwift
 
 open class AbstractDatabaseStore<TKey, TData, TDatabase: NSManagedObject>: StoreType {
     public typealias KeyType = TKey
@@ -22,72 +21,83 @@ open class AbstractDatabaseStore<TKey, TData, TDatabase: NSManagedObject>: Store
     private let setterHandler: SetterHandlerType
     private let getterHandler: GetterHandlerType
     
-    public func loadData(key: TKey) -> Observable<DataType?> {
-        return Observable.deferred({ () -> Observable<DataType?> in
-            return Observable.just(try self.beginLoadData(key: key))
-        })
-        .observeOnBackgroundScheduler()
-    }
-    
-    private func beginLoadData(key: TKey) throws -> DataType? {
-        var resultData: TData? = nil
-        
-        if let dbRecord = DatabaseType.mr_findFirst(with: try keyPredicate(key)) {
-            resultData = try getterHandler(dbRecord)
+    public func loadData(key: TKey) throws -> TData? {
+        var resultData: TData?
+        var error: Error?
+
+        dbContext.performAndWait {
+            do {
+                resultData = try self.beginLoadData(key: key)
+            } catch let catchedError {
+                error = catchedError
+            }
         }
-        
+
+        if let error = error {
+            throw error
+        }
+
         return resultData
     }
-    
-    public func storeData(key: TKey, data: TData?) -> Observable<Void> {
-        return Observable.create({ (observer) -> Disposable in
-            self.dbContext.perform {
-                self.beginStoreData(key: key, data: data, observer: observer)
-            }
-            
-            return Disposables.create()
-        })
-        .observeOnBackgroundScheduler()
+
+    private func beginLoadData(key: TKey) throws -> TData? {
+        guard let dbRecord = DatabaseType.mr_findFirst(with: try self.keyPredicate(key)) else {
+            return nil
+        }
+
+        return try self.getterHandler(dbRecord)
     }
-    
-    private func beginStoreData(key: TKey, data: TData?, observer: AnyObserver<Void>) {
-        do {
-            var dbRecord = DatabaseType.mr_findFirst(with: try keyPredicate(key), in: dbContext)
-            
-            if let data = data {
-                if dbRecord == nil {
-                    dbRecord = DatabaseType.mr_createEntity(in: dbContext)
-                }
-                
-                guard let resultDBRecord = dbRecord else {
-                    throw SomaError("Database \(Utils.typeName(DataType.self)) entity creating failed")
-                }
-                
-                try setterHandler(data, resultDBRecord)
-                (resultDBRecord as NSManagedObject).setValue(key, forKey: keyProperty)
-            } else {
-                if let dbRecord = dbRecord {
-                    let removingResult = dbRecord.mr_deleteEntity(in: dbContext)
-                    
-                    if (!removingResult) {
-                        throw SomaError("Database \(Utils.typeName(DataType.self)) entity removing failed")
-                    }
-                }
+
+    public func storeData(key: TKey, data: TData?) throws {
+        var error: Error?
+
+        dbContext.performAndWait {
+            do {
+                try self.beginStoreData(key: key, data: data)
+            } catch let catchedError {
+                error = catchedError
             }
-            
-            dbContext.mr_save(options: .parentContexts, completion: { (_, error) in
-                if let error = error {
-                    observer.onError(error)
-                } else {
-                    observer.onNext()
-                    observer.onCompleted()
-                }
-            })
-        } catch let error {
-            observer.onError(error)
+        }
+
+        if let error = error {
+            throw error
         }
     }
-    
+
+    private func beginStoreData(key: TKey, data: TData?) throws {
+        var dbRecord = DatabaseType.mr_findFirst(with: try keyPredicate(key), in: dbContext)
+
+        if let data = data {
+            if dbRecord == nil {
+                dbRecord = DatabaseType.mr_createEntity(in: dbContext)
+            }
+
+            guard let resultDBRecord = dbRecord else {
+                throw SomaError("Database \(Utils.typeName(DataType.self)) entity creating failed")
+            }
+
+            try setterHandler(data, resultDBRecord)
+            (resultDBRecord as NSManagedObject).setValue(key, forKey: keyProperty)
+        } else {
+            if let dbRecord = dbRecord {
+                let removingResult = dbRecord.mr_deleteEntity(in: dbContext)
+
+                if (!removingResult) {
+                    throw SomaError("Database \(Utils.typeName(DataType.self)) entity removing failed")
+                }
+            }
+        }
+
+        var savingError: Error?
+        dbContext.mr_save(options: [.parentContexts, .synchronously], completion: { (_, error) in
+            savingError = error
+        })
+
+        if let savingError = savingError {
+            throw savingError
+        }
+    }
+
     public init(dbContext: NSManagedObjectContext, keyProperty: String,
                 setterHandler: @escaping SetterHandlerType, getterHandler: @escaping GetterHandlerType) {
         self.dbContext = dbContext

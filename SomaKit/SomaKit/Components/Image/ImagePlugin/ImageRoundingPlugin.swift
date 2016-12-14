@@ -34,14 +34,7 @@ public class ImageRoundingPlugin: ImagePluginType {
         return mode.key
     }
     
-    public func perform(image: UIImage) -> Observable<UIImage> {
-        return Observable.deferred({ () -> Observable<UIImage> in
-            return Observable.just(self.beginPerform(image: image))
-        })
-            .subcribeOnBackgroundScheduler()
-    }
-    
-    private func beginPerform(image: UIImage) -> UIImage {
+    public func perform(image: UIImage) throws -> UIImage {
         switch mode {
         case .cicrular:
             return image.af_imageRoundedIntoCircle()

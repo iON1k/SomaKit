@@ -1,5 +1,5 @@
 //
-//  CacheStore.swift
+//  CacheBase.swift
 //  SomaKit
 //
 //  Created by Anton on 26.06.16.
@@ -26,38 +26,31 @@ open class CacheBase<TKey, TData>: StoreType {
     private let sourceStore: Store<TKey, CacheDataType>
     private let lifeTimeBehavior: CacheLifeTimeBehavior
     
-    public func loadData(key: TKey) -> Observable<DataType?> {
-        return Observable.deferred({ () -> Observable<DataType?> in
-            if case .never = self.lifeTimeBehavior {
-                return Observable.just(nil)
+    public func loadData(key: TKey) throws -> TData? {
+        if case .never = lifeTimeBehavior {
+            return nil
+        } else {
+            if let cacheData = try sourceStore.loadData(key: key) {
+                return isActualCache(cacheData) ? cacheData.data : nil
             } else {
-                return self.sourceStore.loadData(key: key)
-                    .map({ (cacheValue) -> DataType? in
-                        if let cacheData = cacheValue {
-                            return self.isActualCache(cacheData) ? cacheData.data : nil
-                        } else {
-                            return nil
-                        }
-                    })
+                return nil
             }
-        })
+        }
     }
-    
-    public func storeData(key: TKey, data: TData?) -> Observable<Void> {
-        return Observable.deferred({ () -> Observable<Void> in
-            if case .never = self.lifeTimeBehavior {
-                return Observable.just()
-            }
-            
-            guard let data = data else {
-                return self.sourceStore.storeData(key: key, data: nil)
-            }
-            
-            let cacheValue = CacheValue(data: data, creationTime:self.currentTime())
-            return self.sourceStore.storeData(key: key, data: cacheValue)
-        })
+
+    public func storeData(key: TKey, data: TData?) throws {
+        if case .never = lifeTimeBehavior {
+            return
+        }
+
+        guard let data = data else {
+            return try sourceStore.storeData(key: key, data: nil)
+        }
+
+        let cacheValue = CacheValue(data: data, creationTime:currentTime())
+        return try sourceStore.storeData(key: key, data: cacheValue)
     }
-    
+
     public init<TStore: StoreType>(sourceStore: TStore, lifeTimeBehavior: CacheLifeTimeBehavior = .default) where TStore.KeyType == KeyType, TStore.DataType == CacheDataType {
         self.sourceStore = sourceStore.asStore()
         self.lifeTimeBehavior = lifeTimeBehavior

@@ -16,16 +16,12 @@ public class ImageLoadingOperation<TKey: CustomStringConvertible>: ImageOperatio
     public func _performImageOperation(operation: ImageOperation) -> Observable<UIImage> {
         return Observable.deferred({ () -> Observable<UIImage> in
             let cachingKey = self.key.description + operation._cachingKey
-            
-            return self.cache.loadData(key: cachingKey)
-                .observeOnBackgroundScheduler()
-                .flatMap({ (cachedImage) -> Observable<UIImage> in
-                    if let cachedImage = cachedImage {
-                        return Observable.just(cachedImage)
-                    } else {
-                        return self.beginLoadImage(operation: operation, cachingKey: cachingKey)
-                    }
-                })
+
+            if let cachedImage = try self.cache.loadData(key: cachingKey) {
+                return Observable.just(cachedImage)
+            } else {
+                return self.beginLoadImage(operation: operation, cachingKey: cachingKey)
+            }
         })
         .subcribeOnBackgroundScheduler()
     }
@@ -34,13 +30,10 @@ public class ImageLoadingOperation<TKey: CustomStringConvertible>: ImageOperatio
         return self.imageSource
             .flatMap({ (originalImage) -> Observable<UIImage> in
                 return operation._begin(image: originalImage)
-                    .flatMap({ (image) -> Observable<UIImage> in
-                        if image == originalImage {
-                            return Observable.just(image)
-                        } else {
-                            return self.cache.storeData(key: cachingKey, data: image)
-                                .observeOnBackgroundScheduler()
-                                .mapWith(image)
+                    .observeOnBackgroundScheduler()
+                    .do(onNext: { (image) in
+                        if image != originalImage {
+                            try self.cache.storeData(key: cachingKey, data: image)
                         }
                     })
             })

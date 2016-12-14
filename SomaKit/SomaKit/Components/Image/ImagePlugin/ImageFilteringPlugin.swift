@@ -24,17 +24,14 @@ public class ImageFilteringPlugin: ImagePluginType {
         return resultKey
     }
     
-    public func perform(image: UIImage) -> Observable<UIImage> {
-        return Observable.deferred({ () -> Observable<UIImage> in
-            guard let reusltImage = image.af_imageFiltered(withCoreImageFilter: self.filterName, parameters: self.filterParams) else {
-                throw SomaError("ImageFilterPlugin failed with filter named \(self.filterName)")
-            }
-            
-            return Observable.just(reusltImage)
-        })
-            .subcribeOnBackgroundScheduler()
+    public func perform(image: UIImage) throws -> UIImage {
+        guard let reusltImage = image.af_imageFiltered(withCoreImageFilter: filterName, parameters: filterParams) else {
+            throw SomaError("ImageFilterPlugin failed with filter named \(filterName)")
+        }
+
+        return reusltImage
     }
-    
+
     public init(name: String, params: FitlerParamsType? = nil) {
         filterName = name
         filterParams = params

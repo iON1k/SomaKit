@@ -11,32 +11,23 @@ import RxSwift
 extension StoreType {
     public func transform<TKey, TData>(_ transformKeyHandler: @escaping (TKey) throws -> KeyType,
                           transformDataHandler: @escaping (TData) throws -> DataType, revertTransformDataHandler: @escaping (DataType) throws -> TData) -> Store<TKey, TData> {
-        
-        return Store({ (key) -> Observable<TData?> in
-            return Observable.deferred({ () -> Observable<TData?> in
-                let sourceKey = try transformKeyHandler(key)
-                return self.loadData(key: sourceKey)
-                    .map({ (data) -> TData? in
-                        guard let sourceData = data else {
-                            return nil
-                        }
-                        
-                        return try revertTransformDataHandler(sourceData)
-                    })
-            })
-            }, { (key, data) -> Observable<Void> in
-                return Observable.deferred({ () -> Observable<Void> in
-                    let sourceKey = try transformKeyHandler(key)
-                    
-                    guard let data = data else {
-                        return self.storeData(key: sourceKey, data: nil)
-                    }
-                    
-                    let sourceData = try transformDataHandler(data)
-                    
-                    return self.storeData(key: sourceKey, data: sourceData)
-                })
-            })
+
+        return Store({ (key) -> TData? in
+            let sourceKey = try transformKeyHandler(key)
+            guard let sourceData = try self.loadData(key: sourceKey) else {
+                return nil
+            }
+
+            return try revertTransformDataHandler(sourceData)
+        }, { (key, data) in
+            let sourceKey = try transformKeyHandler(key)
+            guard let data = data else {
+                return try self.storeData(key: sourceKey, data: nil)
+            }
+
+            let sourceData = try transformDataHandler(data)
+            try self.storeData(key: sourceKey, data: sourceData)
+        })
     }
     
     public func transform<TKey, TDataConverter: ConverterType>

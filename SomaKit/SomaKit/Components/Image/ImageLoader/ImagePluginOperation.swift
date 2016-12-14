@@ -15,9 +15,10 @@ public class ImagePluginOperation: ImageOperationWrapper {
     
     public override func _begin(image: UIImage) -> Observable<UIImage> {
         return super._begin(image: image)
-            .flatMap({ (image) -> Observable<UIImage> in
-                return self.plugin.perform(image: image)
+            .map({ (image) -> UIImage in
+                return try self.plugin.perform(image: image)
             })
+            .subcribeOnBackgroundScheduler()
     }
 
     private let plugin: ImagePluginType

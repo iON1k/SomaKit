@@ -9,22 +9,22 @@
 import RxSwift
 
 public protocol ImagePluginType {
-    func perform(image: UIImage) -> Observable<UIImage>
+    func perform(image: UIImage) throws -> UIImage
     var pluginKey: String { get }
 }
 
 extension UIImage {
-    public func performPlugins(plugins: [ImagePluginType]) -> Observable<UIImage> {
-        var observable = Observable.just(self)
+    public func performPlugins(plugins: [ImagePluginType]) throws -> UIImage {
+        var resultImage = self
         
         for plugin in plugins {
-            observable = observable.flatMap(plugin.perform)
+            resultImage = try plugin.perform(image: resultImage)
         }
         
-        return observable
+        return resultImage
     }
     
-    public func performPlugins(plugins: ImagePluginType ...) -> Observable<UIImage> {
-        return performPlugins(plugins: plugins)
+    public func performPlugins(plugins: ImagePluginType ...) throws -> UIImage {
+        return try performPlugins(plugins: plugins)
     }
 }

@@ -14,12 +14,12 @@ public class FakeStore<TKey, TData>: StoreType {
     
     private let defaultValue: DataType?
     
-    public func loadData(key: TKey) -> Observable<TData?> {
-        return Observable.just(defaultValue)
+    public func loadData(key: TKey) throws -> TData? {
+        return defaultValue
     }
     
-    public func storeData(key: TKey, data: TData?) -> Observable<Void> {
-        return Observable.just()
+    public func storeData(key: TKey, data: TData?) throws {
+        //nothing
     }
     
     public init(defaultValue: DataType? = nil) {
