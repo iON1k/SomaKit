@@ -6,12 +6,22 @@
 //  Copyright © 2016 iON1k. All rights reserved.
 //
 
-public class TableHeaderFooterFactory: TableElementBaseFactrory {
-    public init<TView: UIView>(viewModelType: TView.ViewModel.Type, viewType: TView.Type) where TView: ViewModelPresenter {
-        super.init(viewModelType: viewModelType, viewType: viewType, registerHandler: { (tableView, reuseId) in
-            tableView.register(viewType, forCellReuseIdentifier: reuseId)
-        }, dequeueHandler: { (tableView, reuseId) in
-            return tableView.dequeueReusableHeaderFooterView(withIdentifier: reuseId)
-        })
+public class TableHeaderFooterFactory: TableElementBaseFactory {
+    public init<TViewModel: TableElementViewModel, TView: UIView>(viewModelType: TViewModel.Type, viewType: TView.Type, viewModelTypeId: String? = nil)
+        where TView: TableElementType, TViewModel == TView.ViewModel {
+            super.init(viewModelType: viewModelType, elementType: viewType, viewModelTypeId: viewModelTypeId)
+    }
+
+    public override func registerElement(tableView: UITableView) {
+        tableView.register(elementType, forHeaderFooterViewReuseIdentifier: reuseId)
+    }
+
+    public override func createElement(tableView: UITableView) -> UIView {
+        let viewReuseId = reuseId
+        guard let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: viewReuseId) else {
+            Debug.fatalError("UITableView didn't registered header/footer view with reuseId \(viewReuseId)")
+        }
+
+        return view
     }
 }

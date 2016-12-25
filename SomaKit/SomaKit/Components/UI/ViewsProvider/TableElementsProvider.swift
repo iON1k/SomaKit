@@ -6,48 +6,47 @@
 //  Copyright © 2016 iON1k. All rights reserved.
 //
 
-public protocol TableElementFactrory {
-    var viewModelType: ViewModelType.Type { get }
-
-    var viewType: UIView.Type { get }
-
-    func createView(for viewModel: ViewModelType, with tableView: UITableView) -> UIView
-
-    func register(in tableView: UITableView)
-}
-
 public class TableElementsProvider {
     private let elementsFactoriesByTypeName: [String : TableElementFactrory]
-    private let tableView: UITableView
 
-    public init(tableView: UITableView, elementsFactories: [TableElementFactrory]) {
+    public init(elementsFactories: [TableElementFactrory]) {
         var elementsFactoriesByTypeName = [String : TableElementFactrory]()
 
-        elementsFactories.forEach { (elementFactory) in
-            let key = TableElementsProvider.elementFactoryKey(for: elementFactory.viewModelType)
-            guard elementsFactoriesByTypeName[key] == nil else {
-                Log.error("TableElementsProvider: view factory with key \(key) already registered")
+        elementsFactories.forEach { (factory) in
+            let factoryId = TableElementsProvider.generateFactoryId(for: factory.viewModelType, with: factory.viewModelTypeId)
+            guard elementsFactoriesByTypeName[factoryId] == nil else {
+                Log.error("TableElementsProvider: view factory with key \(factoryId) already registered")
                 return
             }
 
-            elementFactory.register(in: tableView)
-            elementsFactoriesByTypeName[key] = elementFactory
+            elementsFactoriesByTypeName[factoryId] = factory
         }
 
         self.elementsFactoriesByTypeName = elementsFactoriesByTypeName
-        self.tableView = tableView
     }
 
-    public func view(for viewModel: ViewModelType) -> UIView? {
-        return viewFactory(for: viewModel)?.createView(for: viewModel, with: tableView)
+    public func registerAllFactories(with tableView: UITableView) {
+        elementsFactoriesByTypeName.forEach { (_, factory) in
+            factory.registerElement(tableView: tableView)
+        }
     }
 
-    public func viewFactory(for viewModel: ViewModelType) -> TableElementFactrory? {
-        let key = TableElementsProvider.elementFactoryKey(for: type(of: viewModel))
-        return elementsFactoriesByTypeName[key]
+    public func elementView(for viewModel: TableElementViewModel, with tableView: UITableView) -> UIView? {
+        return elementFactory(for: viewModel)?.createElement(tableView: tableView)
     }
 
-    private static func elementFactoryKey(for viewModelType: ViewModelType.Type) -> String {
-        return Utils.typeName(viewModelType)
+    public func elementFactory(for viewModel: TableElementViewModel) -> TableElementFactrory? {
+        let factoryId = TableElementsProvider.generateFactoryId(for: type(of:viewModel), with: viewModel.typeId)
+        return elementsFactoriesByTypeName[factoryId]
+    }
+
+    private static func generateFactoryId(for viewModelType: ViewModelType.Type, with viewModelTypeId: String?) -> String {
+        var factoryId = Utils.typeName(viewModelType)
+
+        if let viewModelTypeId = viewModelTypeId {
+            factoryId += viewModelTypeId
+        }
+
+        return factoryId
     }
 }

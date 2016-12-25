@@ -9,11 +9,11 @@
 public typealias TableViewSectionsModels = [TableViewSectionModel]
 
 public struct TableViewSectionModel {
-    public let cellsViewModels: [ViewModelType]
-    public let headerViewModel: ViewModelType?
-    public let footerViewModel: ViewModelType?
+    public let cellsViewModels: [TableElementViewModel]
+    public let headerViewModel: TableElementViewModel?
+    public let footerViewModel: TableElementViewModel?
     
-    public init(cellsViewModels: [ViewModelType], headerViewModel: ViewModelType? = nil, footerViewModel: ViewModelType? = nil) {
+    public init(cellsViewModels: [TableElementViewModel], headerViewModel: TableElementViewModel? = nil, footerViewModel: TableElementViewModel? = nil) {
         self.cellsViewModels = cellsViewModels
         self.headerViewModel = headerViewModel
         self.footerViewModel = footerViewModel

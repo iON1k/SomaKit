@@ -10,17 +10,17 @@ import RxSwift
 import RxCocoa
 
 public protocol TableViewDataSourceType {
-    func headerViewModel(sectionIndex: Int) -> ViewModelType?
+    func headerViewModel(sectionIndex: Int) -> TableElementViewModel?
 
-    func footerViewModel(sectionIndex: Int) -> ViewModelType?
+    func footerViewModel(sectionIndex: Int) -> TableElementViewModel?
 
-    func cellViewModel(sectionIndex: Int, rowIndex: Int) -> ViewModelType
+    func cellViewModel(sectionIndex: Int, rowIndex: Int) -> TableElementViewModel
 
     func rowsCount(sectionIndex: Int) -> Int
 
     func sectionsCount() -> Int
 
-    func view(for viewModel: ViewModelType) -> UIView
+    func loadElementView(for viewModel: TableElementViewModel, with tableView: UITableView) -> UIView?
 }
 
 public class TableViewProxy: SomaProxy, UITableViewDataSource, UITableViewDelegate {
@@ -77,12 +77,11 @@ public class TableViewProxy: SomaProxy, UITableViewDataSource, UITableViewDelega
 
         let viewModel = dataSource.cellViewModel(sectionIndex: indexPath.section, rowIndex: indexPath.row)
 
-        guard let cell = dataSource.view(for: viewModel) as? UITableViewCell else {
+        guard let cell = loadElement(tableView: tableView, viewModel: viewModel, attributes:
+            attributesCalculator.cellAttributes(sectionIndex: indexPath.section, rowIndex: indexPath.row)) as? UITableViewCell else {
             Log.error("Cell for view model type \(type(of: viewModel)) not found")
             return UITableViewCell()
         }
-
-        bindAttributes(attributesCalculator.cellAttributes(sectionIndex: indexPath.section, rowIndex: indexPath.row), view: cell)
 
         return cell
     }
@@ -112,8 +111,9 @@ public class TableViewProxy: SomaProxy, UITableViewDataSource, UITableViewDelega
             return nil
         }
 
-        let headerView = dataSource.view(for: headerViewModel)
-        bindAttributes(attributesCalculator.sectionHeaderAttributes(sectionIndex: section), view: headerView)
+        guard let headerView = loadElement(tableView: tableView, viewModel: headerViewModel, attributes: attributesCalculator.sectionHeaderAttributes(sectionIndex: section)) else {
+            return nil
+        }
 
         return headerView
     }
@@ -125,8 +125,9 @@ public class TableViewProxy: SomaProxy, UITableViewDataSource, UITableViewDelega
             return nil
         }
 
-        let footerView = dataSource.view(for: footerViewModel)
-        bindAttributes(attributesCalculator.sectionHeaderAttributes(sectionIndex: section), view: footerView)
+        guard let footerView = loadElement(tableView: tableView, viewModel: footerViewModel, attributes: attributesCalculator.sectionHeaderAttributes(sectionIndex: section)) else {
+            return nil
+        }
 
         return footerView
     }
@@ -134,35 +135,48 @@ public class TableViewProxy: SomaProxy, UITableViewDataSource, UITableViewDelega
     public func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         forwardDelegate?.tableView?(tableView, didEndDisplaying: cell, forRowAt: indexPath)
 
-        onViewDidEndDisplaying(cell)
+        resetViewModel(for: cell)
     }
 
     public func tableView(_ tableView: UITableView, didEndDisplayingHeaderView view: UIView, forSection section: Int) {
         forwardDelegate?.tableView?(tableView, didEndDisplayingHeaderView: view, forSection: section)
 
-        onViewDidEndDisplaying(view)
+        resetViewModel(for: view)
     }
 
     public func tableView(_ tableView: UITableView, didEndDisplayingFooterView view: UIView, forSection section: Int) {
         forwardDelegate?.tableView?(tableView, didEndDisplayingFooterView: view, forSection: section)
 
-        onViewDidEndDisplaying(view)
+        resetViewModel(for: view)
     }
 
-    private func onViewDidEndDisplaying(_ view: UIView) {
-        tableElementBehavior(with: view)?.tableElementReset()
+    private func resetViewModel(for elementView: UIView) {
+        guard let elementPresenter = elementView as? UnsafeTableElementPresenter else {
+            return
+        }
+
+        elementPresenter.resetViewModel()
     }
 
-    private func bindAttributes(_ attributes: TableElementAttributesType, view: UIView) {
-        tableElementBehavior(with: view)?.bindTableElementAttributes(attributes)
-    }
-
-    private func tableElementBehavior(with view: UIView) -> TableElementBehavior? {
-        guard let tableElementBehavior = view as? TableElementBehavior else {
-            Debug.error("View type \(type(of: view)) not implemented TableElementBehavior protocol")
+    private func loadElement(tableView: UITableView, viewModel: TableElementViewModel, attributes: TableElementAttributesType) -> UIView? {
+        guard let elementView = dataSource.loadElementView(for: viewModel, with: tableView) else {
+            Log.error("Table element view for view model type \(type(of: viewModel)) not found")
             return nil
         }
 
-        return tableElementBehavior
+        if let elementPresenter = elementView as? UnsafeTableElementPresenter {
+            elementPresenter.unsafeBindViewModel(viewModel: viewModel)
+        } else {
+            Log.error("Table element view \(type(of: viewModel)) has no implementation for UnsafeTableElementPresenter protocol")
+        }
+
+        if let attributedElementType = elementView as? TableAttributedElementType {
+            attributedElementType.bindTableElementAttributes(with: attributes)
+        } else {
+            Debug.error("View type \(type(of: elementView)) not implemented TableElementBehavior protocol")
+        }
+
+        return elementView
+
     }
 }

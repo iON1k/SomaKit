@@ -16,11 +16,11 @@ public class TableViewManager: TableViewUpdaterDelegate {
     public private(set) var sectionsModels: [TableViewSectionModel]
     public private(set) var attributesCalculator: TableElementsAttributesCalculator
 
-    public init(tableView: UITableView, elementsFactories: [TableElementFactrory]) {
+    public init(tableView: UITableView, elementsProvider: TableElementsProvider) {
         Debug.ensureIsMainThread()
 
         sectionsModels = [TableViewSectionModel]()
-        let elementsProvider = TableElementsProvider(tableView: tableView, elementsFactories: elementsFactories)
+        let elementsProvider = elementsProvider
         let dataSource = TableViewDataSource(sectionsModels: sectionsModels, elementsProvider: elementsProvider)
         attributesCalculator = TableElementsAttributesCalculator(engine: dataSource)
         tableViewProxy = TableViewProxy(tableView: tableView, dataSource: dataSource, attributesCalculator: attributesCalculator)

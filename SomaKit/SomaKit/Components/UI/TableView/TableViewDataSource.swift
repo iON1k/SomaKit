@@ -35,15 +35,15 @@ public class TableViewDataSource: TableViewDataSourceType, TableElementsAttribut
         return elementAttributes(for: viewModel)
     }
 
-    public func headerViewModel(sectionIndex: Int) -> ViewModelType? {
+    public func headerViewModel(sectionIndex: Int) -> TableElementViewModel? {
         return sectionModel(sectionIndex: sectionIndex).headerViewModel
     }
 
-    public func footerViewModel(sectionIndex: Int) -> ViewModelType? {
+    public func footerViewModel(sectionIndex: Int) -> TableElementViewModel? {
         return sectionModel(sectionIndex: sectionIndex).footerViewModel
     }
 
-    public func cellViewModel(sectionIndex: Int, rowIndex: Int) -> ViewModelType {
+    public func cellViewModel(sectionIndex: Int, rowIndex: Int) -> TableElementViewModel {
         let sectionModel = self.sectionModel(sectionIndex: sectionIndex)
 
         guard rowIndex < sectionModel.cellsViewModels.count else  {
@@ -61,13 +61,8 @@ public class TableViewDataSource: TableViewDataSourceType, TableElementsAttribut
         return sectionsModels.count
     }
 
-    public func view(for viewModel: ViewModelType) -> UIView {
-        guard let view = elementsProvider.view(for: viewModel) else {
-            Log.error("View for view model type \(type(of: viewModel)) not found")
-            return UIView()
-        }
-
-        return view
+    public func loadElementView(for viewModel: TableElementViewModel, with tableView: UITableView) -> UIView? {
+        return elementsProvider.elementView(for: viewModel, with: tableView)
     }
 
     private func sectionModel(sectionIndex: Int) -> TableViewSectionModel {
@@ -78,13 +73,13 @@ public class TableViewDataSource: TableViewDataSourceType, TableElementsAttribut
         return sectionsModels[sectionIndex]
     }
 
-    private func elementAttributes(for viewModel: ViewModelType) -> TableElementAttributesType {
-        guard let viewType = elementsProvider.viewFactory(for: viewModel)?.viewType else {
+    private func elementAttributes(for viewModel: TableElementViewModel) -> TableElementAttributesType {
+        guard let elementType = elementsProvider.elementFactory(for: viewModel)?.elementType else {
             Debug.fatalError("Attributes calculation failed: view factory for view model \(type(of: viewModel)) not found")
         }
 
-        guard let attributedElementType = viewType as? TableAttributedElementType.Type else {
-            Debug.fatalError("Attributes calculation failed: view type \(viewType) has no implementation for TableAttributedElementType protocol")
+        guard let attributedElementType = elementType as? TableAttributedElementType.Type else {
+            Debug.fatalError("Attributes calculation failed: view type \(elementType) has no implementation for TableAttributedElementType protocol")
         }
 
         return attributedElementType.tableElementAttributes(for: viewModel)
